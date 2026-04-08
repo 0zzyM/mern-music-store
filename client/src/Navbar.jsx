@@ -15,7 +15,7 @@ function Navbar() {
             Services
           </a>
           <a className="nav-menu-item" href="#">
-            Contact Us
+            Contact
           </a>
         </nav>
 
