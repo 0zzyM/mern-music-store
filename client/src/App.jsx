@@ -1,11 +1,13 @@
 import "./App.css";
 import Navbar from "./Navbar.jsx";
-
+import PromotionBanner from "./PromotionBanner.jsx";
+import FeaturedProducts from "./FeaturedProducts.jsx";
 function App() {
   return (
     <>
       <Navbar />
-      <h1>TO BE DEVELOPED</h1>
+      <PromotionBanner className="banner" />
+      <FeaturedProducts />
     </>
   );
 }
