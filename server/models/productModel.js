@@ -7,6 +7,11 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    brand: {
+      type: String,
+      enum: ["Jackson", "Marshall", "Ibanez", "Fender", "EVH"],
+      required: true,
+    },
     images: {
       type: [String],
       required: true,
@@ -21,7 +26,13 @@ const productSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ["guitars", "amps", "cabinets", "strings", "picks"],
+      enum: [
+        "Electric Guitars",
+        "Electric Guitar Amplifiers",
+        "Guitar Cabinets",
+        "Guitar Strings",
+        "Guitar Picks",
+      ],
       required: true,
     },
     amountSold: {
