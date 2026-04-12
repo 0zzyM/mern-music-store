@@ -27,11 +27,11 @@ const productSchema = new mongoose.Schema(
     category: {
       type: String,
       enum: [
-        "Electric Guitars",
-        "Electric Guitar Amplifiers",
-        "Guitar Cabinets",
-        "Guitar Strings",
-        "Guitar Picks",
+        "electric-guitars",
+        "electric-guitars-amplifiers",
+        "guitar-cabinets",
+        "guitar-strings",
+        "picks",
       ],
       required: true,
     },
