@@ -2,51 +2,42 @@ import cartIcon from "./assets/cart.svg";
 import userIcon from "./assets/user.svg";
 import searchIcon from "./assets/search.svg";
 
-import "./Navbar.css";
+const navMenuItem = "text-white hover:text-red-500 transition-colors";
+
 function Navbar() {
   return (
     <>
-      <header className="page-header">
-        <nav className="nav-wrapper">
-          <a className="nav-menu-item" href="#">
+      {/* Page Header */}
+      <header className="p-2.5 bg-[#001822] flex items-center justify-between w-full gap-10">
+        {/* Navigation Links */}
+        <nav className="w-60 flex justify-between items-center gap-10">
+          <a className={navMenuItem} href="#">
             Shop
           </a>
-          <a className="nav-menu-item" href="#">
+          <a className={navMenuItem} href="#">
             Services
           </a>
-          <a className="nav-menu-item" href="#">
+          <a className={navMenuItem} href="#">
             Contact
           </a>
         </nav>
 
-        <div className="logo">ozzyMusic</div>
+        {/* Logo */}
+        <div className="text-white text-2xl font-bold">ozzyMusic</div>
 
-        <div className="header-actions">
-          <div className="header-action">
-            <a className="header-action-item" href="#">
-              <img className="search-icon" src={searchIcon} alt="" />
-            </a>
-          </div>
-          <div className="login-register">
-            <a className="login-register-btn" href="#">
-              <img className="cart-icon" src={cartIcon} alt="" />
-            </a>
-          </div>
-          <div className="cart">
-            <a className="cart-btn" href="#">
-              <img className="user-icon" src={userIcon} alt="" />
-            </a>
-          </div>
+        {/* Header Actions */}
+        <div className="w-60 flex justify-center items-center gap-5">
+          <a href="#">
+            <img className="w-9" src={searchIcon} alt="Search" />
+          </a>
+          <a href="#">
+            <img className="w-9" src={cartIcon} alt="Cart" />
+          </a>
+          <a href="#">
+            <img className="w-9" src={userIcon} alt="User" />
+          </a>
         </div>
       </header>
-
-      {/* 
-      <div>
-        <div className="search-bar-wrapper">
-          <input className="search-bar" placeholder="Search" type="text" />
-        </div>
-      </div>
-    */}
     </>
   );
 }
