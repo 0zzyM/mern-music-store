@@ -1,52 +1,55 @@
-import soloistImg from "./assets/jackson-soloist-sl1.png";
-import stratImg from "./assets/fender-usa-stratocaster.png";
-import marshallImg from "./assets/marshall-jvm-410.png";
-
 import "./FeaturedProducts.css";
+import { useState } from "react";
+import { useEffect } from "react";
 
 export default function FeaturedProducts() {
+  const [featuredProducts, setFeaturedProducts] = useState(null);
+
+  useEffect(() => {
+    const getFeaturedProducts = async () => {
+      try {
+        const url = "http://localhost:5000/api/v1/products/featured";
+        const res = await fetch(url);
+        const data = await res.json();
+        setFeaturedProducts(data);
+        console.log(data);
+      } catch (error) {
+        const url = "http://localhost:5000/api/v1/products/featured";
+        console.error(`Error fetching ${url} `, error);
+      }
+    };
+    getFeaturedProducts();
+  }, []);
+  if (!featuredProducts) return <p>Loading...</p>;
+
   return (
     <>
-      <div className="seperator"></div>
+      <>
+        <div className="seperator"></div>
 
-      <h2>Featured Products</h2>
+        <h2>Featured Products</h2>
 
-      <div className="featured-wrapper">
-        <div className="featured-product-container">
-          <div className="featured-product">
-            <div className="featured-product-image-container">
-              <img
-                className="featured-product-image "
-                src={soloistImg}
-                alt=""
-              />
-            </div>
-            <h3 className="featured-product-title">Jackson USA Soloist SL1</h3>
-            <p className="featured-product-price">€3,599.00</p>
-            <button className="add-to-cart-btn"> Add to Cart</button>
-          </div>
-          <div className="featured-product">
-            <div className="featured-product-image-container">
-              <img className="featured-product-image " src={stratImg} alt="" />
-            </div>
-            <h3 className="featured-product-title">Jackson USA Soloist SL1</h3>
-            <p className="featured-product-price">€3,599.00</p>
-            <button className="add-to-cart-btn"> Add to Cart</button>
-          </div>
-          <div className="featured-product">
-            <div className="featured-product-image-container">
-              <img
-                className="featured-product-image "
-                src={marshallImg}
-                alt=""
-              />
-            </div>
-            <h3 className="featured-product-title">Marshall JVM410H</h3>
-            <p className="featured-product-price">€1,299.00</p>
-            <button className="add-to-cart-btn"> Add to Cart</button>
+        <div className="featured-wrapper">
+          <div className="featured-product-container">
+            {featuredProducts.map((product) => {
+              return (
+                <div className="featured-product">
+                  <div className="featured-product-image-container">
+                    <img
+                      className="featured-product-image "
+                      src={product.images[0]}
+                      alt=""
+                    />
+                  </div>
+                  <h3 className="featured-product-title">{product.name}</h3>
+                  <p className="featured-product-price">€{product.price}</p>
+                  <button className="add-to-cart-btn"> Add to Cart</button>
+                </div>
+              );
+            })}
           </div>
         </div>
-      </div>
+      </>
     </>
   );
 }

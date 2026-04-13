@@ -19,9 +19,10 @@ p {
   object-fit: contain;
 }
 .featured-product {
+  width: 220px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   background-color: rgb(241, 238, 235);
   backdrop-filter: blur(12px);
@@ -35,7 +36,7 @@ p {
   gap: 20px;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: strech;
   justify-content: center;
 }
 
