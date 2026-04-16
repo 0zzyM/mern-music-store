@@ -1,9 +1,9 @@
-import guitarPromotionImage from "./assets/guitar-promotion.jpg";
-import ampPromotionImage from "./assets/amp-promotion.jpg";
-import pedalsPromotionImage from "./assets/pedals-promotion.jpg";
+import guitarPromotionImage from "../../assets/guitar-promotion.jpg";
+import ampPromotionImage from "../../assets/amp-promotion.jpg";
+import pedalsPromotionImage from "../../assets/pedals-promotion.jpg";
 
-import nextImage from "./assets/next.svg";
-import prevImage from "./assets/prev.svg";
+import nextImage from "../../assets/next.svg";
+import prevImage from "../../assets/prev.svg";
 import "./PromotionBanner.css";
 import { useState } from "react";
 
@@ -31,9 +31,7 @@ export default function PromotionBanner() {
             <img src={item} alt="" key={index} />
           ))}
         </div>
-        {/*<img src={images[currentImageIndex]} alt="" />
-        <img src={images[currentImageIndex]} alt="" />
-*/}
+
         <button className="promotion-banner-button-next" onClick={handleNext}>
           <img src={nextImage} alt="" />
         </button>

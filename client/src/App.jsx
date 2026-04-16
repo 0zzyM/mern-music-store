@@ -1,7 +1,7 @@
 import "./App.css";
-import Navbar from "./Navbar.jsx";
-import PromotionBanner from "./PromotionBanner.jsx";
-import FeaturedProducts from "./FeaturedProducts.jsx";
+import Navbar from "./components/Navbar/Navbar.jsx";
+import PromotionBanner from "./components/PromotionBanner/PromotionBanner.jsx";
+import FeaturedProducts from "./components/FeaturedProducts/FeaturedProducts.jsx";
 function App() {
   return (
     <>

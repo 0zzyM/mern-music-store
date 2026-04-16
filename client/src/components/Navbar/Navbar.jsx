@@ -1,6 +1,6 @@
-import cartIcon from "./assets/cart.svg";
-import userIcon from "./assets/user.svg";
-import searchIcon from "./assets/search.svg";
+import cartIcon from "../../assets/cart.svg";
+import userIcon from "../../assets/user.svg";
+import searchIcon from "../../assets/search.svg";
 
 import "./Navbar.css";
 function Navbar() {
