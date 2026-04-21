@@ -1,14 +1,14 @@
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar.jsx";
-import PromotionBanner from "./components/PromotionBanner/PromotionBanner.jsx";
-import FeaturedProducts from "./components/FeaturedProducts/FeaturedProducts.jsx";
-import ProductCarousel from "./components/ProductCarousel/ProductCarousel.jsx";
+import HomePage from "./pages/HomePage.jsx";
+import { Route, Routes } from "react-router-dom";
 function App() {
   return (
     <>
       <Navbar />
-      <PromotionBanner />
-      <FeaturedProducts />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+      </Routes>
     </>
   );
 }
