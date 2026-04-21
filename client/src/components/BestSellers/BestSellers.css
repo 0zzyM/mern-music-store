@@ -1,0 +1,14 @@
+.best-seller-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.best-seller-product-container {
+  width: 100%;
+  max-width: 1260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
