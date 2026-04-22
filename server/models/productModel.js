@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { CATEGORY_MAP } from "../config/constants.js";
 
 // Create the Product schema
 const productSchema = new mongoose.Schema(
@@ -27,13 +28,58 @@ const productSchema = new mongoose.Schema(
     category: {
       type: String,
       enum: [
-        "electric-guitars",
-        "electric-guitars-amplifiers",
-        "guitar-cabinets",
-        "guitar-strings",
-        "picks",
+        "guitars",
+        "amplification",
+        "effects",
+        "accessories",
+        "recording",
+        "maintenance",
       ],
       required: true,
+    },
+    subcategory: {
+      type: String,
+      required: true,
+      enum: [
+        // Guitars
+        "electric-guitars",
+        "bass-guitars",
+        "acoustic-guitars",
+        // Amplification
+        "amp-heads",
+        "combo-amps",
+        "cabinets",
+        "bass-amps",
+        // Effects
+        "overdrive-distortion",
+        "delay",
+        "reverb",
+        "modulation",
+        "multi-effects",
+        // Accessories
+        "guitar-strings",
+        "bass-strings",
+        "picks",
+        "straps",
+        "tuners",
+        // Recording
+        "audio-interfaces",
+        "studio-headphones",
+        "microphones",
+        // Maintenance
+        "guitar-tools",
+        "guitar-care",
+      ],
+      validate: {
+        validator: function categoryValidator(value) {
+          const validSubCategories = CATEGORY_MAP[this.category];
+          if (!validSubCategories) return false;
+
+          return validSubCategories.includes(value);
+        },
+        message: (props) =>
+          `${props.value} is not a valid subcategory for the selected category`,
+      },
     },
     amountSold: {
       type: Number,
