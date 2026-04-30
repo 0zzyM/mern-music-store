@@ -1,8 +1,15 @@
 import Subcategory from "../models/subcategoryModel.js";
 
+const PUBLIC_FIELDS = "-__v -createdAt -updatedAt -isActive";
+const PARENT_PUBLIC_FIELDS =
+  "-__v -createdAt -updatedAt -isActive -subcategories";
+
 export const getAllSubCategories = async (req, res) => {
   try {
-    const subCategories = await Subcategory.find({ isActive: true });
+    const subCategories = await Subcategory.find(
+      { isActive: true },
+      PUBLIC_FIELDS,
+    ).populate("parentCategory", PARENT_PUBLIC_FIELDS);
 
     if (!subCategories || subCategories.length === 0) {
       return res.status(404).json({ message: "No sub-categories found" });
@@ -18,10 +25,13 @@ export const getSubCategory = async (req, res) => {
   try {
     const slug = req.params.slug;
 
-    const subCategory = await Subcategory.findOne({
-      slug: slug,
-      isActive: true,
-    });
+    const subCategory = await Subcategory.findOne(
+      {
+        slug: slug,
+        isActive: true,
+      },
+      PUBLIC_FIELDS,
+    ).populate("parentCategory", PARENT_PUBLIC_FIELDS);
 
     if (!subCategory) {
       return res.status(404).json({ message: "Sub-category was not found" });
