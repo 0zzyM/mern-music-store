@@ -10,7 +10,7 @@ export default function ProductCard({ product }) {
           alt={product.name}
         />
       </div>
-      <p className="product-brand">{product.brand}</p>
+      <p className="product-brand">{product.brand.name}</p>
       <p className="product-title">{product.name}</p>
       <p className="product-price">€{product.price}</p>
       <button className="add-to-cart-btn"> Add to Cart</button>
