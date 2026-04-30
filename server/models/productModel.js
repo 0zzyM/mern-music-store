@@ -8,9 +8,8 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     brand: {
-      // To-Do replace it with Brand ref when the table is ready
-      type: String,
-      enum: ["Jackson", "Marshall", "Ibanez", "Fender", "EVH"],
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Brand",
       required: true,
     },
     images: {
