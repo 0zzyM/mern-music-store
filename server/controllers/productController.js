@@ -1,5 +1,12 @@
 import Product from "../models/productModel.js";
+import Category from "../models/categoryModel.js";
 const VALID_SORTS = ["mostSold", "newest", "rating"];
+const PUBLIC_FIELDS = "-__v -createdAt -updatedAt -isActive";
+const PUBLIC_BRAND_FIELDS = "-__v -createdAt -updatedAt -isActive -description";
+const PUBLIC_CATEGORY_FIELDS =
+  "-__v -createdAt -updatedAt -isActive -description -subcategories";
+const PUBLIC_SUBCATEGORY_FIELDS =
+  "-__v -createdAt -updatedAt -isActive -description -parentCategory";
 
 export const getAllProducts = async (req, res) => {
   try {
@@ -12,13 +19,32 @@ export const getAllProducts = async (req, res) => {
     let products;
 
     if (sort === "mostSold") {
-      products = await Product.find().sort({ amountSold: -1 });
+      products = await Product.find({ isActive: true }, PUBLIC_FIELDS)
+        .sort({ amountSold: -1 })
+        .populate("brand", PUBLIC_BRAND_FIELDS)
+        .populate("category", PUBLIC_CATEGORY_FIELDS)
+        .populate("subcategory", PUBLIC_SUBCATEGORY_FIELDS);
     } else if (sort === "newest") {
-      products = await Product.find().sort({ createdAt: -1 });
+      products = await Product.find({ isActive: true }, PUBLIC_FIELDS)
+        .sort({
+          createdAt: -1,
+        })
+        .populate("brand", PUBLIC_BRAND_FIELDS)
+        .populate("category", PUBLIC_CATEGORY_FIELDS)
+        .populate("subcategory", PUBLIC_SUBCATEGORY_FIELDS);
     } else if (sort === "rating") {
-      products = await Product.find().sort({ rating: -1 });
+      products = await Product.find({ isActive: true }, PUBLIC_FIELDS)
+        .sort({
+          rating: -1,
+        })
+        .populate("brand", PUBLIC_BRAND_FIELDS)
+        .populate("category", PUBLIC_CATEGORY_FIELDS)
+        .populate("subcategory", PUBLIC_SUBCATEGORY_FIELDS);
     } else {
-      products = await Product.find();
+      products = await Product.find({ isActive: true }, PUBLIC_FIELDS)
+        .populate("brand", PUBLIC_BRAND_FIELDS)
+        .populate("category", PUBLIC_CATEGORY_FIELDS)
+        .populate("subcategory", PUBLIC_SUBCATEGORY_FIELDS);
     }
 
     if (!products || products.length === 0) {
@@ -33,7 +59,13 @@ export const getAllProducts = async (req, res) => {
 };
 export const getFeaturedProducts = async (req, res) => {
   try {
-    const featuredProducts = await Product.find({ isFeatured: true });
+    const featuredProducts = await Product.find(
+      { isFeatured: true },
+      PUBLIC_FIELDS,
+    )
+      .populate("brand", PUBLIC_BRAND_FIELDS)
+      .populate("category", PUBLIC_CATEGORY_FIELDS)
+      .populate("subcategory", PUBLIC_SUBCATEGORY_FIELDS);
 
     if (!featuredProducts || featuredProducts.length === 0) {
       return res.status(404).json({ message: "No products found" });
@@ -46,9 +78,17 @@ export const getFeaturedProducts = async (req, res) => {
 };
 export const getProductsByCategory = async (req, res) => {
   try {
-    const category = req.params.category;
+    const category_slug = req.params.category;
 
-    const productsByCategory = await Product.find({ category: category });
+    const category = await Category.findOne({ slug: category_slug });
+
+    const productsByCategory = await Product.find(
+      { category: category },
+      PUBLIC_FIELDS,
+    )
+      .populate("brand", PUBLIC_BRAND_FIELDS)
+      .populate("category", PUBLIC_CATEGORY_FIELDS)
+      .populate("subcategory", PUBLIC_SUBCATEGORY_FIELDS);
 
     if (!productsByCategory || productsByCategory.length === 0) {
       return res
@@ -63,12 +103,20 @@ export const getProductsByCategory = async (req, res) => {
 };
 export const getFeaturedProductsByCategory = async (req, res) => {
   try {
-    const category = req.params.category;
+    const category_slug = req.params.category;
 
-    const featuredByCategory = await Product.find({
-      category: category,
-      isFeatured: true,
-    });
+    const category = await Category.findOne({ slug: category_slug });
+
+    const featuredByCategory = await Product.find(
+      {
+        category: category,
+        isFeatured: true,
+      },
+      PUBLIC_FIELDS,
+    )
+      .populate("brand", PUBLIC_BRAND_FIELDS)
+      .populate("category", PUBLIC_CATEGORY_FIELDS)
+      .populate("subcategory", PUBLIC_SUBCATEGORY_FIELDS);
 
     if (!featuredByCategory || featuredByCategory.length === 0) {
       return res
