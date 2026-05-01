@@ -25,9 +25,11 @@ export default function FeaturedProducts() {
   return (
     <>
       <div className="featured-wrapper">
-        <h2>Featured Products</h2>
         <div className="featured-product-container">
-          <ProductCarousel products={featuredProducts} />
+          <ProductCarousel
+            products={featuredProducts}
+            title={"Featured Products"}
+          />
         </div>
       </div>
     </>
