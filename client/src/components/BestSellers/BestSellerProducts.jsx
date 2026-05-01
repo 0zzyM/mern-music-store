@@ -24,9 +24,8 @@ export default function BestSellerProducts() {
 
   return (
     <div className="best-seller-wrapper">
-      <h2>Best Sellers</h2>
       <div className="best-seller-product-container">
-        <ProductCarousel products={bestSellers} />
+        <ProductCarousel products={bestSellers} title="Best Sellers" />
       </div>
     </div>
   );
