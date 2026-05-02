@@ -1,6 +1,14 @@
 import Product from "../models/productModel.js";
 import Category from "../models/categoryModel.js";
+import Subcategory from "../models/subcategoryModel.js";
+import Brand from "../models/brandModel.js";
+
 const VALID_SORTS = ["mostSold", "newest", "rating"];
+const SORT_OPTIONS = {
+  mostSold: { amountSold: -1 },
+  newest: { createdAt: -1 },
+  rating: { rating: -1 },
+};
 const PUBLIC_FIELDS = "-__v -createdAt -updatedAt -isActive";
 const PUBLIC_BRAND_FIELDS = "-__v -createdAt -updatedAt -isActive -description";
 const PUBLIC_CATEGORY_FIELDS =
@@ -8,44 +16,56 @@ const PUBLIC_CATEGORY_FIELDS =
 const PUBLIC_SUBCATEGORY_FIELDS =
   "-__v -createdAt -updatedAt -isActive -description -parentCategory";
 
-export const getAllProducts = async (req, res) => {
+export const getProducts = async (req, res) => {
   try {
-    const { sort } = req.query; // Same as (const sort = req.query.sort)
+    const { sort, category, subcategory, brand, isFeatured } = req.query;
 
+    // Sort Validation
     if (sort && !VALID_SORTS.includes(sort)) {
       return res.status(400).json({ message: "Invalid sort parameter" });
     }
 
-    let products;
+    // Validation and filteration of the query
+    const filter = { isActive: true };
 
-    if (sort === "mostSold") {
-      products = await Product.find({ isActive: true }, PUBLIC_FIELDS)
-        .sort({ amountSold: -1 })
-        .populate("brand", PUBLIC_BRAND_FIELDS)
-        .populate("category", PUBLIC_CATEGORY_FIELDS)
-        .populate("subcategory", PUBLIC_SUBCATEGORY_FIELDS);
-    } else if (sort === "newest") {
-      products = await Product.find({ isActive: true }, PUBLIC_FIELDS)
-        .sort({
-          createdAt: -1,
-        })
-        .populate("brand", PUBLIC_BRAND_FIELDS)
-        .populate("category", PUBLIC_CATEGORY_FIELDS)
-        .populate("subcategory", PUBLIC_SUBCATEGORY_FIELDS);
-    } else if (sort === "rating") {
-      products = await Product.find({ isActive: true }, PUBLIC_FIELDS)
-        .sort({
-          rating: -1,
-        })
-        .populate("brand", PUBLIC_BRAND_FIELDS)
-        .populate("category", PUBLIC_CATEGORY_FIELDS)
-        .populate("subcategory", PUBLIC_SUBCATEGORY_FIELDS);
-    } else {
-      products = await Product.find({ isActive: true }, PUBLIC_FIELDS)
-        .populate("brand", PUBLIC_BRAND_FIELDS)
-        .populate("category", PUBLIC_CATEGORY_FIELDS)
-        .populate("subcategory", PUBLIC_SUBCATEGORY_FIELDS);
+    const sortOption = SORT_OPTIONS[sort] || {}; // default to no sort
+
+    if (category) {
+      const requestedCategory = await Category.findOne({ slug: category });
+      if (!requestedCategory) {
+        return res.status(404).json({ message: "Invalid category" }); //404 cause category is not found
+      }
+      filter.category = requestedCategory._id;
     }
+
+    if (subcategory) {
+      const requestedSubcategory = await Subcategory.findOne({
+        slug: subcategory,
+      });
+      if (!requestedSubcategory) {
+        return res.status(404).json({ message: "Invalid sub-category" });
+      }
+      filter.subcategory = requestedSubcategory._id;
+    }
+
+    if (brand) {
+      const requestedBrand = await Brand.findOne({ slug: brand });
+      if (!requestedBrand) {
+        return res.status(404).json({ message: "Invalid brand" });
+      }
+      filter.brand = requestedBrand._id;
+    }
+
+    if (isFeatured === "true") {
+      filter.isFeatured = true;
+    }
+
+    // Query
+    const products = await Product.find(filter, PUBLIC_FIELDS)
+      .sort(sortOption)
+      .populate("brand", PUBLIC_BRAND_FIELDS)
+      .populate("category", PUBLIC_CATEGORY_FIELDS)
+      .populate("subcategory", PUBLIC_SUBCATEGORY_FIELDS);
 
     if (!products || products.length === 0) {
       return res.status(404).json({ message: "No products found" });
@@ -57,6 +77,8 @@ export const getAllProducts = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+{
+  /*
 export const getFeaturedProducts = async (req, res) => {
   try {
     const featuredProducts = await Product.find(
@@ -100,7 +122,8 @@ export const getProductsByCategory = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
-};
+
+}
 export const getFeaturedProductsByCategory = async (req, res) => {
   try {
     const category_slug = req.params.category;
@@ -130,3 +153,6 @@ export const getFeaturedProductsByCategory = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+};
+ */
+}
