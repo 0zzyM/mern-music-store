@@ -8,7 +8,7 @@ export default function FeaturedProducts() {
 
   useEffect(() => {
     const getFeaturedProducts = async () => {
-      const url = "http://localhost:5000/api/v1/products/featured";
+      const url = "http://localhost:5000/api/v1/products?isFeatured=true";
       try {
         const res = await fetch(url);
         const data = await res.json();
