@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar/Navbar.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import CategoriesPage from "./pages/CategoriesPage.jsx";
 import CategoryPage from "./pages/CategoryPage.jsx";
+import ProductsPage from "./pages/ProductsPage.jsx";
 
 import { Route, Routes } from "react-router-dom";
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/categories" element={<CategoriesPage />}></Route>
         <Route path="/categories/:category" element={<CategoryPage />} />
+        <Route path="/products" element={<ProductsPage />}></Route>
       </Routes>
     </>
   );
