@@ -3,11 +3,13 @@ import Category from "../models/categoryModel.js";
 import Subcategory from "../models/subcategoryModel.js";
 import Brand from "../models/brandModel.js";
 
-const VALID_SORTS = ["mostSold", "newest", "rating"];
+const VALID_SORTS = ["mostSold", "newest", "rating", "priceAsc", "priceDesc"];
 const SORT_OPTIONS = {
-  mostSold: { amountSold: -1 },
   newest: { createdAt: -1 },
+  mostSold: { amountSold: -1 },
   rating: { rating: -1 },
+  priceAsc: { price: 1 },
+  priceDesc: { price: -1 },
 };
 const PUBLIC_FIELDS = "-__v -createdAt -updatedAt -isActive";
 const PUBLIC_BRAND_FIELDS = "-__v -createdAt -updatedAt -isActive -description";
