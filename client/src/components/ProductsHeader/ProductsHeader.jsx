@@ -36,6 +36,7 @@ export default function ProductsHeader({ title }) {
           <div className="sorting-actions">
             <div className="sort-wrapper">
               <select value={sortOption} onChange={handleSort} className="">
+                {/* TODO: Default can be set to Popular after logic is implemented */}
                 <option value="">Sort by...</option>
                 <option value="mostSold">Most Sold</option>
                 <option value="priceAsc">Price: Low to High</option>

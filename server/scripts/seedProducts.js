@@ -20,6 +20,7 @@ const products = [
     subcategorySlug: "electric-guitars",
     isFeatured: true,
     details: {},
+    amountSould: 12,
   },
   {
     name: "Fender USA Professional Classic Stratocaster",
@@ -31,6 +32,7 @@ const products = [
     subcategorySlug: "electric-guitars",
     isFeatured: true,
     details: {},
+    amountSould: 5,
   },
   {
     name: "Marshall JVM 410",
@@ -42,6 +44,7 @@ const products = [
     subcategorySlug: "amp-heads",
     isFeatured: true,
     details: {},
+    amountSould: 10,
   },
   {
     name: "Product 4",
