@@ -2,6 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ProductList from "../components/ProductList/ProductList.jsx";
 import ProductsHeader from "../components/ProductsHeader/ProductsHeader.jsx";
+import SidebarFilter from "../components/SidebarFilter/SidebarFilter.jsx";
 
 export default function ProductsPage() {
   const [searchParams] = useSearchParams();
@@ -40,10 +41,20 @@ export default function ProductsPage() {
     getTitle();
   }, [subcategory, category]);
 
+  {
+    /*TODO:TEMPORARY ADJUSTMENT REMOVE LATER */
+  }
+
   return (
-    <div className="products-wrapper">
+    <div className="products-wrapper" style={{ width: "100%" }}>
       <ProductsHeader title={title} />
-      <ProductList filters={filters} />
+      <div
+        className="products-page-body"
+        style={{ width: "90%", display: "flex", justifyContent: "center" }}
+      >
+        <SidebarFilter />
+        <ProductList filters={filters} />
+      </div>
     </div>
   );
 }
