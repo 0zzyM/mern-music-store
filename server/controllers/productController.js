@@ -51,11 +51,14 @@ export const getProducts = async (req, res) => {
     }
 
     if (brand) {
-      const requestedBrand = await Brand.findOne({ slug: brand });
-      if (!requestedBrand) {
-        return res.status(404).json({ message: "Invalid brand" });
+      const brandSlugs = brand.split(",");
+      const requestedBrands = await Brand.find({ slug: { $in: brandSlugs } });
+
+      if (requestedBrands.length === 0) {
+        return res.status(404).json({ message: `Invalid brand ${brandSlugs}` });
       }
-      filter.brand = requestedBrand._id;
+
+      filter.brand = { $in: requestedBrands.map((b) => b._id) };
     }
 
     if (isFeatured === "true") {
