@@ -8,28 +8,24 @@ export default function SidebarFilter() {
   const [letter, setLetter] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const brandFilter = searchParams.get("brand");
+  const brandFilter = searchParams.get("brand")?.split(",") || [];
 
   const changeLetter = (e) => {
     setLetter(e.target.value);
   };
 
-  {
-    /*FIXME: This function is not working as intended needs to be refactored. */
-  }
-
   const toggleBrandFilter = (brand) => {
-    if (!brandFilter) {
-      searchParams.set("brand", brand);
-      setSearchParams(searchParams);
+    const newBrands = brandFilter.includes(brand)
+      ? brandFilter.filter((b) => b !== brand) // remove
+      : [...brandFilter, brand]; // add
+
+    if (newBrands.length === 0) {
+      searchParams.delete("brand");
     } else {
-      if (brandFilter.includes(brand)) {
-        searchParams.delete("brand", brand);
-        searchParams.set(searchParams);
-      }
-      searchParams.set("brand", brand);
-      setSearchParams(searchParams);
+      searchParams.set("brand", newBrands.join(","));
     }
+
+    setSearchParams(searchParams);
   };
 
   useEffect(() => {
@@ -51,8 +47,6 @@ export default function SidebarFilter() {
       brand.name.toLowerCase().startsWith(letter.toLowerCase()),
     ) || [];
 
-  console.log(brandFilter);
-
   if (!brands) return <p>Loading...</p>;
 
   return (
@@ -73,8 +67,7 @@ export default function SidebarFilter() {
               <label className="filter-item">
                 <input
                   type="checkbox"
-                  className="filter-checkbox"
-                  checked={brandFilter === brand.slug}
+                  checked={brandFilter.includes(brand.slug)}
                   onChange={() => toggleBrandFilter(brand.slug)}
                 />
                 <p>{brand.name}</p>
