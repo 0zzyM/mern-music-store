@@ -1,9 +1,7 @@
 import guitarPromotionImage from "../../assets/guitar-promotion.jpg";
 import ampPromotionImage from "../../assets/amp-promotion.jpg";
 import pedalsPromotionImage from "../../assets/pedals-promotion.jpg";
-
-import nextImage from "../../assets/next.svg";
-import prevImage from "../../assets/prev.svg";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "./PromotionBanner.css";
 import { useState } from "react";
 
@@ -21,24 +19,22 @@ export default function PromotionBanner() {
   };
 
   return (
-    <>
-      <div className="promotion-container">
-        <div
-          className="promotion-image-container"
-          style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
-        >
-          {images.map((item, index) => (
-            <img src={item} alt="" key={index} />
-          ))}
-        </div>
-
-        <button className="promotion-banner-button-next" onClick={handleNext}>
-          <img src={nextImage} alt="" />
-        </button>
-        <button className="promotion-banner-button-prev" onClick={handlePrev}>
-          <img src={prevImage} alt="" />
-        </button>
+    <div className="promotion-container">
+      <div
+        className="promotion-image-container"
+        style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
+      >
+        {images.map((item, index) => (
+          <img src={item} alt="" key={index} />
+        ))}
       </div>
-    </>
+
+      <button className="promotion-banner-next-btn" onClick={handleNext}>
+        <FaChevronRight className="promotion-banner-next-icon" />
+      </button>
+      <button className="promotion-banner-prev-btn" onClick={handlePrev}>
+        <FaChevronLeft className="promotion-banner-prev-icon" />
+      </button>
+    </div>
   );
 }
