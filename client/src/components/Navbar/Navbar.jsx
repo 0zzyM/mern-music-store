@@ -1,53 +1,87 @@
-import cartIcon from "../../assets/cart.svg";
-import userIcon from "../../assets/user.svg";
-import searchIcon from "../../assets/search.svg";
+import { Link } from "react-router-dom";
+import { FaHeart, FaUser } from "react-icons/fa";
+import { LuShoppingCart, LuSearch } from "react-icons/lu";
 
 import "./Navbar.css";
+import React from "react";
+
 function Navbar() {
   return (
-    <>
-      <header className="page-header">
-        <nav className="nav-wrapper">
-          <a className="nav-menu-item" href="#">
-            Shop
-          </a>
-          <a className="nav-menu-item" href="#">
-            Services
-          </a>
-          <a className="nav-menu-item" href="#">
-            Contact
-          </a>
-        </nav>
+    <header className="page-header">
+      <nav className="page-header-top">
+        <Link className="logo-wrapper" to="/">
+          <div className="logo">ozzyMusic</div>
+        </Link>
 
-        <div className="logo">ozzyMusic</div>
-
+        <div className="page-search-bar-wrapper">
+          <input
+            type="text"
+            className="page-search-bar"
+            placeholder="Search for a product"
+          />
+          {/*TODO: Add search function here */}
+          <label className="header-search-icon">
+            <LuSearch />
+          </label>
+        </div>
         <div className="header-actions">
-          <div className="header-action">
-            <a className="header-action-item" href="#">
-              <img className="search-icon" src={searchIcon} alt="" />
-            </a>
-          </div>
-          <div className="login-register">
-            <a className="login-register-btn" href="#">
-              <img className="cart-icon" src={cartIcon} alt="" />
-            </a>
-          </div>
-          <div className="cart">
-            <a className="cart-btn" href="#">
-              <img className="user-icon" src={userIcon} alt="" />
-            </a>
-          </div>
+          {/*TODO: Username needs to be added to the routing */}
+          <Link to="/username/wishlist">
+            <FaHeart className="wish-list-icon" />
+          </Link>
+          <Link to="/username/cart">
+            <LuShoppingCart className="cart-icon" />
+          </Link>
+          <Link to="/username/profile">
+            <FaUser className="user-icon" />
+          </Link>
         </div>
-      </header>
+      </nav>
 
-      {/* 
-      <div>
-        <div className="search-bar-wrapper">
-          <input className="search-bar" placeholder="Search" type="text" />
-        </div>
-      </div>
-    */}
-    </>
+      {/* TODO:EDIT Bottom Navbar */}
+
+      <nav className="page-header-bottom">
+        <ul className="categories-nav">
+          <li className="nav-item">
+            <Link to="/categories/guitars">Guitars</Link>
+            {/*TODO: Add Styling and State for dropdown 
+              <div className="dropdown">
+                <Link to="/products?subcategory=electric-guitars">
+                  Electric Guitars
+                </Link>
+                <Link to="/products?subcategory=bass-guitars">
+                  Bass Guitars
+                </Link>
+                <Link to="/products?subcategory=acoustic-guitars">
+                  Acoustic Guitars
+                </Link>
+              </div>
+              */}
+          </li>
+          <li className="nav-item">
+            <Link to="/categories/amplification">Amplification</Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/categories/effects">Effects</Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/categories/recording">Recording</Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/categories/maintenance">Maintenance</Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/categories/accessories">Accessories</Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/categories/services">Services</Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/categories/contact-us">Contact Us</Link>
+          </li>
+        </ul>
+      </nav>
+    </header>
   );
 }
 
