@@ -71,7 +71,7 @@ export default function SidebarFilter() {
                   onChange={() => toggleBrandFilter(brand.slug)}
                 />
                 <p>{brand.name}</p>
-                {/*TODO: Add Amount of products here later */}
+                {/* TODO: Add faceted search - product counts per filter this is an extra feature will take time */}
               </label>
             );
           })}
