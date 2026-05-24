@@ -1,5 +1,6 @@
 import CategoryCard from "./CategoryCard";
 import { useState, useEffect } from "react";
+import "./Categories.css";
 
 export default function CategoriesGrid() {
   const [categories, setCategories] = useState(null);
