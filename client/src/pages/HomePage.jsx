@@ -1,6 +1,7 @@
 import PromotionBanner from "../components/PromotionBanner/PromotionBanner.jsx";
 import CategoriesGrid from "../components/Categories/CategoriesGrid.jsx";
 import ProductCollection from "../components/ProductCollection/ProductCollection.jsx";
+import BrandCarousel from "../components/Brands/BrandCarousel.jsx";
 
 export default function HomePage() {
   return (
@@ -14,6 +15,8 @@ export default function HomePage() {
       <ProductCollection title="Best Sellers" sortOption="mostSold" />
 
       <ProductCollection title="New Arrivals" sortOption="newest" />
+
+      <BrandCarousel />
     </>
   );
 }
