@@ -35,8 +35,7 @@
 .promotion-banner-prev-btn,
 .promotion-banner-next-btn {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  transition: translateY(-50%);
   height: 100%;
   opacity: 0;
   border: none;
