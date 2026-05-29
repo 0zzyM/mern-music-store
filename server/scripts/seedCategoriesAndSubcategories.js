@@ -6,11 +6,13 @@ import Subcategory from "../models/subcategoryModel.js";
 
 dotenv.config();
 
+const IMAGE_RESIZE_OPTIONS = "h_1080,c_scale,q_auto,f_auto";
+
 const categories = [
   {
     name: "Guitars",
     slug: "guitars",
-    image: "https://picsum.photos/400/300",
+    image: `https://res.cloudinary.com/drbhtzgcs/image/upload/${IMAGE_RESIZE_OPTIONS}/v1779704947/guitars-category-image_ue8f8b.jpg`,
     description: "Electric, bass, and acoustic guitars from top brands",
     subcategories: [],
     isActive: true,
@@ -18,7 +20,7 @@ const categories = [
   {
     name: "Amplification",
     slug: "amplification",
-    image: "https://picsum.photos/400/300",
+    image: `https://res.cloudinary.com/drbhtzgcs/image/upload/${IMAGE_RESIZE_OPTIONS}/v1779706782/amplification-category-image4_hmrnsx.jpg`,
     description: "Amp heads, combos, and cabinets for every style",
     subcategories: [],
     isActive: true,
@@ -26,7 +28,7 @@ const categories = [
   {
     name: "Effects",
     slug: "effects",
-    image: "https://picsum.photos/400/300",
+    image: `https://res.cloudinary.com/drbhtzgcs/image/upload/${IMAGE_RESIZE_OPTIONS}/v1779706913/effects-category-image2_ecd2wl.jpg`,
     description: "Pedals and effects to shape your sound",
     subcategories: [],
     isActive: true,
@@ -34,7 +36,7 @@ const categories = [
   {
     name: "Accessories",
     slug: "accessories",
-    image: "https://picsum.photos/400/300",
+    image: `https://res.cloudinary.com/drbhtzgcs/image/upload/${IMAGE_RESIZE_OPTIONS}/v1779704938/accessories-category-image_n1m68p.jpg`,
     description: "Strings, picks, straps, and essential gear",
     subcategories: [],
     isActive: true,
@@ -42,7 +44,7 @@ const categories = [
   {
     name: "Recording",
     slug: "recording",
-    image: "https://picsum.photos/400/300",
+    image: `https://res.cloudinary.com/drbhtzgcs/image/upload/${IMAGE_RESIZE_OPTIONS}/v1779704937/recording-category-image_cx54tu.jpg`,
     description: "Audio interfaces, microphones, and studio equipment",
     subcategories: [],
     isActive: true,
@@ -50,7 +52,7 @@ const categories = [
   {
     name: "Maintenance",
     slug: "maintenance",
-    image: "https://picsum.photos/400/300",
+    image: `https://res.cloudinary.com/drbhtzgcs/image/upload/${IMAGE_RESIZE_OPTIONS}/v1779704941/maintenance-category-image_buabwt.jpg`,
     description: "Tools and care products to keep your gear in shape",
     subcategories: [],
     isActive: true,
