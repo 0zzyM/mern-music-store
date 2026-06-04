@@ -4,6 +4,7 @@ import Subcategory from "../models/subcategoryModel.js";
 import Brand from "../models/brandModel.js";
 
 const VALID_SORTS = ["mostSold", "newest", "rating", "priceAsc", "priceDesc"];
+const DEFAULT_SORT = { createdAt: 1 };
 const SORT_OPTIONS = {
   newest: { createdAt: -1 },
   mostSold: { amountSold: -1 },
@@ -30,7 +31,7 @@ export const getProducts = async (req, res) => {
     // Validation and filteration of the query
     const filter = { isActive: true };
 
-    const sortOption = SORT_OPTIONS[sort] || {}; // default to no sort
+    const sortOption = SORT_OPTIONS[sort] || DEFAULT_SORT; // fall back to default sort which is createdAt: 1
 
     if (category) {
       const requestedCategory = await Category.findOne({ slug: category });

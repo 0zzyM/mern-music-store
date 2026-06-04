@@ -2,9 +2,13 @@ import Brand from "../models/brandModel.js";
 
 const PUBLIC_FIELDS = "-__v -createdAt -updatedAt -isActive";
 
+const DEFAULT_SORT = { createdAt: 1 };
+
 export const getAllBrands = async (req, res) => {
   try {
-    const brands = await Brand.find({ isActive: true }, PUBLIC_FIELDS);
+    const brands = await Brand.find({ isActive: true }, PUBLIC_FIELDS).sort(
+      DEFAULT_SORT,
+    );
 
     if (!brands) {
       return res.status(404).json({ message: "No brands found" });

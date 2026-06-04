@@ -2,6 +2,7 @@ import Category from "../models/categoryModel.js";
 import Subcategory from "../models/subcategoryModel.js";
 
 const PUBLIC_FIELDS = "-__v -createdAt -updatedAt -isActive";
+const DEFAULT_SORT = { createdAt: 1 };
 
 export const getAllCategories = async (req, res) => {
   try {
@@ -10,7 +11,9 @@ export const getAllCategories = async (req, res) => {
         isActive: true,
       },
       PUBLIC_FIELDS,
-    ).populate("subcategories", PUBLIC_FIELDS);
+    )
+      .sort(DEFAULT_SORT)
+      .populate("subcategories", PUBLIC_FIELDS);
 
     if (!categories || categories.length === 0) {
       return res.status(404).json({ message: "No categories found" });
