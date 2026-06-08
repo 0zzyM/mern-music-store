@@ -43,7 +43,7 @@ export default function BrandsCarousel() {
 
   return (
     <div className="brands-carousel-container">
-      <div className="carousel-header">
+      <div className="brand-carousel-header">
         <h2>Brands</h2>
         <Link to="/brands" className="carousel-header-action">
           <span>View all</span>
