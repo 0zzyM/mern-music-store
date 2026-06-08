@@ -3,8 +3,8 @@ import "./ProductCarousel.css";
 import { Link } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useState } from "react";
-const VISIBLE_CARDS = 5;
-const SLIDE_AMOUNT = 250;
+const VISIBLE_CARDS = 6;
+const SLIDE_AMOUNT = 240;
 
 export default function ProductCarousel({ products, title, viewAllLink }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -20,9 +20,13 @@ export default function ProductCarousel({ products, title, viewAllLink }) {
     setCurrentIndex((prev) => prev - 1);
   };
 
+  {
+    /*TODO: Css needs to be cleaned and code can be improved later */
+  }
+
   return (
     <div className="carousel-container">
-      <div className="carousel-header">
+      <div className="product-carousel-header">
         <h2>{title}</h2>
         <Link to={viewAllLink} className="carousel-header-action">
           <span>View all</span>
