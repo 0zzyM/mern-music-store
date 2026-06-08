@@ -208,9 +208,12 @@ function Navbar() {
               </Link>
             </div>
           </li>
+          {/*TODO: Decide to keep and build or remove */}
+          {/*
           <li className="nav-item">
             <Link to="/categories/services">Services</Link>
           </li>
+          */}
           <li className="nav-item">
             <Link to="/categories/contact-us">Contact Us</Link>
           </li>
