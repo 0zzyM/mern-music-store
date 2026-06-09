@@ -1,13 +1,10 @@
 import { Link } from "react-router-dom";
 import { FaHeart, FaUser } from "react-icons/fa";
 import { LuShoppingCart, LuSearch } from "react-icons/lu";
-import { useState } from "react";
 import "./Navbar.css";
 import React from "react";
 
 function Navbar() {
-  const [isItemHovered, setIsItemHovered] = useState(false);
-
   return (
     <header className="page-header">
       <nav className="page-header-top">
