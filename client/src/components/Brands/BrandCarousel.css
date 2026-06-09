@@ -13,6 +13,7 @@
   justify-content: center;
   gap: 10px;
   transition: all 300ms ease;
+  font-size: 1.2em;
 }
 
 .carousel-header-action:hover {
@@ -24,8 +25,8 @@
   color: black;
   border-radius: 100%;
   padding: 8px;
-  height: 16px;
-  width: 16px;
+  height: 20px;
+  width: 20px;
   transition: all 300ms ease;
 }
 
@@ -45,23 +46,20 @@
 .brands-carousel-container {
   width: 100%;
   max-width: 1560px;
-  margin: 0 auto;
+  margin: 32px auto 32px;
   position: relative;
 }
 
-/*
-.brands-carousel-wrapper {
-  gap: 12px;
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  flex-direction: row;
-  margin: 0 auto;
-  max-height: 330px;
-  overflow: hidden;
+.brand-carousel-header {
+  padding-bottom: 12px;
 }
-*/
+
+.brand-carousel-header h2 {
+  font-size: 2em;
+}
+
 .brands-carousel-wrapper {
+  padding-top: 10px;
   width: 100%;
   overflow: hidden;
 }
