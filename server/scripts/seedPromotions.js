@@ -7,7 +7,7 @@ dotenv.config();
 
 const promotions = [
   {
-    title: "Find Your Sound",
+    title: "Find Your Sound with us",
     subtitle: "Premium guitars from top brands",
     image:
       "https://res.cloudinary.com/drbhtzgcs/image/upload/v1781001338/guitar-promotion_vwskba.jpg",
