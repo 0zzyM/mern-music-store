@@ -1,32 +1,51 @@
-import guitarPromotionImage from "../../assets/guitar-promotion.jpg";
-import ampPromotionImage from "../../assets/amp-promotion.jpg";
-import pedalsPromotionImage from "../../assets/pedals-promotion.jpg";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "./PromotionBanner.css";
-import { useState } from "react";
-
-const images = [guitarPromotionImage, ampPromotionImage, pedalsPromotionImage]; //Sitting outside so it wouldn't get recreated on re-render
+import { useState, useEffect } from "react";
+import PromotionBannerItem from "./PromotionBannerItem";
 
 export default function PromotionBanner() {
+  const [promotions, setPromotions] = useState(null);
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  useEffect(() => {
+    const getPromotions = async () => {
+      try {
+        const url = "http://localhost:5000/api/v1/promotions";
+        const res = await fetch(url);
+        const data = await res.json();
+        setPromotions(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getPromotions();
+  }, []);
+
   const handleNext = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    setCurrentImageIndex((prev) => (prev + 1) % promotions.length);
   };
 
   const handlePrev = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+    setCurrentImageIndex(
+      (prev) => (prev - 1 + promotions.length) % promotions.length,
+    );
   };
+
+  if (!promotions) return <p>Loading...</p>;
 
   return (
     <div className="promotion-container">
       <div
-        className="promotion-image-container"
+        className="promotion-item"
         style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
       >
-        {images.map((item, index) => (
-          <img src={item} alt="" key={index} />
-        ))}
+        {promotions.map((promotion) => {
+          return (
+            <PromotionBannerItem promotion={promotion} key={promotion._id} />
+          );
+        })}
       </div>
 
       <button className="promotion-banner-next-btn" onClick={handleNext}>

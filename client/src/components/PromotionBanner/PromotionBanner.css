@@ -1,50 +1,117 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playwrite+GB+S+Guides:ital@0;1&display=swap");
 .promotion-container {
   margin-top: 32px;
   margin-bottom: 48px;
   width: 90%;
+
   align-self: center;
   position: relative;
   max-height: 480px;
-  display: flex;
   overflow: hidden;
-}
-.promotion-container img {
   border-radius: 24px;
-  height: 100%;
-  min-width: 100%;
-  object-fit: cover;
 }
 
-.promotion-image-container {
+.promotion-item {
   display: flex;
-  flex-direction: row;
-  transition: all 300ms ease-in-out;
+  transition: transform 300ms ease;
 }
 
-.promotion-container img:hover {
+.promotion-item-container {
+  min-width: 100%;
+  position: relative;
+}
+
+.promotion-image-container img {
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+
+  border-radius: 24px;
+}
+
+.promotion-overlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.3) 70%,
+    transparent 100%
+  );
+  color: white;
+  transition: all 300ms ease;
+}
+
+.promotion-title {
+  font-family: "Playfair Display", serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 3.5em;
+  font-weight: 400;
+  margin: 0 0 16px 0;
+  line-height: 1;
+}
+
+.promotion-subtitle {
+  font-size: 1.25em;
+  margin-bottom: 24px;
+}
+
+.promotion-cta-btn {
+  text-decoration: none;
+  display: inline-block;
+  background: white;
+  color: black;
+  padding: 22px 28px;
+  text-decoration: none;
+  border-radius: 40px;
+  font-size: large;
+  font-weight: 600;
+  transition: all 300ms ease;
+}
+
+.promotion-cta-btn:hover {
   cursor: pointer;
-}
-
-.promotion-banner-next-btn {
-  right: 0px;
-}
-.promotion-banner-prev-btn {
-  left: 0px;
+  background-color: rgb(219, 219, 219);
 }
 
 .promotion-banner-prev-btn,
 .promotion-banner-next-btn {
   position: absolute;
-  transition: translateY(-50%);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
   height: 100%;
   opacity: 0;
   border: none;
+  cursor: pointer;
   background: radial-gradient(
     circle,
-    rgba(240, 240, 240, 0.08) 100%,
-    rgba(207, 207, 207, 0.2) 0%
+    rgba(240, 240, 240, 0.08) 0%,
+    rgba(207, 207, 207, 0.2) 100%
   );
-  transform: all 0.3ms ease;
+  transition: opacity 200ms ease;
+  z-index: 10;
+}
+
+.promotion-banner-prev-btn {
+  left: 0;
+}
+.promotion-banner-next-btn {
+  right: 0;
+}
+
+.promotion-container:hover .promotion-banner-prev-btn,
+.promotion-container:hover .promotion-banner-next-btn {
+  opacity: 1;
 }
 
 .promotion-banner-prev-icon,
@@ -52,10 +119,4 @@
   color: white;
   height: 32px;
   width: 32px;
-}
-
-.promotion-container:hover .promotion-banner-next-btn,
-.promotion-container:hover .promotion-banner-prev-btn {
-  opacity: 1;
-  cursor: pointer;
 }
