@@ -66,13 +66,14 @@
 }
 
 .promotion-cta-btn {
+  text-transform: uppercase;
   text-decoration: none;
   display: inline-block;
-  background: white;
+  background: rgba(255, 255, 255, 1);
   color: black;
-  padding: 22px 28px;
+  padding: 18px 24px;
   text-decoration: none;
-  border-radius: 40px;
+  border-radius: 22px;
   font-size: large;
   font-weight: 600;
   transition: all 300ms ease;
