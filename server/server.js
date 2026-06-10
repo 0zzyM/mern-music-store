@@ -7,6 +7,7 @@ import subCategoryRouter from "./routers/subCategoryRouter.js";
 import categoryRouter from "./routers/categoryRouter.js";
 import brandRouter from "./routers/brandRouter.js";
 import promotionRouter from "./routers/promotionRouter.js";
+import searchRouter from "./routers/searchRouter.js";
 
 // Apperantly this needs to be on top otherwise process.env will get undefined
 dotenv.config(); // remember this loads .env into process.env
@@ -28,6 +29,7 @@ app.use("/api/v1/subcategories", subCategoryRouter);
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/brands", brandRouter);
 app.use("/api/v1/promotions", promotionRouter);
+app.use("/api/v1/search", searchRouter);
 
 app.get("/", (req, res) => {
   res.send("Backend is running!!!");
