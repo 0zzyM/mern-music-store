@@ -5,11 +5,12 @@ import CategoriesPage from "./pages/CategoriesPage.jsx";
 import CategoryPage from "./pages/CategoryPage.jsx";
 import ProductsPage from "./pages/ProductsPage.jsx";
 import PageFooter from "./components/Footer/PageFooter.jsx";
+import { SearchProvider } from "./contexts/SearchProvider.jsx";
 
 import { Route, Routes } from "react-router-dom";
 function App() {
   return (
-    <>
+    <SearchProvider>
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -18,7 +19,7 @@ function App() {
         <Route path="/products" element={<ProductsPage />}></Route>
       </Routes>
       <PageFooter />
-    </>
+    </SearchProvider>
   );
 }
 
