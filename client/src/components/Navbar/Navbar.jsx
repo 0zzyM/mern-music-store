@@ -2,9 +2,13 @@ import { Link } from "react-router-dom";
 import { FaHeart, FaUser } from "react-icons/fa";
 import { LuShoppingCart, LuSearch } from "react-icons/lu";
 import "./Navbar.css";
-import React from "react";
+import NavbarSearch from "./NavbarSearch";
+import { useContext } from "react";
+import { SearchContext } from "../../contexts/SearchContext";
 
 function Navbar() {
+  const { isSearching } = useContext(SearchContext);
+
   return (
     <header className="page-header">
       <nav className="page-header-top">
@@ -12,17 +16,8 @@ function Navbar() {
           <div className="logo">ozzyMusic</div>
         </Link>
 
-        <div className="page-search-bar-wrapper">
-          <input
-            type="text"
-            className="page-search-bar"
-            placeholder="Search for a product"
-          />
-          {/*TODO: Add search function here */}
-          <label className="header-search-icon">
-            <LuSearch />
-          </label>
-        </div>
+        <NavbarSearch />
+
         <div className="header-actions">
           {/*TODO: Username needs to be added to the routing */}
           <Link to="/username/wishlist">
@@ -37,7 +32,10 @@ function Navbar() {
         </div>
       </nav>
 
-      <nav className="page-header-bottom">
+      <nav
+        className="page-header-bottom"
+        style={isSearching ? { opacity: "0" } : { opacity: "1" }}
+      >
         {/*TODO: Consider re-styling Navbar dropdown */}
         <ul className="categories-nav">
           <li className="nav-item">
