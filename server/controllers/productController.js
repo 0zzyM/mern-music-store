@@ -69,15 +69,39 @@ export const getProducts = async (req, res) => {
     // Query
     const products = await Product.find(filter, PUBLIC_FIELDS)
       .sort(sortOption)
-      .populate("brand", PUBLIC_BRAND_FIELDS)
-      .populate("category", PUBLIC_CATEGORY_FIELDS)
-      .populate("subcategory", PUBLIC_SUBCATEGORY_FIELDS);
+      .populate([
+        { path: "category", select: PUBLIC_CATEGORY_FIELDS },
+        { path: "subcategory", select: PUBLIC_SUBCATEGORY_FIELDS },
+        { path: "brand", select: PUBLIC_BRAND_FIELDS },
+      ]);
 
     if (!products || products.length === 0) {
       return res.status(404).json({ message: "No products found" });
     }
 
     res.status(200).json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getProduct = async (req, res) => {
+  try {
+    const { _id } = req.params;
+
+    const product = await Product.findOne(
+      {
+        _id: _id,
+        isActive: true,
+      },
+      PUBLIC_FIELDS,
+    ); // No populate as brand-category fields does not seem to be required
+
+    if (!product) {
+      return res.status(404).json({ message: "Product was not found" });
+    }
+    res.status(200).json(product);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
