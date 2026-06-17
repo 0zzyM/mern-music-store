@@ -97,7 +97,7 @@ export const getProduct = async (req, res) => {
       },
       PUBLIC_FIELDS,
     ).populate([
-      { path: "category", select: "PUBLIC_CATEGORY_FIELDS" + " -image" },
+      { path: "category", select: PUBLIC_CATEGORY_FIELDS + " -image" },
       { path: "subcategory", select: PUBLIC_SUBCATEGORY_FIELDS + " -image" },
       { path: "brand", select: PUBLIC_BRAND_FIELDS },
     ]); // No populate as brand-category fields does not seem to be required
