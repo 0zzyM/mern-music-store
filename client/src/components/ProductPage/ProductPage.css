@@ -1,0 +1,13 @@
+.product-page-wrapper {
+  display: flex;
+  width: 80%;
+  margin: 0 auto;
+  padding-top: 20px;
+  justify-content: center;
+  gap: 40px;
+}
+
+.product-page-main {
+  display: flex;
+  flex-direction: column;
+}
