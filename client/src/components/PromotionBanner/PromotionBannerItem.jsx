@@ -12,9 +12,7 @@ export default function PromotionBannerItem({ promotion }) {
         <h2 className="promotion-title">{promotion.title}</h2>
         <p className="promotion-subtitle">{promotion.subtitle}</p>
 
-        <Link to={promotion.ctaLink} className="promotion-cta-btn">
-          {promotion.ctaText}
-        </Link>
+        <span className="promotion-cta-btn">{promotion.ctaText}</span>
       </div>
     </Link>
   );
