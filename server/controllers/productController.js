@@ -96,7 +96,11 @@ export const getProduct = async (req, res) => {
         isActive: true,
       },
       PUBLIC_FIELDS,
-    ); // No populate as brand-category fields does not seem to be required
+    ).populate([
+      { path: "category", select: "PUBLIC_CATEGORY_FIELDS" + " -image" },
+      { path: "subcategory", select: PUBLIC_SUBCATEGORY_FIELDS + " -image" },
+      { path: "brand", select: PUBLIC_BRAND_FIELDS },
+    ]); // No populate as brand-category fields does not seem to be required
 
     if (!product) {
       return res.status(404).json({ message: "Product was not found" });
