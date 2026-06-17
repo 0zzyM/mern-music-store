@@ -4,6 +4,8 @@ import HomePage from "./pages/HomePage.jsx";
 import CategoriesPage from "./pages/CategoriesPage.jsx";
 import CategoryPage from "./pages/CategoryPage.jsx";
 import ProductsPage from "./pages/ProductsPage.jsx";
+import ProductPage from "./pages/ProductPage.jsx";
+
 import PageFooter from "./components/Footer/PageFooter.jsx";
 import { SearchProvider } from "./contexts/SearchProvider.jsx";
 
@@ -17,6 +19,7 @@ function App() {
         <Route path="/categories" element={<CategoriesPage />}></Route>
         <Route path="/categories/:category" element={<CategoryPage />} />
         <Route path="/products" element={<ProductsPage />}></Route>
+        <Route path="/products/:id" element={<ProductPage />}></Route>
       </Routes>
       <PageFooter />
     </SearchProvider>
