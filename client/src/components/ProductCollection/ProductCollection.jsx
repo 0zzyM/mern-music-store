@@ -7,6 +7,7 @@ export default function ProductCollection({
   sortOption,
   isFeatured,
   title,
+  subcategory,
 }) {
   const [products, setProducts] = useState(null);
 
@@ -25,6 +26,9 @@ export default function ProductCollection({
       if (isFeatured) {
         params += `&isFeatured=${isFeatured}`;
       }
+      if (subcategory) {
+        params += `&subcategory=${subcategory}`;
+      }
 
       if (params) url += "?" + params.substring(1); // removes the 1st char of params not(0) it should be (1)
 
@@ -41,5 +45,11 @@ export default function ProductCollection({
 
   if (!products) return <p>Loading...</p>;
 
-  return <ProductCarousel products={products} title={title} />;
+  return (
+    <ProductCarousel
+      products={products}
+      title={title}
+      viewAllLink={`../products?subcategory=${subcategory}`}
+    />
+  );
 }
