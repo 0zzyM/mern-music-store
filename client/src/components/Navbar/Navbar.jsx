@@ -210,7 +210,7 @@ function Navbar() {
           </li>
           */}
           <li className="nav-item">
-            <Link to="/categories/contact-us">Contact Us</Link>
+            <Link to="/contact-us">Contact Us</Link>
           </li>
         </ul>
       </nav>
