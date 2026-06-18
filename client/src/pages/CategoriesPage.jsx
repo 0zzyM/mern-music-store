@@ -5,7 +5,6 @@ export default function CategoriesPage() {
   return (
     <>
       <CategoriesGrid />
-      <CategoriesGrid />
       <ProductCollection
         isFeatured={true} // should enclose the boolean value in {}
         title="Featured Products"
