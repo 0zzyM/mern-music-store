@@ -24,3 +24,8 @@ a {
   max-height: 720px;
   width: 100%;
 }
+
+.page-content {
+  display: flex;
+  flex-direction: column;
+}
