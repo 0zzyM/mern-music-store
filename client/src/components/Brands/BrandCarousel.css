@@ -1,6 +1,7 @@
 .brand-carousel-header {
   margin: 0 auto;
-  width: 1560px;
+  width: 100%;
+  max-width: 1720px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -45,7 +46,8 @@
 
 .brands-carousel-container {
   width: 100%;
-  max-width: 1560px;
+  max-width: 1720px;
+
   margin: 32px auto 32px;
   position: relative;
 }
@@ -102,7 +104,7 @@
   align-items: center;
   overflow: hidden;
   border-radius: 4px;
-  max-width: 240px;
+  max-width: 280px;
   height: 150px;
 }
 
