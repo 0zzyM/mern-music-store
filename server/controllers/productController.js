@@ -75,8 +75,12 @@ export const getProducts = async (req, res) => {
         { path: "brand", select: PUBLIC_BRAND_FIELDS },
       ]);
 
-    if (!products || products.length === 0) {
+    if (!products) {
       return res.status(404).json({ message: "No products found" });
+    }
+
+    if (products.length === 0) {
+      return res.status(200).json([]);
     }
 
     res.status(200).json(products);
