@@ -153,11 +153,14 @@
 }
 
 .product-title {
+  padding: 10px 0px;
   text-align: start;
   width: 90%;
   overflow: hidden;
   max-height: 2.8em;
   line-height: 1.4;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .product-card-details {
@@ -181,7 +184,7 @@
   justify-content: center;
   position: absolute;
   gap: 2px;
-  top: 0;
+  top: 10px;
   right: 0px;
 }
 
