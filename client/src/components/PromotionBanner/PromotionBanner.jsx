@@ -8,6 +8,16 @@ export default function PromotionBanner() {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  const handleNext = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % promotions.length);
+  };
+
+  const handlePrev = () => {
+    setCurrentImageIndex(
+      (prev) => (prev - 1 + promotions.length) % promotions.length,
+    );
+  };
+
   useEffect(() => {
     const getPromotions = async () => {
       try {
@@ -23,15 +33,13 @@ export default function PromotionBanner() {
     getPromotions();
   }, []);
 
-  const handleNext = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % promotions.length);
-  };
-
-  const handlePrev = () => {
-    setCurrentImageIndex(
-      (prev) => (prev - 1 + promotions.length) % promotions.length,
-    );
-  };
+  useEffect(() => {
+    if (!promotions) return;
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % promotions.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [promotions, currentImageIndex]); // only handles auto-swipe
 
   if (!promotions) return <p>Loading...</p>;
 
