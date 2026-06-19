@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // only allow React dev server to send req
+    origin: process.env.CLIENT_URL || "http://localhost:5173", // only allow deployed FE server and dev server to send req
   }),
 );
 
