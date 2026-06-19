@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "./BrandCarousel.css";
 import { Link } from "react-router-dom";
+import { SERVER_URL } from "../../config.js";
 
 export default function BrandsCarousel() {
   const [brands, setBrands] = useState(null);
@@ -12,7 +13,7 @@ export default function BrandsCarousel() {
 
   useEffect(() => {
     const getBrands = async () => {
-      const url = "http://localhost:5000/api/v1/brands";
+      const url = `${SERVER_URL}/api/v1/brands`;
       try {
         const res = await fetch(url);
         const data = await res.json();

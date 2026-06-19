@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { FaHeart, FaUser } from "react-icons/fa";
 import { LuShoppingCart, LuSearch } from "react-icons/lu";
 import { SearchContext } from "../../contexts/SearchContext.js";
+import { SERVER_URL } from "../../config.js";
 
 export default function NavbarSearch() {
   const [searchIndex, setSearchIndex] = useState("");
@@ -36,7 +37,7 @@ export default function NavbarSearch() {
       }
       const getSuggestions = async () => {
         try {
-          const url = `http://localhost:5000/api/v1/search/suggest?q=${searchIndex}`;
+          const url = `${SERVER_URL}/api/v1/search/suggest?q=${searchIndex}`;
           const res = await fetch(url);
 
           // If the search returns 404 set it to empty response

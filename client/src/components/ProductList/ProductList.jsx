@@ -2,13 +2,14 @@ import { useEffect } from "react";
 import { useState } from "react";
 import ProductListCard from "./ProductListCard";
 import "./ProductList.css";
+import { SERVER_URL } from "../../config.js";
 
 export default function ProductList({ filters }) {
   const [products, setProducts] = useState(null);
 
   useEffect(() => {
     const getProducts = async () => {
-      let url = "http://localhost:5000/api/v1/products";
+      let url = `${SERVER_URL}/api/v1/products`;
       if (filters) url += filters;
 
       try {

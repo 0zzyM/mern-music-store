@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import "./SidebarFilter.css";
 import { FiSearch } from "react-icons/fi";
+import { SERVER_URL } from "../../config.js";
 
 export default function SidebarFilter() {
   const [brands, setBrands] = useState(null);
@@ -31,7 +32,7 @@ export default function SidebarFilter() {
   useEffect(() => {
     const getBrands = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/v1/brands");
+        const res = await fetch(`${SERVER_URL}/api/v1/brands`);
         const data = await res.json();
         setBrands(data);
       } catch (error) {

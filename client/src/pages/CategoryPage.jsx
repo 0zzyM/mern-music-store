@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import SubcategoriesGrid from "../components/Subcategories/SubcategoriesGrid.jsx";
 import ProductCollection from "../components/ProductCollection/ProductCollection.jsx";
 import { useEffect, useState } from "react";
+import { SERVER_URL } from "../config.js";
 
 export default function CategoryPage() {
   const { category } = useParams();
@@ -11,7 +12,7 @@ export default function CategoryPage() {
   useEffect(() => {
     const getSubcategories = async () => {
       const res = await fetch(
-        `http://localhost:5000/api/v1/categories/${category}/subcategories`,
+        `${SERVER_URL}/api/v1/categories/${category}/subcategories`,
       );
       const data = await res.json();
       setSubcategories(data);

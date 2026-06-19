@@ -2,6 +2,7 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "./PromotionBanner.css";
 import { useState, useEffect } from "react";
 import PromotionBannerItem from "./PromotionBannerItem";
+import { SERVER_URL } from "../../config.js";
 
 export default function PromotionBanner() {
   const [promotions, setPromotions] = useState(null);
@@ -21,7 +22,7 @@ export default function PromotionBanner() {
   useEffect(() => {
     const getPromotions = async () => {
       try {
-        const url = "http://localhost:5000/api/v1/promotions";
+        const url = `${SERVER_URL}/api/v1/promotions`;
         const res = await fetch(url);
         const data = await res.json();
         setPromotions(data);
@@ -34,6 +35,7 @@ export default function PromotionBanner() {
   }, []);
 
   useEffect(() => {
+    // initial load will return null
     if (!promotions) return;
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % promotions.length);

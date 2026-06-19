@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import ProductList from "../components/ProductList/ProductList.jsx";
 import ProductsHeader from "../components/ProductsHeader/ProductsHeader.jsx";
 import SidebarFilter from "../components/SidebarFilter/SidebarFilter.jsx";
+import { SERVER_URL } from "../config.js";
 
 export default function ProductsPage() {
   const [searchParams] = useSearchParams();
@@ -17,7 +18,7 @@ export default function ProductsPage() {
       if (subcategory) {
         try {
           const res = await fetch(
-            `http://localhost:5000/api/v1/subcategories/${subcategory}`,
+            `${SERVER_URL}/api/v1/subcategories/${subcategory}`,
           );
           const data = await res.json();
           setTitle(data.name);
@@ -27,7 +28,7 @@ export default function ProductsPage() {
       } else if (category) {
         try {
           const res = await fetch(
-            `http://localhost:5000/api/v1/categories/${category}`,
+            `${SERVER_URL}/api/v1/categories/${category}`,
           );
           const data = await res.json();
           setTitle(data.name);

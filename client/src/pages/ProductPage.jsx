@@ -4,6 +4,7 @@ import ProductGallery from "../components/ProductPage/ProductGallery.jsx";
 import ProductPurchasePanel from "../components/ProductPage/ProductPurchasePanel.jsx";
 import ProductInfo from "../components/ProductPage/ProductInfo.jsx";
 import "../components/ProductPage/ProductPage.css";
+import { SERVER_URL } from "../config.js";
 
 export default function ProductPage() {
   const { id } = useParams();
@@ -13,7 +14,7 @@ export default function ProductPage() {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const url = `http://localhost:5000/api/v1/products/${id}`;
+        const url = `${SERVER_URL}/api/v1/products/${id}`;
         const res = await fetch(url);
         const data = await res.json();
         setProduct(data);

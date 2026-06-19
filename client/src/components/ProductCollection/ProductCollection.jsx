@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import ProductCarousel from "../ProductCarousel/ProductCarousel";
+import { SERVER_URL } from "../../config.js";
 
 export default function ProductCollection({
   category,
@@ -14,7 +15,7 @@ export default function ProductCollection({
 
   useEffect(() => {
     const getProducts = async () => {
-      let url = "http://localhost:5000/api/v1/products";
+      let url = `${SERVER_URL}/api/v1/products`;
 
       let params = "";
 
