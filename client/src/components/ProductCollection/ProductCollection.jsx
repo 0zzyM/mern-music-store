@@ -8,6 +8,7 @@ export default function ProductCollection({
   isFeatured,
   title,
   subcategory,
+  limit,
 }) {
   const [products, setProducts] = useState(null);
 
@@ -29,6 +30,9 @@ export default function ProductCollection({
       if (subcategory) {
         params += `&subcategory=${subcategory}`;
       }
+      if (limit) {
+        params += `&limit=${limit}`;
+      }
 
       if (params) url += "?" + params.substring(1); // removes the 1st char of params not(0) it should be (1)
 
@@ -41,7 +45,7 @@ export default function ProductCollection({
       }
     };
     getProducts();
-  }, [category, sortOption, isFeatured]); // slug and title is excluded so the comp doesnt re-render
+  }, [category, sortOption, isFeatured, subcategory, limit]); // slug and title is excluded so the comp doesnt re-render
 
   if (!products) return <p>Loading...</p>;
 

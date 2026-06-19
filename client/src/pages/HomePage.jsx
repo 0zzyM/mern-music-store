@@ -19,10 +19,15 @@ export default function HomePage() {
       <ProductCollection
         isFeatured={true} // should enclose the boolean value in {}
         title="Featured Products"
+        limit="12"
       />
-      <ProductCollection title="Best Sellers" sortOption="mostSold" />
+      <ProductCollection
+        title="Best Sellers"
+        sortOption="mostSold"
+        limit="12"
+      />
 
-      <ProductCollection title="New Arrivals" sortOption="newest" />
+      <ProductCollection title="New Arrivals" sortOption="newest" limit="12" />
 
       <BrandCarousel />
     </div>
