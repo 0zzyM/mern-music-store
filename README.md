@@ -6,6 +6,10 @@ This project was created as a learning exercise to understand how to build a com
 
 The focus of this project was not only building features, but understanding how different parts of a modern web application work together and how minor architectural desicions can create a big difference.
 
+## 🔗 Live Demo Link
+
+https://ozzymusic.netlify.app
+
 ## 📦 Technologies
 
 ### Frontend
@@ -40,7 +44,7 @@ Currently implemented:
 - Brand organisation
 - Product search API
 - Product promotions
-- Responsive React interface
+- React interface
 - REST API with versioned routes
 
 Example API structure:
@@ -57,7 +61,6 @@ Example API structure:
 Upcoming features:
 
 - Shopping cart
-- Deployment
 - Centralised error handling middleware
 - User authentication
 - JWT authentication
@@ -281,22 +284,6 @@ Benefits:
 # 🧠 What I Learned
 
 _TO BE ADDED LATER_
-
----
-
-## MongoDB Data Modelling
-
-One of the biggest challenges was deciding how to represent different musical products.
-
-A guitar, keyboard, and audio interface all have different specifications.
-
-Instead of creating a separate schema for every product type, I experimented with flexible product details:
-
-```javascript
-details: {
-  type: mongoose.Schema.Types.Mixed;
-}
-```
 
 ---
 
