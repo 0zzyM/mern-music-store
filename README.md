@@ -4,7 +4,7 @@ A full-stack music store application built using the **MERN stack** (MongoDB, Ex
 
 This project was created as a learning exercise to understand how to build a complete full-stack application, including frontend development, REST API design, backend architecture, and MongoDB data modelling.
 
-The focus of this project was not only building features, but understanding how different parts of a modern web application work together and how architectural desicions can change the whole scope of the application.
+The focus of this project was not only building features, but understanding how different parts of a modern web application work together and how minor architectural desicions can create a big difference.
 
 ## 📦 Technologies
 
@@ -30,7 +30,7 @@ The focus of this project was not only building features, but understanding how 
 
 ---
 
-# 🦄 Features
+# ✨ Features
 
 Currently implemented:
 
