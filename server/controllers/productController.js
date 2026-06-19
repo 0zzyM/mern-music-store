@@ -21,7 +21,7 @@ const PUBLIC_SUBCATEGORY_FIELDS =
 
 export const getProducts = async (req, res) => {
   try {
-    const { sort, category, subcategory, brand, isFeatured } = req.query;
+    const { sort, category, subcategory, brand, isFeatured, limit } = req.query;
 
     // Sort Validation
     if (sort && !VALID_SORTS.includes(sort)) {
@@ -73,7 +73,8 @@ export const getProducts = async (req, res) => {
         { path: "category", select: PUBLIC_CATEGORY_FIELDS },
         { path: "subcategory", select: PUBLIC_SUBCATEGORY_FIELDS },
         { path: "brand", select: PUBLIC_BRAND_FIELDS },
-      ]);
+      ])
+      .limit(limit ? parseInt(limit) : 0);
 
     if (!products) {
       return res.status(404).json({ message: "No products found" });
