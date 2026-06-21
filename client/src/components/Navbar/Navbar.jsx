@@ -5,9 +5,21 @@ import "./Navbar.css";
 import NavbarSearch from "./NavbarSearch";
 import { useContext } from "react";
 import { SearchContext } from "../../contexts/SearchContext";
+import { useDispatch, useSelector } from "react-redux";
+import { closeCart, openCart } from "../../features/cartSlice";
 
 function Navbar() {
   const { isSearching } = useContext(SearchContext);
+
+  const isCartView = useSelector((state) => state.cart.isCartOpen);
+
+  const dispatch = useDispatch();
+
+  const toggleCartView = (isCartView) => {
+    if (isCartView) {
+      dispatch(closeCart());
+    } else dispatch(openCart());
+  };
 
   return (
     <header className="page-header">
@@ -23,9 +35,14 @@ function Navbar() {
           <Link to="/username/wishlist">
             <FaHeart className="wish-list-icon" />
           </Link>
-          <Link to="/cart">
+          <button
+            className="navbar-cart-btn"
+            onClick={() => {
+              toggleCartView(isCartView);
+            }}
+          >
             <LuShoppingCart className="cart-icon" />
-          </Link>
+          </button>
           <Link to="/username/profile">
             <FaUser className="user-icon" />
           </Link>
@@ -34,7 +51,7 @@ function Navbar() {
 
       <nav
         className="page-header-bottom"
-        style={isSearching ? { opacity: "0" } : { opacity: "1" }}
+        style={isSearching ? { visibility: "hidden" } : { opacity: "1" }}
       >
         {/*TODO: Consider re-styling Navbar dropdown */}
         <ul className="categories-nav">

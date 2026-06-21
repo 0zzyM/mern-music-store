@@ -72,6 +72,23 @@
   gap: 24px;
 }
 
+.navbar-cart-btn {
+  all: unset;
+  cursor: pointer;
+  background: none;
+  height: 100%;
+  width: 100%;
+}
+
+.cart-icon {
+  transform: scale(1.1);
+  font-weight: 800;
+}
+
+.cart-icon:hover {
+  transform: scale(1.2);
+}
+
 .wish-list-icon,
 .cart-icon,
 .user-icon {
@@ -81,7 +98,6 @@
 }
 
 .wish-list-icon:hover,
-.cart-icon:hover,
 .user-icon:hover {
   transform: scale(1.1);
 }
@@ -250,8 +266,4 @@
 
 .search-dropdown-right {
   width: 100%;
-}
-
-.page-header-bottom {
-  transition: opacity 300ms ease;
 }
