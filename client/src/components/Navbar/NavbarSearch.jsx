@@ -8,8 +8,8 @@ import { SERVER_URL } from "../../config.js";
 
 export default function NavbarSearch() {
   const [searchIndex, setSearchIndex] = useState("");
-  const [suggestions, setSuggestions] = useState(null);
-  const { setIsSearching } = useContext(SearchContext);
+  const { isSearching, setIsSearching, suggestions, setSuggestions } =
+    useContext(SearchContext);
 
   const hasNoResults =
     suggestions &&
@@ -27,9 +27,15 @@ export default function NavbarSearch() {
     suggestions.subcategoryResults.length === 0 &&
     suggestions.brandResults.length === 0;
 
+  const handleReset = () => {
+    setSearchIndex("");
+    setSuggestions(null);
+    setIsSearching(false);
+  };
+
   useEffect(() => {
     // IMPORTANT: debouncing so not every keystroke makes an API call
-    const timer = setTimeout(() => {
+    const searchQuery = setTimeout(() => {
       if (searchIndex.length < 2) {
         setSuggestions(null);
         setIsSearching(false);
@@ -52,8 +58,8 @@ export default function NavbarSearch() {
             return;
           }
           const data = await res.json();
-          setSuggestions(data);
           setIsSearching(true);
+          setSuggestions(data);
         } catch (error) {
           console.error(error);
           setIsSearching(false);
@@ -62,15 +68,19 @@ export default function NavbarSearch() {
       getSuggestions();
     }, 300);
 
-    return () => clearTimeout(timer);
-  }, [searchIndex, setIsSearching]);
+    return () => clearTimeout(searchQuery);
+  }, [searchIndex, setIsSearching, setSuggestions]);
   return (
     <div className="page-search-bar-wrapper">
       <input
         type="text"
+        //Used e.target.value here for the current value, not the state variable.
+        //The state is one render behind and is causing bugs.
         onChange={(e) => {
+          if (e.target.value.length >= 2) setIsSearching(true);
           setSearchIndex(e.target.value);
         }}
+        value={searchIndex}
         className="page-search-bar"
         placeholder="Search for a product brand or category"
       />
@@ -78,7 +88,7 @@ export default function NavbarSearch() {
       <label className="header-search-icon">
         <LuSearch />
       </label>
-      {suggestions && (
+      {suggestions && isSearching && (
         <div
           className="search-bar-dropdown"
           style={
@@ -110,6 +120,9 @@ export default function NavbarSearch() {
                           to={`/products?brand=${brand.slug}`}
                           key={brand._id}
                           className="search-suggestion-item"
+                          onClick={() => {
+                            handleReset();
+                          }}
                         >
                           <img
                             className="search-suggestion-item-image"
@@ -129,6 +142,9 @@ export default function NavbarSearch() {
                           to={`/categories/${category.slug}`}
                           key={category._id}
                           className="search-suggestion-item"
+                          onClick={() => {
+                            handleReset();
+                          }}
                         >
                           <div className="product-suggestion-item-details">
                             <p className="product-suggestion-item-title">
@@ -148,6 +164,9 @@ export default function NavbarSearch() {
                           to={`/products?subcategory=${subcategory.slug}`}
                           key={subcategory._id}
                           className="search-suggestion-item"
+                          onClick={() => {
+                            handleReset();
+                          }}
                         >
                           <p className="product-suggestion-item-title">
                             {subcategory.name}
@@ -168,6 +187,9 @@ export default function NavbarSearch() {
                           to={`/products/${product._id}`}
                           key={product._id}
                           className="search-suggestion-item"
+                          onClick={() => {
+                            handleReset();
+                          }}
                         >
                           <img
                             className="search-suggestion-item-image"
