@@ -26,6 +26,28 @@ a {
 }
 
 .page-content {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+.page-content.searching {
+  filter: blur(4px);
+  transition: all 1000ms ease;
+}
+
+.page-backdrop-active {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  transition: all 1500ms ease;
+}
+
+.page-backdrop-searching {
+  position: fixed;
+  inset: 0;
+  background-color: none;
+  z-index: 100;
+  transition: all 1500ms ease;
 }
