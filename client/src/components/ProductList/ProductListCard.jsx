@@ -4,8 +4,17 @@ import { FaStar } from "react-icons/fa";
 import { CiHeart, CiShoppingCart } from "react-icons/ci";
 import { PiScales } from "react-icons/pi";
 import { GoDot, GoDotFill } from "react-icons/go";
+import { addItem, openCart } from "../../features/cartSlice.js";
+import { useDispatch } from "react-redux";
 
 export default function ProductListCard({ product }) {
+  const dispatch = useDispatch();
+
+  function handleAddToCart(product, qty) {
+    dispatch(addItem({ product, qty }));
+    dispatch(openCart());
+  }
+
   return (
     <div className="product-listing">
       <Link to={`/products/${product._id}`}>
@@ -69,7 +78,12 @@ export default function ProductListCard({ product }) {
             <button className="listing-action-button">
               <CiHeart className="hearth-wish-icon" />
             </button>
-            <button className="listing-action-button">
+            <button
+              className="listing-action-button"
+              onClick={() => {
+                handleAddToCart(product, 1);
+              }}
+            >
               <CiShoppingCart className="shopping-cart-icon" />
             </button>
           </div>

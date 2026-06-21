@@ -4,7 +4,7 @@ import "./ProductPurchasePanel.css";
 import "../ProductList/ProductList.css";
 import { CiHeart, CiShare2, CiDeliveryTruck } from "react-icons/ci";
 import { PiScales } from "react-icons/pi";
-import { addItem } from "../../features/cartSlice";
+import { addItem, openCart } from "../../features/cartSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 
@@ -13,8 +13,9 @@ export default function ProductPurchasePanel({ product }) {
 
   const [quantity, setQuantity] = useState(1);
 
-  function handleAddToCart() {
-    dispatch(addItem({ product, quantity }));
+  function handleAddToCart(product, qty) {
+    dispatch(addItem({ product, qty }));
+    dispatch(openCart());
   }
 
   return (
@@ -62,7 +63,9 @@ export default function ProductPurchasePanel({ product }) {
         />
         <button
           className="product-page-add-to-cart-btn"
-          onClick={handleAddToCart}
+          onClick={() => {
+            handleAddToCart(product, quantity);
+          }}
         >
           Add to Cart
         </button>

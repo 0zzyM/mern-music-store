@@ -7,8 +7,17 @@ import { Link } from "react-router-dom";
 import { PiHeartFill } from "react-icons/pi";
 import { BsCart2 } from "react-icons/bs";
 import { MdStarRate } from "react-icons/md";
+import { addItem, openCart } from "../../features/cartSlice";
+import { useDispatch } from "react-redux";
 
 export default function ProductCard({ product }) {
+  const dispatch = useDispatch();
+
+  const handleAddToCart = (product, qty) => {
+    dispatch(addItem({ product, qty }));
+    dispatch(openCart());
+  };
+
   return (
     <div className="product">
       <Link to={`/products/${product._id}`}>
@@ -53,7 +62,10 @@ export default function ProductCard({ product }) {
         </div>
       </div>
 
-      <button className="product-card-add-to-cart-btn">
+      <button
+        className="product-card-add-to-cart-btn"
+        onClick={() => handleAddToCart(product, 1)}
+      >
         <BsCart2 className="add-to-cart-icon" />
         <p className="add-to-cart-text">Add to Cart</p>
       </button>
