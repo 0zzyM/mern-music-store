@@ -1,16 +1,17 @@
 import "./CartSidebar.css";
 import { useDispatch, useSelector } from "react-redux";
-import { removeItem, updateQty } from "../../features/cartSlice";
+import { closeCart, removeItem, updateQty } from "../../features/cartSlice";
 import { LuTrash, LuPlus, LuMinus } from "react-icons/lu";
 import { MdOutlineCancel } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
-
 import { Link } from "react-router-dom";
 
 export default function CartSidebar() {
   const dispatch = useDispatch();
 
   const cartItems = useSelector((state) => state.cart.items);
+
+  const isCartView = useSelector((state) => state.cart.isCartOpen);
 
   const handleRemoveItem = (id) => {
     dispatch(removeItem(id));
@@ -37,14 +38,23 @@ export default function CartSidebar() {
     });
 
   return (
-    <div className="cart-sidebar-wrapper">
+    <div
+      className={
+        isCartView ? "cart-sidebar-wrapper open" : "cart-sidebar-wrapper"
+      }
+    >
       <div className="cart-sidebar-products">
         <header className="cart-sidebar-header">
-          <div className="cart-title">
+          <div className="cart-sidebar-title">
             <h3>Cart</h3>
             <p className="cart-sidebar-items-total">{cartItems.length}</p>
           </div>
-          <button className="cart-sidebar-close-btn">
+          <button
+            className="cart-sidebar-close-btn"
+            onClick={() => {
+              dispatch(closeCart());
+            }}
+          >
             <IoClose />
           </button>
         </header>
