@@ -4,7 +4,7 @@ A full-stack music store application built using the **MERN stack** (MongoDB, Ex
 
 This project was created as a learning exercise to understand how to build a complete full-stack application, including frontend development, REST API design, backend architecture, and MongoDB data modelling.
 
-The focus of this project was not only building features, but understanding how different parts of a modern web application work together and how minor architectural desicions can create a big difference.
+The focus of this project was not only building features, but understanding how different parts of a modern web application work together and how minor architectural decisions can create a big difference.
 
 ## 🔗 Live Demo Link
 
@@ -16,6 +16,7 @@ https://ozzymusic.netlify.app
 
 - `React.js`
 - `Vite`
+- `Redux`
 - `React Router`
 - `Native CSS`
 
@@ -42,10 +43,12 @@ Currently implemented:
 - View individual product details
 - Product categories and subcategories
 - Brand organisation
-- Product search API
+- Product search with real-time suggestions
 - Product promotions
 - React interface
 - REST API with versioned routes
+- Redux-powered cart sidebar with slide-in animation
+- Quantity controls with stock validation
 
 Example API structure:
 
@@ -60,7 +63,6 @@ Example API structure:
 
 Upcoming features:
 
-- Shopping cart
 - Centralised error handling middleware
 - User authentication
 - JWT authentication
@@ -143,6 +145,13 @@ This allows different categories to store different specifications without const
 
 The flexibility comes with less strict validation.
 A future improvement would be introducing category-specific schemas or validation rules.
+
+### State Management Strategy
+
+Cart state lives in Redux as it needs to be triggered from any page.
+Any component dispatching addItem or openCart without prop drilling is only possible with a global store.
+
+Search state lives in React Context because it's scoped to the navbar and the UI overlay.
 
 ---
 
