@@ -23,7 +23,7 @@ function Navbar() {
           <Link to="/username/wishlist">
             <FaHeart className="wish-list-icon" />
           </Link>
-          <Link to="/username/cart">
+          <Link to="/cart">
             <LuShoppingCart className="cart-icon" />
           </Link>
           <Link to="/username/profile">
@@ -203,12 +203,6 @@ function Navbar() {
               </Link>
             </div>
           </li>
-          {/*TODO: Decide to keep and build or remove */}
-          {/*
-          <li className="nav-item">
-            <Link to="/categories/services">Services</Link>
-          </li>
-          */}
           <li className="nav-item">
             <Link to="/contact-us">Contact Us</Link>
           </li>
