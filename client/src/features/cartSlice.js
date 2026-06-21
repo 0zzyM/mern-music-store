@@ -15,6 +15,7 @@ export const cartSlice = createSlice({
   name: "cart", // give it  a label for redux
   initialState: {
     items: [],
+    isCartOpen: false,
   }, //2nd object redux needs
   reducers: {
     addItem(state, action) {
@@ -63,12 +64,25 @@ export const cartSlice = createSlice({
     clearCart(state) {
       state.items = [];
     },
+    openCart(state) {
+      state.isCartOpen = true;
+    },
+    closeCart(state) {
+      state.isCartOpen = false;
+    },
   }, //object where we pass the functions as keys to change state
 });
 
 // Action creators are generated for each case reducer function
 // Exported for components to dispatch
-export const { addItem, removeItem, updateQty, clearCart } = cartSlice.actions;
+export const {
+  addItem,
+  removeItem,
+  updateQty,
+  clearCart,
+  openCart,
+  closeCart,
+} = cartSlice.actions;
 
 // Exported for the store to process the dispatches
 export default cartSlice.reducer;
