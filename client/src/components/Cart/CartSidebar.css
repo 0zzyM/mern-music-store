@@ -202,6 +202,7 @@
 .cart-sidebar-view-cart-btn,
 .cart-sidebar-checkout-btn {
   all: unset;
+  cursor: pointer;
   padding: 18px 40px;
   font-weight: 700;
   line-height: 1.6;

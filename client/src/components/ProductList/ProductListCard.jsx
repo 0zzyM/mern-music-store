@@ -6,6 +6,7 @@ import { PiScales } from "react-icons/pi";
 import { GoDot, GoDotFill } from "react-icons/go";
 import { addItem, openCart } from "../../features/cartSlice.js";
 import { useDispatch } from "react-redux";
+import { resizeUrlForCard } from "../../utils/imageUtils.js";
 
 export default function ProductListCard({ product }) {
   const dispatch = useDispatch();
@@ -21,8 +22,9 @@ export default function ProductListCard({ product }) {
         <div className="listing-image-container">
           <img
             className="listing-image"
-            src={product.images[0]}
+            src={resizeUrlForCard(product.images[0])}
             alt={product.name}
+            loading="lazy"
           />
         </div>
       </Link>

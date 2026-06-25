@@ -2,6 +2,7 @@ import "./ProductGallery.css";
 import { useState } from "react";
 import { FaChevronLeft, FaChevronRight, FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { resizeUrlForThumbnail } from "../../utils/imageUtils";
 
 // TODO: Add Img Zoom
 
@@ -63,7 +64,7 @@ export default function ProductGallery({ product }) {
               {/* If the index equals to imgIndex Matches the border color to product.color or orange as a fall back*/}
               <img
                 className="product-page-image-thumbnail"
-                src={image}
+                src={resizeUrlForThumbnail(image)}
                 alt={`${product.name} thumbnail ${index + 1}`}
                 style={
                   index === imgIndex

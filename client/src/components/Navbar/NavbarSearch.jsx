@@ -5,6 +5,7 @@ import { FaHeart, FaUser } from "react-icons/fa";
 import { LuShoppingCart, LuSearch } from "react-icons/lu";
 import { SearchContext } from "../../contexts/SearchContext.js";
 import { SERVER_URL } from "../../config.js";
+import { resizeUrlForThumbnail } from "../../utils/imageUtils.js";
 
 export default function NavbarSearch() {
   const [searchIndex, setSearchIndex] = useState("");
@@ -126,7 +127,7 @@ export default function NavbarSearch() {
                         >
                           <img
                             className="search-suggestion-item-image"
-                            src={brand.image}
+                            src={resizeUrlForThumbnail(brand.image)}
                             alt={brand.name}
                           />
                         </Link>
@@ -193,7 +194,7 @@ export default function NavbarSearch() {
                         >
                           <img
                             className="search-suggestion-item-image"
-                            src={product.images[0]}
+                            src={resizeUrlForThumbnail(product.images[0])}
                             alt={product.name}
                           />
                           <div className="product-suggestion-item-details">

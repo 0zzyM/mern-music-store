@@ -1,14 +1,12 @@
 import "./ProductCard.css";
-import { FaStar, FaCartPlus } from "react-icons/fa";
-import { CiHeart, CiShoppingCart } from "react-icons/ci";
 import { CgArrowsExchangeAlt } from "react-icons/cg";
-import { LuHeart } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import { PiHeartFill } from "react-icons/pi";
 import { BsCart2 } from "react-icons/bs";
 import { MdStarRate } from "react-icons/md";
 import { addItem, openCart } from "../../features/cartSlice";
 import { useDispatch } from "react-redux";
+import { resizeUrlForCard } from "../../utils/imageUtils";
 
 export default function ProductCard({ product }) {
   const dispatch = useDispatch();
@@ -24,8 +22,9 @@ export default function ProductCard({ product }) {
         <div className="product-image-container">
           <img
             className="product-image"
-            src={product.images[0]}
+            src={resizeUrlForCard(product.images[0])}
             alt={product.name}
+            loading="lazy"
           />
           <button
             className="add-wishlist-btn"

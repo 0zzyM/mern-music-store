@@ -5,6 +5,7 @@ import { LuTrash, LuPlus, LuMinus } from "react-icons/lu";
 import { MdOutlineCancel } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import { resizeUrlForThumbnail } from "../../utils/imageUtils";
 
 export default function CartSidebar() {
   const dispatch = useDispatch();
@@ -64,7 +65,7 @@ export default function CartSidebar() {
             return (
               <div className="cart-sidebar-item" key={item._id}>
                 <img
-                  src={item.images[0]}
+                  src={resizeUrlForThumbnail(item.images[0])}
                   alt={`${item.name}`}
                   className="cart-sidebar-thumbnail"
                 />
@@ -130,7 +131,16 @@ export default function CartSidebar() {
         </div>
 
         <div className="cart-sidebar-checkout-actions">
-          <button className="cart-sidebar-view-cart-btn">View Cart</button>
+          <Link
+            to="/cart"
+            className="cart-sidebar-view-cart-btn"
+            onClick={() => {
+              dispatch(closeCart());
+            }}
+          >
+            View Cart
+          </Link>
+
           <button className="cart-sidebar-checkout-btn">Checkout</button>
         </div>
       </div>
