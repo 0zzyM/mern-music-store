@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { closeCart } from "./features/cartSlice";
 import { useContext } from "react";
 import { SearchContext } from "./contexts/SearchContext.js";
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop.jsx";
 
 function App() {
   const isCartView = useSelector((state) => state.cart.isCartOpen);
@@ -26,6 +27,8 @@ function App() {
     <>
       <Navbar />
       <div className={isSearching ? "page-content searching" : "page-content"}>
+        <ScrollToTop></ScrollToTop>
+
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/categories" element={<CategoriesPage />}></Route>
