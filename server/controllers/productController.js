@@ -21,7 +21,16 @@ const PUBLIC_SUBCATEGORY_FIELDS =
 
 export const getProducts = async (req, res) => {
   try {
-    const { sort, category, subcategory, brand, isFeatured, limit } = req.query;
+    const {
+      sort,
+      category,
+      subcategory,
+      brand,
+      isFeatured,
+      limit,
+      minPrice,
+      maxPrice,
+    } = req.query;
 
     // Sort Validation
     if (sort && !VALID_SORTS.includes(sort)) {
@@ -65,6 +74,11 @@ export const getProducts = async (req, res) => {
     if (isFeatured === "true") {
       filter.isFeatured = true;
     }
+
+    const priceFilter = {};
+    if (minPrice) priceFilter.$gte = Number(minPrice);
+    if (maxPrice) priceFilter.$lte = Number(maxPrice);
+    if (Object.keys(priceFilter).length) filter.price = priceFilter;
 
     // Query
     const products = await Product.find(filter, PUBLIC_FIELDS)
