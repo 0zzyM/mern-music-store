@@ -5,6 +5,8 @@ export function useFilters() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const inStock = searchParams.get("inStock") === "true";
+  const highRated = searchParams.get("highRated") === "true";
+
   const minPrice = searchParams.get("minPrice");
   const maxPrice = searchParams.get("maxPrice");
 
@@ -51,6 +53,18 @@ export function useFilters() {
         });
   };
 
+  const toggleRating = () => {
+    highRated
+      ? setSearchParams((prev) => {
+          prev.delete("highRated");
+          return prev;
+        })
+      : setSearchParams((prev) => {
+          prev.set("highRated", "true");
+          return prev;
+        });
+  };
+
   return {
     inStock,
     toggleStock,
@@ -58,5 +72,7 @@ export function useFilters() {
     maxPrice,
     handleMinPrice,
     handleMaxPrice,
+    highRated,
+    toggleRating,
   };
 }
