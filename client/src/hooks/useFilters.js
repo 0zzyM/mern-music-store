@@ -6,6 +6,7 @@ export function useFilters() {
 
   const inStock = searchParams.get("inStock") === "true";
   const highRated = searchParams.get("highRated") === "true";
+  const brandParams = searchParams.get("brand")?.split(",") || [];
 
   const minPrice = searchParams.get("minPrice");
   const maxPrice = searchParams.get("maxPrice");
@@ -65,6 +66,24 @@ export function useFilters() {
         });
   };
 
+  const toggleBrandFilter = (brand) => {
+    const newBrands = brandParams.includes(brand)
+      ? brandParams.filter((b) => b !== brand) // remove
+      : [...brandParams, brand]; // add
+
+    if (newBrands.length === 0) {
+      setSearchParams((prev) => {
+        prev.delete("brand");
+        return prev;
+      });
+    } else {
+      setSearchParams((prev) => {
+        prev.set("brand", newBrands.join(","));
+        return prev;
+      });
+    }
+  };
+
   return {
     inStock,
     toggleStock,
@@ -74,5 +93,7 @@ export function useFilters() {
     handleMaxPrice,
     highRated,
     toggleRating,
+    brandParams,
+    toggleBrandFilter,
   };
 }
