@@ -30,6 +30,7 @@ export const getProducts = async (req, res) => {
       limit,
       minPrice,
       maxPrice,
+      highRated,
     } = req.query;
 
     // Sort Validation
@@ -79,6 +80,9 @@ export const getProducts = async (req, res) => {
     if (minPrice) priceFilter.$gte = Number(minPrice);
     if (maxPrice) priceFilter.$lte = Number(maxPrice);
     if (Object.keys(priceFilter).length) filter.price = priceFilter;
+
+    // 4 is hardcoded here as the FE only offers 4star and above as an option "boolean"
+    if (highRated === "true") filter.rating = { $gte: 4 };
 
     // Query
     const products = await Product.find(filter, PUBLIC_FIELDS)
