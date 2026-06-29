@@ -25,7 +25,7 @@ export default function ProductsHeader({ title }) {
     <>
       <div className="products-page-header">
         <div className="header-top">
-          <h1>{title}</h1> {/* FIXME: CHANGE THIS VALUE TO FROM SLUG TO NAME*/}
+          <h1 className="products-page-title">{title}</h1>
         </div>
 
         <div className="header-bottom">
@@ -35,7 +35,11 @@ export default function ProductsHeader({ title }) {
           </div>
           <div className="sorting-actions">
             <div className="sort-wrapper">
-              <select value={sortOption} onChange={handleSort} className="">
+              <select
+                value={sortOption ?? ""}
+                onChange={handleSort}
+                className=""
+              >
                 {/* TODO: Default can be set to Popular after logic is implemented */}
                 <option value="">Sort by...</option>
                 <option value="mostSold">Most Sold</option>
@@ -44,23 +48,18 @@ export default function ProductsHeader({ title }) {
                 <option value="newest">Newest</option>
                 <option value="rating">Highest Rated</option>
               </select>
-              <RxCaretSort className="sorting-operator" />{" "}
+              <RxCaretSort className="sorting-operator" />
               {/* TODO: Change this so it also trigers click */}
             </div>
             <div className="toggle-view">
               {listView ? (
-                <BsGrid
-                  className="
-            grid-view-icon "
-                  onClick={toggleView}
-                />
+                <BsGrid className="grid-view-icon" onClick={toggleView} />
               ) : (
                 <IoIosList className="list-view-icon" onClick={toggleView} />
               )}
             </div>
           </div>
         </div>
-        <hr />
       </div>
     </>
   );

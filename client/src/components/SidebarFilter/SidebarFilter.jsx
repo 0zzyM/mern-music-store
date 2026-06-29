@@ -12,7 +12,6 @@ export default function SidebarFilter() {
       <PriceFilter />
       <StockFilter />
       <RatingFilter />
-      <hr />
     </div>
   );
 }

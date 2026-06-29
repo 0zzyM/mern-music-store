@@ -12,10 +12,10 @@ export default function PriceFilter() {
     <div className="price-filter">
       <h3>Price</h3>
 
-      <div className="price-input-filter">
+      <div className="price-input-wrapper">
         <input
           type="number"
-          className="filter-search"
+          className="price-filter-search"
           placeholder="Min Price"
           value={localMin}
           onChange={(e) => {
@@ -33,7 +33,7 @@ export default function PriceFilter() {
 
         <input
           type="number"
-          className="filter-search"
+          className="price-filter-search"
           placeholder="Max price"
           value={localMax}
           onChange={(e) => {

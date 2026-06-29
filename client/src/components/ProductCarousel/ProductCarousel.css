@@ -49,7 +49,7 @@
 
 .carousel-prev-btn,
 .carousel-next-btn {
-  height: 90%;
+  height: 100%;
   opacity: 0;
   transition: opacity 200ms ease-in-out;
   z-index: 10;

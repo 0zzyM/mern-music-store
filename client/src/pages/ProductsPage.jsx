@@ -48,7 +48,7 @@ export default function ProductsPage() {
 
   return (
     <div className="products-wrapper" style={{ width: "100%" }}>
-      <ProductsHeader title={title} />
+      <ProductsHeader title={title.toUpperCase()} />
       <div
         className="products-page-body"
         style={{ width: "90%", display: "flex", justifyContent: "center" }}
