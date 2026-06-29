@@ -9,7 +9,7 @@ export default function StockFilter() {
       <h3>Availability</h3>
       <label className="filter-item">
         <input type="checkbox" checked={inStock} onChange={toggleStock} />
-        <p>In Stock</p>
+        <span>In Stock</span>
       </label>
     </div>
   );
