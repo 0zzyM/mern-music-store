@@ -31,6 +31,7 @@ export const getProducts = async (req, res) => {
       minPrice,
       maxPrice,
       highRated,
+      page,
     } = req.query;
 
     // Sort Validation
@@ -84,6 +85,9 @@ export const getProducts = async (req, res) => {
     // 4 is hardcoded here as the FE only offers 4star and above as an option "boolean"
     if (highRated === "true") filter.rating = { $gte: 4 };
 
+    const SKIP = page ? (Number(page) - 1) * Number(limit || 15) : 0;
+    const LIMIT = page ? parseInt(limit) || 15 : parseInt(limit) || 0;
+
     // Query
     const products = await Product.find(filter, PUBLIC_FIELDS)
       .sort(sortOption)
@@ -92,7 +96,8 @@ export const getProducts = async (req, res) => {
         { path: "subcategory", select: PUBLIC_SUBCATEGORY_FIELDS },
         { path: "brand", select: PUBLIC_BRAND_FIELDS },
       ])
-      .limit(limit ? parseInt(limit) : 0);
+      .skip(SKIP)
+      .limit(LIMIT);
 
     if (!products) {
       return res.status(404).json({ message: "No products found" });
