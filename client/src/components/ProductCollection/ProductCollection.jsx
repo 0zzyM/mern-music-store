@@ -40,7 +40,7 @@ export default function ProductCollection({
       try {
         const res = await fetch(url);
         const data = await res.json();
-        setProducts(data);
+        setProducts(data.products);
       } catch (error) {
         console.error(`Error fetching ${url} `, error);
       }
@@ -49,6 +49,8 @@ export default function ProductCollection({
   }, [category, sortOption, isFeatured, subcategory, limit]); // slug and title is excluded so the comp doesnt re-render
 
   if (!products) return <p>Loading...</p>;
+
+  if (products.length === 0) return <p>No product Found...</p>;
 
   return (
     <ProductCarousel
