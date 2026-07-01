@@ -2,6 +2,7 @@ import Product from "../models/productModel.js";
 import Category from "../models/categoryModel.js";
 import Subcategory from "../models/subcategoryModel.js";
 import Brand from "../models/brandModel.js";
+import { DEFAULT_PAGE_LIMIT } from "../config/constants.js";
 
 const VALID_SORTS = ["mostSold", "newest", "rating", "priceAsc", "priceDesc"];
 const DEFAULT_SORT = { createdAt: 1 };
@@ -85,29 +86,38 @@ export const getProducts = async (req, res) => {
     // 4 is hardcoded here as the FE only offers 4star and above as an option "boolean"
     if (highRated === "true") filter.rating = { $gte: 4 };
 
-    const SKIP = page ? (Number(page) - 1) * Number(limit || 15) : 0;
-    const LIMIT = page ? parseInt(limit) || 15 : parseInt(limit) || 0;
+    const LIMIT = page
+      ? parseInt(limit) || DEFAULT_PAGE_LIMIT
+      : parseInt(limit) || 0;
+
+    const SKIP = page
+      ? (Number(page) - 1) * Number(limit || DEFAULT_PAGE_LIMIT)
+      : 0;
 
     // Query
-    const products = await Product.find(filter, PUBLIC_FIELDS)
-      .sort(sortOption)
-      .populate([
-        { path: "category", select: PUBLIC_CATEGORY_FIELDS },
-        { path: "subcategory", select: PUBLIC_SUBCATEGORY_FIELDS },
-        { path: "brand", select: PUBLIC_BRAND_FIELDS },
-      ])
-      .skip(SKIP)
-      .limit(LIMIT);
+
+    const [products, total] = await Promise.all([
+      Product.find(filter, PUBLIC_FIELDS)
+        .sort(sortOption)
+        .populate([
+          { path: "category", select: PUBLIC_CATEGORY_FIELDS },
+          { path: "subcategory", select: PUBLIC_SUBCATEGORY_FIELDS },
+          { path: "brand", select: PUBLIC_BRAND_FIELDS },
+        ])
+        .skip(SKIP)
+        .limit(LIMIT),
+      Product.countDocuments(filter),
+    ]);
 
     if (!products) {
       return res.status(404).json({ message: "No products found" });
     }
 
     if (products.length === 0) {
-      return res.status(200).json([]);
+      return res.status(200).json({ products: [], total: 0 });
     }
 
-    res.status(200).json(products);
+    res.status(200).json({ products, total });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

@@ -23,3 +23,5 @@ export const CATEGORY_MAP = {
   ],
   maintenance: ["guitar-tools", "guitar-care"],
 };
+
+export const DEFAULT_PAGE_LIMIT = 15;
