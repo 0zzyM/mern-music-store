@@ -5,15 +5,17 @@ import "./BrandCarousel.css";
 import { Link } from "react-router-dom";
 import { SERVER_URL } from "../../config.js";
 
+const BRANDS_PER_PAGE = 12;
+const SLIDE_COUNT = 2;
+const FETCH_LIMIT = BRANDS_PER_PAGE * SLIDE_COUNT;
+
 export default function BrandsCarousel() {
   const [brands, setBrands] = useState(null);
   const [index, setIndex] = useState(0);
 
-  const BRANDS_PER_PAGE = 12;
-
   useEffect(() => {
     const getBrands = async () => {
-      const url = `${SERVER_URL}/api/v1/brands`;
+      const url = `${SERVER_URL}/api/v1/brands?limit=${FETCH_LIMIT}`;
       try {
         const res = await fetch(url);
         const data = await res.json();

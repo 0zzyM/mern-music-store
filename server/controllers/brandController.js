@@ -5,10 +5,12 @@ const PUBLIC_FIELDS = "-__v -createdAt -updatedAt -isActive";
 const DEFAULT_SORT = { createdAt: 1 };
 
 export const getAllBrands = async (req, res) => {
+  const { limit } = req.query;
+
   try {
-    const brands = await Brand.find({ isActive: true }, PUBLIC_FIELDS).sort(
-      DEFAULT_SORT,
-    );
+    const brands = await Brand.find({ isActive: true }, PUBLIC_FIELDS)
+      .sort(DEFAULT_SORT)
+      .limit(limit ? parseInt(limit) : 0); //limit(0) means no limit did this in product too
 
     if (!brands) {
       return res.status(404).json({ message: "No brands found" });
