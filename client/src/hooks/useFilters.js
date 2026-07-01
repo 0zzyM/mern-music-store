@@ -10,9 +10,14 @@ export function useFilters() {
 
   const minPrice = searchParams.get("minPrice");
   const maxPrice = searchParams.get("maxPrice");
+  const page = Number(searchParams.get("page")) || 1;
 
   const minTimerRef = useRef(null);
   const maxTimerRef = useRef(null);
+
+  const subcategory = searchParams.get("subcategory");
+  const category = searchParams.get("category");
+  const filters = searchParams.toString() ? `?${searchParams.toString()}` : "";
 
   const handleMinPrice = (value, onError) => {
     clearTimeout(minTimerRef.current);
@@ -84,6 +89,49 @@ export function useFilters() {
     }
   };
 
+  // Pagination Functions
+
+  const goToNextPage = (noOfPages) => {
+    setSearchParams((prev) => {
+      if (page === noOfPages) return prev;
+      else {
+        prev.set("page", page + 1);
+        return prev;
+      }
+    });
+  };
+
+  const goToPrevPage = () => {
+    setSearchParams((prev) => {
+      if (page <= 1) return prev;
+      else {
+        prev.set("page", page - 1);
+        return prev;
+      }
+    });
+  };
+
+  const goToFirstPage = () => {
+    setSearchParams((prev) => {
+      prev.set("page", 1);
+      return prev;
+    });
+  };
+
+  const goToLastPage = (noOfPages) => {
+    setSearchParams((prev) => {
+      prev.set("page", Number(noOfPages));
+      return prev;
+    });
+  };
+
+  const goToPage = (pageNumber) => {
+    setSearchParams((prev) => {
+      prev.set("page", pageNumber);
+      return prev;
+    });
+  };
+
   return {
     inStock,
     toggleStock,
@@ -95,5 +143,14 @@ export function useFilters() {
     toggleRating,
     brandParams,
     toggleBrandFilter,
+    page,
+    goToFirstPage,
+    goToPrevPage,
+    goToNextPage,
+    goToLastPage,
+    goToPage,
+    subcategory,
+    category,
+    filters,
   };
 }
