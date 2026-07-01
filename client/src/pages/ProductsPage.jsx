@@ -1,17 +1,14 @@
-import { useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ProductList from "../components/ProductList/ProductList.jsx";
 import ProductsHeader from "../components/ProductsHeader/ProductsHeader.jsx";
 import SidebarFilter from "../components/SidebarFilter/SidebarFilter.jsx";
 import { SERVER_URL } from "../config.js";
+import { useFilters } from "../hooks/useFilters.js";
 
 export default function ProductsPage() {
-  const [searchParams] = useSearchParams();
   const [title, setTitle] = useState("All Products");
 
-  const subcategory = searchParams.get("subcategory");
-  const category = searchParams.get("category");
-  const filters = searchParams.toString() ? `?${searchParams.toString()}` : "";
+  const { subcategory, category, filters } = useFilters();
 
   useEffect(() => {
     const getTitle = async () => {
