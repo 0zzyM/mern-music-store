@@ -18,6 +18,7 @@ export default function DesktopBottomNavbar({ isSearching }) {
                 {category.subcategories.map((subcategory) => {
                   return (
                     <Link
+                      key={subcategory.slug}
                       to={`/products?subcategory=${subcategory.slug}`}
                       className="header-dropdown-item"
                     >
