@@ -1,7 +1,5 @@
 :root {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  --navbar-height: 57px;
 }
 body {
   width: 100%;
