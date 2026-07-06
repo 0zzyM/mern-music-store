@@ -4,7 +4,7 @@
 body {
   width: 100%;
   margin: 0;
-  font-family: "Josefin Sans", sans-serif;
+  font-family: "Borlow", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #ffffff;
@@ -13,14 +13,6 @@ body {
 
 a {
   text-decoration: none;
-}
-
-.promotion-container {
-  max-height: 400px;
-}
-.promotion-container img {
-  max-height: 720px;
-  width: 100%;
 }
 
 .page-content {
