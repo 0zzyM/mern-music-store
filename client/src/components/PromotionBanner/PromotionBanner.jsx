@@ -49,7 +49,9 @@ export default function PromotionBanner() {
     <div className="promotion-container">
       <div
         className="promotion-item"
-        style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
+        style={{
+          transform: `translateX(calc(${currentImageIndex} * (-100% - var(--slide-gap))))`,
+        }}
       >
         {promotions.map((promotion) => {
           return (
