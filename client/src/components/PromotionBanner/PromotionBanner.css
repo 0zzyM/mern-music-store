@@ -127,9 +127,10 @@
 
 @media (max-width: 768px) {
   .promotion-container {
-    overflow: visible;
-    width: min(360px, 85vw);
+    width: min(416px, 100vw - 8px); /* 360px card + 56px padding, all inside */
     aspect-ratio: 3 / 4;
+    padding-inline: 28px;
+    border-radius: 0;
   }
 
   .promotion-item {
@@ -162,16 +163,9 @@
     width: 36px;
     background: white;
     border-radius: 50%;
-    border: 1px solid rgba(0, 0, 0, 1);
+    border: 1px solid rgba(0, 0, 0, 0.4);
   }
 
-  .promotion-banner-next-btn {
-    right: -24px;
-  }
-
-  .promotion-banner-prev-btn {
-    left: -24px;
-  }
   .promotion-banner-next-icon,
   .promotion-banner-prev-icon {
     height: 16px;
