@@ -59,7 +59,7 @@
 .brand-filter-search {
   height: 32px;
   padding: 0px 20px;
-  width: 220px;
+  width: 260px;
   font-size: 16px;
   text-align: start;
   background-color: #f8f9fa00;
@@ -111,7 +111,7 @@
 .price-filter-search {
   height: 36px;
   padding: 0px 20px;
-  width: 80px;
+  width: 120px;
   font-size: 16px;
   text-align: start;
   background-color: #f8f9fa00;
