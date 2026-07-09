@@ -13,7 +13,12 @@ export default function DesktopBottomNavbar({ isSearching }) {
         {CATEGORIES.map((category) => {
           return (
             <li key={category.slug} className="nav-item">
-              <Link to={`/categories/${category.slug}`}>{category.name}</Link>
+              <Link
+                to={`/categories/${category.slug}`}
+                className="nav-category-link"
+              >
+                {category.name}
+              </Link>
               <div className="header-dropdown">
                 {category.subcategories.map((subcategory) => {
                   return (
