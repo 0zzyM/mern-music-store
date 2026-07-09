@@ -17,10 +17,6 @@
   font-size: 1.2em;
 }
 
-.carousel-header-action:hover {
-  cursor: pointer;
-}
-
 .carousel-view-all-icon {
   background-color: rgb(227, 226, 226);
   color: black;
@@ -31,17 +27,8 @@
   transition: all 300ms ease;
 }
 
-.carousel-header-action:hover .carousel-view-all-icon {
-  background-color: rgb(0, 0, 0);
-  color: white;
-}
-
 .carousel-header-action span {
   color: black;
-}
-
-.carousel-header-action:hover span {
-  text-decoration: underline;
 }
 
 .brands-carousel-container {
@@ -50,10 +37,6 @@
 
   margin: 32px auto 32px;
   position: relative;
-}
-
-.brand-carousel-header {
-  padding-bottom: 12px;
 }
 
 .brand-carousel-header h2 {
@@ -82,21 +65,6 @@
   gap: 12px;
 }
 
-/*
-@media (min-width: 768px) {
-  .categories-container {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .categories-container {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-*/
-
 .brand-image-container {
   border: 1px solid rgba(0, 0, 0, 0.4);
   display: flex;
@@ -114,7 +82,7 @@
   width: 50%;
   height: 50%;
   border-radius: 8px;
-  transform: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .brands-carousel-next-btn {
@@ -138,19 +106,74 @@
   transition: all 300ms ease;
 }
 
-.brands-carousel-next-btn:hover,
-.brands-carousel-prev-btn:hover {
-  background-color: black;
-}
-
-.brands-carousel-next-btn:hover .brands-carousel-next-icon,
-.brands-carousel-prev-btn:hover .brands-carousel-prev-icon {
-  color: white;
-}
-
 .brands-carousel-next-icon,
 .brands-carousel-prev-icon {
   color: black;
   height: 24px;
   width: 24px;
+}
+
+@media (max-width: 768px) {
+  .carousel-view-all-icon {
+    height: 24px;
+    width: 24px;
+  }
+
+  .carousel-view-all-icon {
+    font-size: 1.2em;
+  }
+
+  .brand-carousel-header h2 {
+    font-size: 1.8em;
+  }
+
+  .brands-carousel-container {
+    width: 90%;
+  }
+  .brands-carousel-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .brand-image-container {
+    aspect-ratio: 1/1;
+    height: 60%;
+  }
+
+  .brand-image {
+    height: 80%;
+    aspect-ratio: 1/1;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1280px) {
+  .brands-carousel-container {
+    width: 90%;
+  }
+  .brands-carousel-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (hover: hover) {
+  .brands-carousel-next-btn:hover,
+  .brands-carousel-prev-btn:hover {
+    background-color: black;
+  }
+
+  .brands-carousel-next-btn:hover .brands-carousel-next-icon,
+  .brands-carousel-prev-btn:hover .brands-carousel-prev-icon {
+    color: white;
+  }
+
+  .carousel-header-action:hover .carousel-view-all-icon {
+    background-color: rgb(0, 0, 0);
+    color: white;
+  }
+
+  .carousel-header-action:hover span {
+    text-decoration: underline;
+  }
+
+  .carousel-header-action:hover {
+    cursor: pointer;
+  }
 }

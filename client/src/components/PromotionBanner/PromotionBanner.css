@@ -127,7 +127,7 @@
 
 @media (max-width: 768px) {
   .promotion-container {
-    width: min(416px, 100vw - 8px); /* 360px card + 56px padding, all inside */
+    width: 90%;
     aspect-ratio: 3 / 4;
     padding-inline: 28px;
     border-radius: 0;
