@@ -1,15 +1,25 @@
 import "./ProductGallery.css";
 import { useState } from "react";
-import { FaChevronLeft, FaChevronRight, FaStar } from "react-icons/fa";
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaStar,
+  FaChevronDown,
+  FaChevronUp,
+} from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { resizeUrlForThumbnail } from "../../utils/imageUtils";
+
+const VISIBLE_IMG = 6;
 
 // TODO: Add Img Zoom
 
 export default function ProductGallery({ product }) {
   const [imgIndex, setImgIndex] = useState(0);
 
+  // For thumbnail
   const totalImages = product.images.length;
+  const maxOffset = Math.max(0, totalImages - VISIBLE_IMG);
 
   const handleNext = () => {
     setImgIndex((prev) => (prev + 1) % totalImages);
@@ -51,29 +61,47 @@ export default function ProductGallery({ product }) {
         <li className="product-page-navigation-result">{product.name}</li>
       </ul>
       <div className="product-gallery-container">
-        <div className="product-page-image-thumbnails">
-          {product.images.map((image, index) => (
-            <button
-              className="image-thumbnail-btn"
-              aria-label={`View image ${index + 1}`}
-              key={index}
-              onClick={() => {
-                setImgIndex(index);
+        <div className="product-page-thumbnail-wrapper">
+          <button className="thumbnail-prev-btn" onClick={handlePrev}>
+            <FaChevronUp />
+          </button>
+          <div className="product-image-thumbnail-viewport">
+            <div
+              className="product-page-image-thumbnails"
+              style={{
+                transform: `translateY(${
+                  -66 *
+                  Math.max(0, Math.min(imgIndex + 1 - VISIBLE_IMG, maxOffset))
+                }px)`,
               }}
             >
-              {/* If the index equals to imgIndex Matches the border color to product.color or orange as a fall back*/}
-              <img
-                className="product-page-image-thumbnail"
-                src={resizeUrlForThumbnail(image)}
-                alt={`${product.name} thumbnail ${index + 1}`}
-                style={
-                  index === imgIndex
-                    ? { border: `2px solid ${product.color || "orange"}` }
-                    : null
-                }
-              />
-            </button>
-          ))}
+              {product.images.map((image, index) => (
+                <button
+                  className="image-thumbnail-btn"
+                  aria-label={`View image ${index + 1}`}
+                  key={index}
+                  onClick={() => {
+                    setImgIndex(index);
+                  }}
+                >
+                  {/* If the index equals to imgIndex Matches the border color to product.color or orange as a fall back*/}
+                  <img
+                    className="product-page-image-thumbnail"
+                    src={resizeUrlForThumbnail(image)}
+                    alt={`${product.name} thumbnail ${index + 1}`}
+                    style={
+                      index === imgIndex
+                        ? { border: `2px solid ${product.color || "orange"}` }
+                        : null
+                    }
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+          <button className="thumbnail-next-btn" onClick={handleNext}>
+            <FaChevronDown />
+          </button>
         </div>
         <div className="main-image-container">
           <img
