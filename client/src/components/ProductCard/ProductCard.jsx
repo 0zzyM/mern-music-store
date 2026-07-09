@@ -28,7 +28,7 @@ export default function ProductCard({ product }) {
           />
           <button
             className="add-wishlist-btn"
-            alt="Add to Wishlist"
+            aria-label="Add to Wishlist"
             onClick={(e) => {
               e.preventDefault();
               {
@@ -47,6 +47,7 @@ export default function ProductCard({ product }) {
                 /*TODO: Add Comparison Logic */
               }
             }}
+            aria-label="Compare product"
           >
             <CgArrowsExchangeAlt className="product-card-compare-icon" />
           </button>

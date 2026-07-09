@@ -55,6 +55,7 @@ export default function CartSidebar() {
             onClick={() => {
               dispatch(closeCart());
             }}
+            aria-label="Close cart"
           >
             <IoClose />
           </button>
@@ -89,6 +90,7 @@ export default function CartSidebar() {
                     <button
                       className="cart-sidebar-minus-btn"
                       onClick={() => decItemQty(item._id, item.quantity)}
+                      aria-label="Decrease quantity"
                     >
                       <LuMinus />
                     </button>
@@ -100,6 +102,7 @@ export default function CartSidebar() {
                     <button
                       className="cart-sidebar-plus-btn"
                       onClick={() => incItemQty(item)}
+                      aria-label="Increase quantity"
                     >
                       <LuPlus />
                     </button>

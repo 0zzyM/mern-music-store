@@ -63,6 +63,7 @@ export default function ProductList({ filters, subcategory }) {
           onClick={() => {
             currentPage != 1 && goToFirstPage();
           }}
+          aria-label="First page"
         >
           &lt; &lt;
         </button>
@@ -71,6 +72,7 @@ export default function ProductList({ filters, subcategory }) {
           onClick={() => {
             currentPage != 1 && goToPrevPage();
           }}
+          aria-label="Previous page"
         >
           &lt;
         </button>
@@ -81,6 +83,7 @@ export default function ProductList({ filters, subcategory }) {
             onClick={() => {
               goToPage(currentPage - 1);
             }}
+            aria-current="page"
           >
             {currentPage - 1}
           </button>
@@ -94,6 +97,7 @@ export default function ProductList({ filters, subcategory }) {
             onClick={() => {
               goToPage(currentPage + 1);
             }}
+            aria-label="Next page"
           >
             {currentPage + 1}
           </button>
@@ -104,6 +108,7 @@ export default function ProductList({ filters, subcategory }) {
           onClick={() => {
             currentPage != NO_OF_PAGES && goToNextPage(NO_OF_PAGES);
           }}
+          aria-label="Last page"
         >
           &gt;
         </button>

@@ -39,6 +39,7 @@ export default function ProductCarousel({ products, title, viewAllLink }) {
           onClick={handlePrev}
           disabled={isFirstSlide}
           style={{ visibility: isFirstSlide ? "hidden" : "visible" }}
+          aria-label="Previous products"
         >
           <FaChevronLeft className="carousel-prev-icon" />
         </button>
@@ -55,6 +56,7 @@ export default function ProductCarousel({ products, title, viewAllLink }) {
           onClick={handleNext}
           disabled={isLastSlide}
           style={{ visibility: isLastSlide ? "hidden" : "visible" }}
+          aria-label="Next products"
         >
           <FaChevronRight className="carousel-next-icon" />
         </button>

@@ -62,7 +62,11 @@ export default function ProductGallery({ product }) {
       </ul>
       <div className="product-gallery-container">
         <div className="product-page-thumbnail-wrapper">
-          <button className="thumbnail-prev-btn" onClick={handlePrev}>
+          <button
+            className="thumbnail-prev-btn"
+            onClick={handlePrev}
+            aria-label="Previous image"
+          >
             <FaChevronUp />
           </button>
           <div className="product-image-thumbnail-viewport">
@@ -99,7 +103,11 @@ export default function ProductGallery({ product }) {
               ))}
             </div>
           </div>
-          <button className="thumbnail-next-btn" onClick={handleNext}>
+          <button
+            className="thumbnail-next-btn"
+            onClick={handleNext}
+            aria-label="Next image"
+          >
             <FaChevronDown />
           </button>
         </div>

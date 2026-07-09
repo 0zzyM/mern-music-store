@@ -60,7 +60,11 @@ export default function PromotionBanner() {
         })}
       </div>
 
-      <button className="promotion-banner-next-btn" onClick={handleNext}>
+      <button
+        className="promotion-banner-next-btn"
+        onClick={handleNext}
+        aria-label="Next promotion"
+      >
         <FaChevronRight className="promotion-banner-next-icon" />
       </button>
       <button className="promotion-banner-prev-btn" onClick={handlePrev}>

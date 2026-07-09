@@ -29,6 +29,7 @@ export default function PageFooter() {
           href="https://github.com/0zzyM"
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="GitHub"
         >
           <FaGithub className="footer-socials-icon" />
         </a>
@@ -36,6 +37,7 @@ export default function PageFooter() {
           href="https://mt.linkedin.com/in/ozzyacar"
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="LinkedIn"
         >
           <FaLinkedin className="footer-socials-icon" />
         </a>

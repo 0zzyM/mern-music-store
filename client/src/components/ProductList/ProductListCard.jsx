@@ -71,17 +71,24 @@ export default function ProductListCard({ product }) {
           </div>
 
           <div className="listing-actions">
-            <button className="listing-action-button">
+            <button
+              className="listing-action-button"
+              aria-label="Compare product"
+            >
               <PiScales className="compare-listings-icon" />
             </button>
             <button className="listing-action-button">
-              <CiHeart className="hearth-wish-icon" />
+              <CiHeart
+                className="hearth-wish-icon"
+                aria-label="Add to wishlist"
+              />
             </button>
             <button
               className="listing-action-button"
               onClick={() => {
                 handleAddToCart(product, 1);
               }}
+              aria-label="Add to cart"
             >
               <CiShoppingCart className="shopping-cart-icon" />
             </button>

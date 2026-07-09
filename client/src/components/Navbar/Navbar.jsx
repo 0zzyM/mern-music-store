@@ -48,15 +48,16 @@ function Navbar() {
             onClick={() => {
               toggleCartView(isCartView);
             }}
+            aria-label="Open cart"
           >
             <LuShoppingCart className="cart-icon" />
           </button>
 
-          <Link to="/wishlist">
+          <Link to="/wishlist" aria-label="Wishlist">
             <FaHeart className="wish-list-icon" />
           </Link>
 
-          <Link to="/profile">
+          <Link to="/profile" aria-label="Profile">
             <FaUser className="user-icon" />
           </Link>
         </div>
