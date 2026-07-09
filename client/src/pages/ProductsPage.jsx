@@ -39,10 +39,6 @@ export default function ProductsPage() {
     getTitle();
   }, [subcategory, category]);
 
-  {
-    /*TODO:TEMPORARY ADJUSTMENT REMOVE LATER */
-  }
-
   return (
     <div className="products-wrapper" style={{ width: "100%" }}>
       <ProductsHeader title={title.toUpperCase()} />
@@ -51,7 +47,7 @@ export default function ProductsPage() {
         style={{ width: "90%", display: "flex", justifyContent: "center" }}
       >
         <SidebarFilter />
-        <ProductList filters={filters} />
+        <ProductList filters={filters} subcategory={subcategory} />
       </div>
     </div>
   );

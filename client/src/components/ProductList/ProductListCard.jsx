@@ -43,24 +43,21 @@ export default function ProductListCard({ product }) {
               })}
             </div>
           </Link>
-          <div className="listing-extra-details">
-            <p>
-              <GoDot />
-              Body: American alder (Hardcoded placeholder)
-            </p>
-            <p>
-              <GoDot />
-              Neck: Roasted flamed Canadian maple (Hardcoded placeholder)
-            </p>
-            <p>
-              <GoDot />
-              Fingerboard: Canadian roasted maple(Hardcoded placeholder)
-            </p>
-            <p>
-              <GoDot />
-              Pickups: EMG 81-85 Set (Hardcoded placeholder)
-            </p>
-          </div>
+          {product.details &&
+            product.subcategory.slug === "electric-guitars" && (
+              <div className="listing-extra-details">
+                <p className="listing-detail">
+                  <b>Body Material:</b> {product.details.bodyMaterial}
+                </p>
+
+                <p className="listing-detail">
+                  <b>Fingerboard Material:</b> {product.details.bodyMaterial}
+                </p>
+                <p className="listing-detail">
+                  <b>Frets:</b> {product.details.frets}
+                </p>
+              </div>
+            )}
           <p className="listing-stock">
             <GoDotFill
               style={product.stock ? { color: "green" } : { color: "red" }}

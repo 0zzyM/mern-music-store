@@ -5,7 +5,7 @@ import "./ProductList.css";
 import { SERVER_URL, PRODUCTS_PER_PAGE } from "../../config.js";
 import { useFilters } from "../../hooks/useFilters.js";
 
-export default function ProductList({ filters }) {
+export default function ProductList({ filters, subcategory }) {
   const [products, setProducts] = useState(null);
   const [total, setTotal] = useState(null);
 
@@ -47,7 +47,13 @@ export default function ProductList({ filters }) {
     <div className="product-list-wrapper">
       <div className="product-list">
         {products.map((product) => {
-          return <ProductListCard key={product._id} product={product} />;
+          return (
+            <ProductListCard
+              key={product._id}
+              product={product}
+              subcategory={subcategory}
+            />
+          );
         })}
       </div>
 

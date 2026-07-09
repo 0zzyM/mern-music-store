@@ -193,3 +193,8 @@
   width: 36px;
   height: 36px;
 }
+
+.listing-detail {
+  line-height: 20px;
+  font-size: 18px;
+}
