@@ -9,7 +9,7 @@ export default function CategoryCard({ category }) {
           <img
             className="category-image"
             src={category.image}
-            alt={category.slug}
+            alt={category.name}
           />
         </div>
         <div className="category-actions">

@@ -60,6 +60,7 @@ export default function ProductPurchasePanel({ product }) {
           min="1"
           value={quantity}
           onChange={(e) => setQuantity(Number(e.target.value))}
+          aria-label="Quantity"
         />
         <button
           className="product-page-add-to-cart-btn"

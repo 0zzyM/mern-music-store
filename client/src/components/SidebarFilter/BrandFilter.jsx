@@ -44,6 +44,7 @@ export default function BrandFilter() {
           className="brand-filter-search"
           placeholder="Search for a brand"
           onChange={changeQuery}
+          aria-label="Search brands"
         />
 
         <div className="brand-filter-items">

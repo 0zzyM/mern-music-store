@@ -9,7 +9,7 @@ export default function SubcategoryCard({ subcategory }) {
           <img
             className="subcategory-image"
             src={subcategory.image}
-            alt={subcategory.slug}
+            alt={subcategory.name}
           />
         </div>
         <div className="subcategory-actions">

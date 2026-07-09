@@ -31,7 +31,7 @@ export default function ProductGallery({ product }) {
 
   return (
     <div className="left-product-page">
-      <ul className="product-page-navigation">
+      <ul className="product-page-navigation" aria-label="Breadcrumb">
         <li>
           <Link to={"/"} className="product-page-navigation-item">
             Home

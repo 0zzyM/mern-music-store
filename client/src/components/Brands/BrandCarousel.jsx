@@ -71,11 +71,19 @@ export default function BrandsCarousel() {
         </div>
       </div>
 
-      <button className="brands-carousel-next-btn" onClick={handleNext}>
+      <button
+        className="brands-carousel-next-btn"
+        onClick={handleNext}
+        aria-label="Next brands"
+      >
         <FaChevronRight className="brands-carousel-next-icon" />
       </button>
 
-      <button className="brands-carousel-prev-btn" onClick={handlePrev}>
+      <button
+        className="brands-carousel-prev-btn"
+        onClick={handlePrev}
+        aria-label="Previous brands"
+      >
         <FaChevronLeft className="brands-carousel-prev-icon" />
       </button>
     </div>

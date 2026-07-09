@@ -6,7 +6,7 @@ export default function BrandCard({ brand }) {
     <Link to={`/products/?brand=${brand.slug}`}>
       <div className="brand">
         <div className="brand-image-container">
-          <img className="brand-image" src={brand.image} alt={brand.slug} />
+          <img className="brand-image" src={brand.image} alt={brand.name} />
         </div>
       </div>
     </Link>

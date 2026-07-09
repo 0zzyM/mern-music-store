@@ -84,6 +84,7 @@ export default function NavbarSearch() {
         value={searchIndex}
         className="page-search-bar"
         placeholder="Search for a product brand or category"
+        aria-label="Search products"
       />
       {/*TODO: Add search function here */}
       <label className="header-search-icon">

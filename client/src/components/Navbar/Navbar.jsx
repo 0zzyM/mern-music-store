@@ -28,7 +28,7 @@ function Navbar() {
 
   return (
     <header className="page-header">
-      <nav className="page-header-top">
+      <nav className="page-header-top" aria-label="Main">
         <button
           className="hamburger-btn"
           onClick={() => setIsMenuOpen(true)}

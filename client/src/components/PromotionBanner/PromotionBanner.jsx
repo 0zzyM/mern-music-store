@@ -67,7 +67,11 @@ export default function PromotionBanner() {
       >
         <FaChevronRight className="promotion-banner-next-icon" />
       </button>
-      <button className="promotion-banner-prev-btn" onClick={handlePrev}>
+      <button
+        className="promotion-banner-prev-btn"
+        onClick={handlePrev}
+        aria-label="Previous promotion"
+      >
         <FaChevronLeft className="promotion-banner-prev-icon" />
       </button>
     </div>

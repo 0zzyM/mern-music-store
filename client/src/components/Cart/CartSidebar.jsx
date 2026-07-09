@@ -98,6 +98,8 @@ export default function CartSidebar() {
                       type="number"
                       value={item.quantity}
                       className="cart-sidebar-qty"
+                      aria-label="Quantity"
+                      readOnly
                     />
                     <button
                       className="cart-sidebar-plus-btn"

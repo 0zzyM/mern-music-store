@@ -29,6 +29,7 @@ export default function PriceFilter() {
           onKeyDown={(e) =>
             ["e", "E", "+", "-", "."].includes(e.key) && e.preventDefault()
           }
+          aria-label="Minimum price"
         />
 
         <input
@@ -47,6 +48,7 @@ export default function PriceFilter() {
           onKeyDown={(e) =>
             ["e", "E", "+", "-", "."].includes(e.key) && e.preventDefault()
           }
+          aria-label="Maximum price"
         />
 
         {err && <p className="price-error">{err}</p>}

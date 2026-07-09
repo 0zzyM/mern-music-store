@@ -26,7 +26,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <div className={isSearching ? "page-content searching" : "page-content"}>
+      <main className={isSearching ? "page-content searching" : "page-content"}>
         <ScrollToTop></ScrollToTop>
 
         <Routes>
@@ -51,7 +51,7 @@ function App() {
             setSuggestions(null);
           }}
         ></div>
-      </div>
+      </main>
       <CartSidebar />
 
       <PageFooter />

@@ -38,7 +38,7 @@ export default function ProductsHeader({ title }) {
               <select
                 value={sortOption ?? ""}
                 onChange={handleSort}
-                className=""
+                aria-label="Sort products"
               >
                 {/* TODO: Default can be set to Popular after logic is implemented */}
                 <option value="">Sort by...</option>

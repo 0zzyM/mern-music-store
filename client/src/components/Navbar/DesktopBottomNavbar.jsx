@@ -7,6 +7,7 @@ export default function DesktopBottomNavbar({ isSearching }) {
     <nav
       className="page-header-bottom"
       style={isSearching ? { visibility: "hidden" } : { opacity: "1" }}
+      aria-label="Categories"
     >
       {/*TODO: Consider re-styling Navbar dropdown */}
       <ul className="categories-nav">
