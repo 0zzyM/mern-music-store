@@ -29,6 +29,7 @@ function Navbar() {
   return (
     <header className="page-header">
       <nav className="page-header-top" aria-label="Main">
+        {/*Reads as Main Navigation(bcs of nav)*/}
         <button
           className="hamburger-btn"
           onClick={() => setIsMenuOpen(true)}
@@ -39,9 +40,7 @@ function Navbar() {
         <Link className="logo-wrapper" to="/">
           <div className="logo">ozzyMusic</div>
         </Link>
-
         <NavbarSearch />
-
         <div className="header-actions">
           <button
             className="navbar-cart-btn"
