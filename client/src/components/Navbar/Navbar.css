@@ -51,7 +51,9 @@
   box-sizing: border-box;
 }
 
-.header-search-icon {
+.navbar-search-btn {
+  all: unset;
+  cursor: pointer;
   position: absolute;
   right: 14px;
   top: 50%;

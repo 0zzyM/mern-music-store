@@ -1,6 +1,6 @@
 import "./Navbar.css";
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaHeart, FaUser } from "react-icons/fa";
 import { LuShoppingCart, LuSearch } from "react-icons/lu";
 import { SearchContext } from "../../contexts/SearchContext.js";
@@ -11,6 +11,8 @@ export default function NavbarSearch() {
   const [searchIndex, setSearchIndex] = useState("");
   const { isSearching, setIsSearching, suggestions, setSuggestions } =
     useContext(SearchContext);
+
+  const navigate = useNavigate();
 
   const hasNoResults =
     suggestions &&
@@ -32,6 +34,14 @@ export default function NavbarSearch() {
     setSearchIndex("");
     setSuggestions(null);
     setIsSearching(false);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchIndex.length >= 2) {
+      navigate(`/products?q=${searchIndex}`);
+      handleReset();
+    }
   };
 
   useEffect(() => {
@@ -73,23 +83,30 @@ export default function NavbarSearch() {
   }, [searchIndex, setIsSearching, setSuggestions]);
   return (
     <div className="page-search-bar-wrapper">
-      <input
-        type="text"
-        //Used e.target.value here for the current value, not the state variable.
-        //The state is one render behind and is causing bugs.
-        onChange={(e) => {
-          if (e.target.value.length >= 2) setIsSearching(true);
-          setSearchIndex(e.target.value);
-        }}
-        value={searchIndex}
-        className="page-search-bar"
-        placeholder="Search for a product brand or category"
-        aria-label="Search products"
-      />
-      {/*TODO: Add search function here */}
-      <label className="header-search-icon">
-        <LuSearch />
-      </label>
+      <form onSubmit={(e) => handleSearch(e)} role="search">
+        <input
+          type="text"
+          //Used e.target.value here for the current value, not the state variable.
+          //The state is one render behind and is causing bugs.
+          onChange={(e) => {
+            if (e.target.value.length >= 2) setIsSearching(true);
+            setSearchIndex(e.target.value);
+          }}
+          value={searchIndex}
+          className="page-search-bar"
+          placeholder="Search for a product brand or category"
+          aria-label="Search for a product, brand or category"
+        />
+        {/*TODO: Add search function here */}
+        <button
+          type="submit"
+          aria-label="Search "
+          className="navbar-search-btn"
+        >
+          <LuSearch />
+        </button>
+      </form>
+
       {suggestions && isSearching && (
         <div
           className="search-bar-dropdown"
