@@ -24,4 +24,7 @@ export const CATEGORY_MAP = {
   maintenance: ["guitar-tools", "guitar-care"],
 };
 
+export type Category = keyof typeof CATEGORY_MAP;
+export type SubCategory = (typeof CATEGORY_MAP)[Category][number];
+
 export const DEFAULT_PAGE_LIMIT = 15;

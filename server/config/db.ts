@@ -1,8 +1,11 @@
 import mongoose from "mongoose";
-//import dotenv from "dotenv"; //not needed here as it is called in server.js
 
 export const connectDB = async () => {
   const MONGODB_URI = process.env.MONGODB_URI;
+
+  if (!MONGODB_URI) {
+    throw new Error("MONGODB_URI is not set — check server/.env");
+  }
 
   try {
     await mongoose.connect(MONGODB_URI);
