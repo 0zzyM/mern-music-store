@@ -1,10 +1,11 @@
 import Category from "../models/categoryModel.js";
 import Subcategory from "../models/subcategoryModel.js";
+import type { Request, Response } from "express";
 
 const PUBLIC_FIELDS = "-__v -createdAt -updatedAt -isActive";
-const DEFAULT_SORT = { createdAt: 1 };
+const DEFAULT_SORT = { createdAt: 1 } as const;
 
-export const getAllCategories = async (req, res) => {
+export const getAllCategories = async (req: Request, res: Response) => {
   try {
     const categories = await Category.find(
       {
@@ -13,9 +14,10 @@ export const getAllCategories = async (req, res) => {
       PUBLIC_FIELDS,
     )
       .sort(DEFAULT_SORT)
-      .populate("subcategories", PUBLIC_FIELDS);
+      .populate("subcategories", PUBLIC_FIELDS)
+      .lean();
 
-    if (!categories || categories.length === 0) {
+    if (categories.length === 0) {
       return res.status(404).json({ message: "No categories found" });
     }
     res.status(200).json(categories);
@@ -25,7 +27,10 @@ export const getAllCategories = async (req, res) => {
   }
 };
 
-export const getCategory = async (req, res) => {
+export const getCategory = async (
+  req: Request<{ slug: string }>,
+  res: Response,
+) => {
   try {
     const { slug } = req.params;
 
@@ -35,7 +40,9 @@ export const getCategory = async (req, res) => {
         isActive: true,
       },
       PUBLIC_FIELDS,
-    ).populate("subcategories", PUBLIC_FIELDS); // Added populate to return full subcat data exc created updated dates instead of just the object id
+    )
+      .populate("subcategories", PUBLIC_FIELDS)
+      .lean(); // Added populate to return full subcat data exc created updated dates instead of just the object id
     if (!category) {
       return res.status(404).json({ message: "Category was not found" });
     }
@@ -46,13 +53,19 @@ export const getCategory = async (req, res) => {
   }
 };
 
-export const getSubcategoriesByCategory = async (req, res) => {
+export const getSubcategoriesByCategory = async (
+  req: Request<{ slug: string }>,
+  res: Response,
+) => {
   try {
     const { slug } = req.params;
-    const category = await Category.findOne({
-      slug: slug,
-      isActive: true,
-    });
+    const category = await Category.findOne(
+      {
+        slug: slug,
+        isActive: true,
+      },
+      "_id",
+    ).lean();
 
     if (!category) {
       return res.status(404).json({ message: "Category was not found" });
@@ -64,7 +77,7 @@ export const getSubcategoriesByCategory = async (req, res) => {
         isActive: true,
       },
       PUBLIC_FIELDS,
-    );
+    ).lean();
 
     if (subcategories.length === 0) {
       return res

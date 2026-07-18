@@ -1,18 +1,22 @@
 import Brand from "../models/brandModel.js";
+import type { Request, Response } from "express";
 
 const PUBLIC_FIELDS = "-__v -createdAt -updatedAt -isActive";
 
-const DEFAULT_SORT = { createdAt: 1 };
+const DEFAULT_SORT = { createdAt: 1 } as const;
 
-export const getAllBrands = async (req, res) => {
+export const getAllBrands = async (req: Request, res: Response) => {
   const { limit } = req.query;
+
+  const parsed = typeof limit === "string" ? parseInt(limit, 10) : NaN;
 
   try {
     const brands = await Brand.find({ isActive: true }, PUBLIC_FIELDS)
       .sort(DEFAULT_SORT)
-      .limit(limit ? parseInt(limit) : 0); //limit(0) means no limit did this in product too
+      .limit(Number.isNaN(parsed) ? 0 : parsed) //limit(0) means no limit did this in product too
+      .lean();
 
-    if (!brands) {
+    if (brands.length === 0) {
       return res.status(404).json({ message: "No brands found" });
     }
 
@@ -23,16 +27,19 @@ export const getAllBrands = async (req, res) => {
   }
 };
 
-export const getBrand = async (req, res) => {
+export const getBrand = async (
+  req: Request<{ slug: string }>,
+  res: Response,
+) => {
   try {
     const { slug } = req.params;
 
     const brand = await Brand.findOne(
       { slug: slug, isActive: true },
       PUBLIC_FIELDS,
-    );
+    ).lean();
 
-    if (!brand || brand == undefined) {
+    if (!brand) {
       return res.status(404).json({ message: "Brand was not found" });
     }
 
