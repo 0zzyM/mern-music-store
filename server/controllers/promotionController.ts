@@ -5,7 +5,7 @@ const PUBLIC_FIELDS = "-__v -createdAt -updatedAt -isActive";
 
 const DEFAULT_SORT = { order: 1 } as const;
 
-export const getAllPromotions = async (req: Request, res: Response) => {
+export const getAllPromotions = async (_req: Request, res: Response) => {
   try {
     const promotions = await Promotion.find({ isActive: true }, PUBLIC_FIELDS)
       .sort(DEFAULT_SORT)

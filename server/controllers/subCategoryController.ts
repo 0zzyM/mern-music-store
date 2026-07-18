@@ -5,7 +5,7 @@ const PUBLIC_FIELDS = "name slug image description parentCategory";
 const PARENT_PUBLIC_FIELDS =
   "-__v -createdAt -updatedAt -isActive -subcategories";
 
-export const getAllSubCategories = async (req: Request, res: Response) => {
+export const getAllSubCategories = async (_req: Request, res: Response) => {
   try {
     const subCategories = await Subcategory.find(
       { isActive: true },

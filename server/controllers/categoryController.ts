@@ -5,7 +5,7 @@ import type { Request, Response } from "express";
 const PUBLIC_FIELDS = "-__v -createdAt -updatedAt -isActive";
 const DEFAULT_SORT = { createdAt: 1 } as const;
 
-export const getAllCategories = async (req: Request, res: Response) => {
+export const getAllCategories = async (_req: Request, res: Response) => {
   try {
     const categories = await Category.find(
       {
