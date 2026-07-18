@@ -13,7 +13,7 @@ export const getAllBrands = async (req: Request, res: Response) => {
   try {
     const brands = await Brand.find({ isActive: true }, PUBLIC_FIELDS)
       .sort(DEFAULT_SORT)
-      .limit(Number.isNaN(parsed) ? 0 : parsed) //limit(0) means no limit did this in product too
+      .limit(Number.isNaN(parsed) || parsed < 0 ? 0 : parsed) //limit(0) means no limit did this in product too
       .lean();
 
     if (brands.length === 0) {

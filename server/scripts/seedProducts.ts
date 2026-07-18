@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Product from "../models/productModel.js";
+import Product, { ProductDoc } from "../models/productModel.js";
 import Category from "../models/categoryModel.js";
 import Subcategory from "../models/subcategoryModel.js";
 import Brand from "../models/brandModel.js";
@@ -7,11 +7,47 @@ import Brand from "../models/brandModel.js";
 import dotenv from "dotenv";
 import { connectDB } from "../config/db.js";
 
-const IMAGE_RESIZE_OPTIONS = "h_1080,c_scale,q_auto,f_auto";
-
 dotenv.config();
 
-const products = [
+const IMAGE_RESIZE_OPTIONS = "h_1080,c_scale,q_auto,f_auto";
+
+// These keys have a default value in the model if no data is passed by the script they will be defaulted to the value given to mongoose
+// If I don't pass them as optional TS will throw errs
+type DefaultedKeys =
+  | "amountSold"
+  | "reviewCount"
+  | "rating"
+  | "isOnSale"
+  | "isActive"
+  | "isFeatured"
+  | "discountAmount"
+  | "details"
+  | "description";
+
+// ! CHAOTIC HERE A BIT
+// Take Produc Doc remove brand category subcategory etc.
+// To make defaulted keys optional have choosen them via Pick and turned them to optional via Patrial
+// and Slug fields were added at the end
+// had to remove Defaulted keys from Omit otherwise required wins over optional from patrial
+type ProductPreSeed = Omit<
+  ProductDoc,
+  | "createdAt"
+  | "updatedAt"
+  | "brand"
+  | "category"
+  | "subcategory"
+  | DefaultedKeys
+> &
+  Partial<Pick<ProductDoc, DefaultedKeys>> & {
+    brandSlug: string;
+    categorySlug: string;
+    subcategorySlug: string;
+  };
+
+type ProductSeed = Omit<ProductDoc, "createdAt" | "updatedAt" | DefaultedKeys> &
+  Partial<Pick<ProductDoc, DefaultedKeys>>;
+
+const products: ProductPreSeed[] = [
   {
     name: "Jackson American Series Soloist™ SL2MG",
     brandSlug: "jackson",
@@ -317,26 +353,26 @@ const seedDatabase = async () => {
 
     //Categories
     const categories = await Category.find({});
-    const categoryMap = {};
+    const categoryMap: Record<string, mongoose.Types.ObjectId> = {};
     categories.forEach((cat) => {
       categoryMap[cat.slug] = cat._id;
     });
 
     //Sub-Categories
     const subcategories = await Subcategory.find({});
-    const subcategoryMap = {};
+    const subcategoryMap: Record<string, mongoose.Types.ObjectId> = {};
     subcategories.forEach((subcat) => {
       subcategoryMap[subcat.slug] = subcat._id;
     });
 
     //Brands
     const brands = await Brand.find({});
-    const brandMap = {};
+    const brandMap: Record<string, mongoose.Types.ObjectId> = {};
     brands.forEach((brand) => {
       brandMap[brand.slug] = brand._id;
     });
 
-    const productsWithIds = products.map((product) => ({
+    const productsWithIds: ProductSeed[] = products.map((product) => ({
       name: product.name,
       brand: brandMap[product.brandSlug],
       images: product.images,
@@ -345,20 +381,25 @@ const seedDatabase = async () => {
       category: categoryMap[product.categorySlug],
       subcategory: subcategoryMap[product.subcategorySlug],
       isFeatured: product.isFeatured,
+      amountSold: product.amountSold,
+      discountAmount: product.discountAmount,
+      isOnSale: product.isOnSale,
       details: product.details,
       description: product.description,
       rating: product.rating,
       reviewCount: product.reviewCount,
+      isActive: product.isActive,
     }));
 
     // Insert products
 
     await Product.insertMany(productsWithIds);
     console.log("Products added to DB");
-    mongoose.connection.close();
   } catch (error) {
     console.error("Error adding products", error);
-    mongoose.connection.close();
+    process.exitCode = 1;
+  } finally {
+    await mongoose.connection.close();
   }
 };
 

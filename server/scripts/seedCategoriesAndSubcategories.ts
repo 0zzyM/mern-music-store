@@ -1,14 +1,25 @@
 import mongoose from "mongoose";
-import Category from "../models/categoryModel.js";
+import Category, { CategoryDoc } from "../models/categoryModel.js";
 import dotenv from "dotenv";
 import { connectDB } from "../config/db.js";
-import Subcategory from "../models/subcategoryModel.js";
+import Subcategory, { SubcategoryDoc } from "../models/subcategoryModel.js";
 
 dotenv.config();
 
 const IMAGE_RESIZE_OPTIONS = "h_1080,c_scale,q_auto,f_auto";
 
-const categories = [
+type CategorySeed = Omit<CategoryDoc, "createdAt" | "updatedAt">;
+
+// Had to seperate as it takes Slug first then creates another object
+// subcategoresWithIds which is used for seeding
+type SubcategoryPreSeed = Omit<
+  SubcategoryDoc,
+  "createdAt" | "updatedAt" | "parentCategory"
+> & { parentCategorySlug: string };
+
+type SubcategorySeed = Omit<SubcategoryDoc, "createdAt" | "updatedAt">;
+
+const categories: CategorySeed[] = [
   {
     name: "Guitars",
     slug: "guitars",
@@ -59,7 +70,7 @@ const categories = [
   },
 ];
 
-const subcategories = [
+const subcategories: SubcategoryPreSeed[] = [
   // Guitars
   {
     name: "Electric Guitars",
@@ -278,37 +289,44 @@ const seedDatabase = async () => {
     console.log("Categories inserted");
 
     // Build the slug to ObjectId map from inserted documents
-    const categoryMap = {};
+    const categoryMap: Record<string, mongoose.Types.ObjectId> = {};
     insertedCategories.forEach((cat) => {
       categoryMap[cat.slug] = cat._id;
     });
 
     // Transform subcategories with parent ObjectIds
-    const subcategoriesWithIds = subcategories.map((sub) => ({
-      name: sub.name,
-      slug: sub.slug,
-      image: sub.image,
-      description: sub.description,
-      isActive: sub.isActive,
-      parentCategory: categoryMap[sub.parentCategorySlug],
-    }));
+    const subcategoriesWithIds: SubcategorySeed[] = subcategories.map(
+      (sub) => ({
+        name: sub.name,
+        slug: sub.slug,
+        image: sub.image,
+        description: sub.description,
+        isActive: sub.isActive,
+        parentCategory: categoryMap[sub.parentCategorySlug],
+      }),
+    );
 
     // Insert subcategories
     const insertedSubCategories =
       await Subcategory.insertMany(subcategoriesWithIds);
     console.log("Subcategories inserted");
 
-    const categoriesWithIds = {};
+    const categoriesWithIds: Record<string, mongoose.Types.ObjectId[]> = {};
 
     // Transform Categories to Categories with subcat Ids
     for (const cat of insertedCategories) {
       for (const subcat of insertedSubCategories) {
         // if (subcat.parentCategory === cat._id) === doesn't work with ObjectIds
         if (subcat.parentCategory.equals(cat._id)) {
-          if (!categoriesWithIds[cat._id]) {
-            categoriesWithIds[cat._id] = [];
+          // had to do this as JS was doing it before under the hood
+          // object keys can't be _id as it is not a string or symbol
+          // another alternative to not convert to a str would be using id instead of _id
+          // but I don't want to break the consistency both FE and BE used _id everywhere so far
+          const key = cat._id.toString();
+          if (!categoriesWithIds[key]) {
+            categoriesWithIds[key] = [];
           }
-          categoriesWithIds[cat._id].push(subcat._id);
+          categoriesWithIds[key].push(subcat._id);
         }
       }
     }
@@ -319,11 +337,11 @@ const seedDatabase = async () => {
         subcategories: categoriesWithIds[catId],
       });
     }
-
-    mongoose.connection.close();
   } catch (error) {
     console.error("Seed error:", error);
-    mongoose.connection.close();
+    process.exitCode = 1;
+  } finally {
+    await mongoose.connection.close();
   }
 };
 
