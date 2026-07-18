@@ -5,12 +5,9 @@
     "outDir": "./dist",
     "rootDir": "./",
 
-    // migration ergonomics
-    "allowJs": true, // lets .ts and .js coexist while you migrate
-    "checkJs": false, //! TODO: flip to true later if you want errors in remaining .js files
-
-    // correctness
-    "strict": true, // start strict; new .ts files get full checking
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true, // don't type-check node_modules .d.ts files
