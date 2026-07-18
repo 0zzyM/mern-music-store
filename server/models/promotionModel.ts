@@ -36,4 +36,6 @@ const promotionSchema = new mongoose.Schema(
 
 const Promotion = mongoose.model("Promotion", promotionSchema);
 
+export type PromotionDoc = mongoose.InferSchemaType<typeof promotionSchema>;
+
 export default Promotion;

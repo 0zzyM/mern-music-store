@@ -1,13 +1,15 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { connectDB } from "../config/db.js";
-import Brand from "../models/brandModel.js";
+import Brand, { BrandDoc } from "../models/brandModel.js";
 
 dotenv.config();
 
 const IMAGE_RESIZE_OPTIONS = "h_360,c_scale,q_auto,f_auto";
 
-const brands = [
+type BrandSeed = Omit<BrandDoc, "createdAt" | "updatedAt">;
+
+const brands: BrandSeed[] = [
   // Guitars
   {
     name: "Fender",
@@ -154,7 +156,7 @@ const brands = [
     slug: "elixir",
     image: `https://res.cloudinary.com/drbhtzgcs/image/upload/${IMAGE_RESIZE_OPTIONS}/v1779832318/elixir-logo_r9c92j.png`,
     description:
-      "The string of choice for legends. Ernie Ball Slinky strings have been wound onto the guitars of Clapton, Hendrix, and Slash.",
+      "The string of choice for legends. Elixir strings have been wound onto the guitars of Clapton, Hendrix, and Slash.",
     isActive: true,
   },
   {
@@ -190,11 +192,11 @@ const seedDatabase = async () => {
     await Brand.deleteMany({});
     await Brand.insertMany(brands);
     console.log(`${brands.length} brands inserted successfully`);
-
-    mongoose.connection.close();
   } catch (error) {
     console.error("Seed error:", error);
-    mongoose.connection.close();
+    process.exitCode = 1;
+  } finally {
+    await mongoose.connection.close();
   }
 };
 

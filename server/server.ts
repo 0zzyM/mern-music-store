@@ -1,6 +1,6 @@
+import "dotenv/config"; // After this import dotenv.config() is no longer required but keep it on top at line 1
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import productRouter from "./routers/productRouter.js";
 import subCategoryRouter from "./routers/subCategoryRouter.js";
@@ -9,12 +9,11 @@ import brandRouter from "./routers/brandRouter.js";
 import promotionRouter from "./routers/promotionRouter.js";
 import searchRouter from "./routers/searchRouter.js";
 
-// Apperantly this needs to be on top otherwise process.env will get undefined
-dotenv.config(); // remember this loads .env into process.env
-connectDB();
+// Only allowed here on ES modules bcs it is the top lvl no need for async fn
+await connectDB();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = Number(process.env.PORT) || 5000;
 
 app.use(
   cors({
@@ -31,7 +30,8 @@ app.use("/api/v1/brands", brandRouter);
 app.use("/api/v1/promotions", promotionRouter);
 app.use("/api/v1/search", searchRouter);
 
-app.get("/", (req, res) => {
+//noUnusedParameters  doesn't allow to use req if I add _ before it will pass the test of it
+app.get("/", (_req, res) => {
   res.send("Backend is running!!!");
 });
 

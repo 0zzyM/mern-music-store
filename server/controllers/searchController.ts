@@ -2,6 +2,7 @@ import Brand from "../models/brandModel.js";
 import Product from "../models/productModel.js";
 import Category from "../models/categoryModel.js";
 import Subcategory from "../models/subcategoryModel.js";
+import type { Request, Response } from "express";
 
 const PRODUCT_SEARCH_FIELDS =
   "-__v -createdAt -updatedAt -isActive -brand -category -subcategory -amountSold -reviewCount -rating -isFeatured";
@@ -14,12 +15,13 @@ const CATEGORY_SEARCH_FIELDS =
 const SUBCATEGORY_SEARCH_FIELDS =
   "-__v -createdAt -updatedAt -isActive -parentCategory -description";
 
-export const getAllSearchResults = async (req, res) => {
+export const getAllSearchResults = async (req: Request, res: Response) => {
   try {
     const { q } = req.query;
 
     //q.trim().length === 0 in case just spaces etc.
-    if (!q || q.trim().length === 0) {
+
+    if (typeof q !== "string" || q.trim().length === 0) {
       return res.status(400).json({ message: "Search query is required" });
     }
 
@@ -34,25 +36,28 @@ export const getAllSearchResults = async (req, res) => {
         isActive: true,
       },
       PRODUCT_SEARCH_FIELDS,
-    );
+    ).lean();
 
     //(!productResults) was removed as if none it  will be []
     if (productResults.length === 0) {
       return res.status(404).json({ message: "No matching product found" });
     }
 
-    res.status(200).json(productResults);
+    return res.status(200).json(productResults);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
-export const getSuggestedSearchResults = async (req, res) => {
+export const getSuggestedSearchResults = async (
+  req: Request,
+  res: Response,
+) => {
   try {
     const { q } = req.query;
 
-    if (!q || q.trim().length === 0) {
+    if (typeof q !== "string" || q.trim().length === 0) {
       return res.status(400).json({ message: "Search query is required" });
     }
 
@@ -60,37 +65,48 @@ export const getSuggestedSearchResults = async (req, res) => {
 
     const regex = new RegExp(safeQuery, "i");
 
-    const productResults = await Product.find(
-      {
-        name: regex,
-        isActive: true,
-      },
-      PRODUCT_SEARCH_FIELDS,
-    ).limit(5);
+    const [productResults, categoryResults, subcategoryResults, brandResults] =
+      await Promise.all([
+        Product.find(
+          {
+            name: regex,
+            isActive: true,
+          },
+          PRODUCT_SEARCH_FIELDS,
+        )
+          .limit(5)
+          .lean(),
 
-    const categoryResults = await Category.find(
-      {
-        name: regex,
-        isActive: true,
-      },
-      CATEGORY_SEARCH_FIELDS,
-    ).limit(2);
+        Category.find(
+          {
+            name: regex,
+            isActive: true,
+          },
+          CATEGORY_SEARCH_FIELDS,
+        )
+          .limit(2)
+          .lean(),
 
-    const subcategoryResults = await Subcategory.find(
-      {
-        name: regex,
-        isActive: true,
-      },
-      SUBCATEGORY_SEARCH_FIELDS,
-    ).limit(2);
+        Subcategory.find(
+          {
+            name: regex,
+            isActive: true,
+          },
+          SUBCATEGORY_SEARCH_FIELDS,
+        )
+          .limit(2)
+          .lean(),
 
-    const brandResults = await Brand.find(
-      {
-        name: regex,
-        isActive: true,
-      },
-      BRAND_SEARCH_FIELDS,
-    ).limit(3);
+        Brand.find(
+          {
+            name: regex,
+            isActive: true,
+          },
+          BRAND_SEARCH_FIELDS,
+        )
+          .limit(3)
+          .lean(),
+      ]);
 
     // Check any search  results exist  for any schema, FE can handle [] and show no result
     const hasResults =
@@ -104,7 +120,7 @@ export const getSuggestedSearchResults = async (req, res) => {
     }
 
     //This is how to return multiple results
-    res.status(200).json({
+    return res.status(200).json({
       productResults,
       categoryResults,
       subcategoryResults,
@@ -112,6 +128,6 @@ export const getSuggestedSearchResults = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 };

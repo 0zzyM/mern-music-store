@@ -30,4 +30,6 @@ const brandSchema = new mongoose.Schema(
 
 const Brand = mongoose.model("Brand", brandSchema);
 
+export type BrandDoc = mongoose.InferSchemaType<typeof brandSchema>;
+
 export default Brand;

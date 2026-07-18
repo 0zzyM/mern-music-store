@@ -73,7 +73,8 @@ const productSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-// Create the Product model
 const Product = mongoose.model("Product", productSchema);
+
+export type ProductDoc = mongoose.InferSchemaType<typeof productSchema>;
 
 export default Product;

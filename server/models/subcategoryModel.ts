@@ -67,4 +67,6 @@ const subcategorySchema = new mongoose.Schema(
 // Create the Subcategory model
 const Subcategory = mongoose.model("Subcategory", subcategorySchema);
 
+export type SubcategoryDoc = mongoose.InferSchemaType<typeof subcategorySchema>;
+
 export default Subcategory;

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { CATEGORY_MAP } from "../config/constants.js";
 
 // Create the Category schema
 const categorySchema = new mongoose.Schema(
@@ -17,14 +18,7 @@ const categorySchema = new mongoose.Schema(
     },
     slug: {
       type: String,
-      enum: [
-        "guitars",
-        "amplification",
-        "effects",
-        "accessories",
-        "recording",
-        "maintenance",
-      ],
+      enum: Object.keys(CATEGORY_MAP),
       required: true,
       lowercase: true,
       trim: true,
@@ -53,5 +47,7 @@ const categorySchema = new mongoose.Schema(
 
 // Create Category model
 const Category = mongoose.model("Category", categorySchema);
+
+export type CategoryDoc = mongoose.InferSchemaType<typeof categorySchema>;
 
 export default Category;
