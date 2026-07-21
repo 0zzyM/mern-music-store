@@ -138,8 +138,8 @@ export const getProduct = async (
       PRODUCT_DETAILED_FIELDS,
     )
       .populate([
-        { path: "category", select: PUBLIC_CATEGORY_FIELDS + " -image" },
-        { path: "subcategory", select: PUBLIC_SUBCATEGORY_FIELDS + " -image" },
+        { path: "category", select: PUBLIC_CATEGORY_FIELDS },
+        { path: "subcategory", select: PUBLIC_SUBCATEGORY_FIELDS },
         { path: "brand", select: PUBLIC_BRAND_FIELDS },
       ])
       .lean();
