@@ -3,8 +3,8 @@ import Product, { type ProductDoc } from "../models/productModel.js";
 import Category from "../models/categoryModel.js";
 import Subcategory from "../models/subcategoryModel.js";
 import Brand from "../models/brandModel.js";
-import { DEFAULT_PAGE_LIMIT } from "../config/constants.js";
 import type { Request, Response } from "express";
+import { ProductListQueryDTO } from "../middlewares/queryHandler.js";
 
 const SORT_OPTIONS = {
   newest: { createdAt: -1 },
@@ -16,51 +16,31 @@ const SORT_OPTIONS = {
 
 type SortKey = keyof typeof SORT_OPTIONS;
 
-const VALID_SORTS = Object.keys(SORT_OPTIONS);
 const DEFAULT_SORT = { createdAt: 1 } as const;
 
-const PUBLIC_FIELDS = "-__v -createdAt -updatedAt -isActive";
-const PUBLIC_BRAND_FIELDS = "-__v -createdAt -updatedAt -isActive -description";
-const PUBLIC_CATEGORY_FIELDS =
-  "-__v -createdAt -updatedAt -isActive -description -subcategories";
-const PUBLIC_SUBCATEGORY_FIELDS =
-  "-__v -createdAt -updatedAt -isActive -description -parentCategory";
+const PUBLIC_PRODUCT_FIELDS =
+  "name price images stock rating reviewCount isOnSale discountAmount isFeatured brand category subcategory";
+
+const PRODUCT_DETAILED_FIELDS = PUBLIC_PRODUCT_FIELDS + " details description";
+
+const PUBLIC_BRAND_FIELDS = "name slug";
+const PUBLIC_CATEGORY_FIELDS = "name slug";
+const PUBLIC_SUBCATEGORY_FIELDS = "name slug";
 
 export const getProducts = async (req: Request, res: Response) => {
   try {
-    const {
-      sort,
-      category,
-      subcategory,
-      brand,
-      isFeatured,
-      limit,
-      minPrice,
-      maxPrice,
-      highRated,
-      page,
-    } = req.query;
-
-    // Sort Validation
-    if (sort && (typeof sort !== "string" || !VALID_SORTS.includes(sort))) {
-      return res.status(400).json({ message: "Invalid sort parameter" });
-    }
+    const dto = req.validatedQuery as ProductListQueryDTO;
 
     // Validation and filteration of the query
     const filter: QueryFilter<ProductDoc> = { isActive: true };
 
-    const sortOption =
-      typeof sort === "string" && sort in SORT_OPTIONS
-        ? SORT_OPTIONS[sort as SortKey]
-        : DEFAULT_SORT; // fall back to default sort which is createdAt: 1
+    const sortOption = dto.sort
+      ? SORT_OPTIONS[dto.sort as SortKey]
+      : DEFAULT_SORT;
 
-    if (category) {
-      if (typeof category !== "string") {
-        return res.status(400).json({ message: "Invalid category parameter" });
-      }
-
+    if (dto.category) {
       const requestedCategory = await Category.findOne(
-        { slug: category, isActive: true },
+        { slug: dto.category, isActive: true },
         "_id",
       );
 
@@ -70,15 +50,10 @@ export const getProducts = async (req: Request, res: Response) => {
       filter.category = requestedCategory._id;
     }
 
-    if (subcategory) {
-      if (typeof subcategory !== "string") {
-        return res
-          .status(400)
-          .json({ message: "Invalid subcategory parameter" });
-      }
+    if (dto.subcategory) {
       const requestedSubcategory = await Subcategory.findOne(
         {
-          slug: subcategory,
+          slug: dto.subcategory,
           isActive: true,
         },
         "_id",
@@ -89,63 +64,42 @@ export const getProducts = async (req: Request, res: Response) => {
       filter.subcategory = requestedSubcategory._id;
     }
 
-    if (brand) {
-      if (typeof brand !== "string") {
-        return res.status(400).json({ message: "Invalid brand parameter" });
-      }
-      const brandSlugs = brand.split(",");
+    if (dto.brand) {
       const requestedBrands = await Brand.find(
         {
-          slug: { $in: brandSlugs },
+          slug: { $in: dto.brand },
           isActive: true,
         },
         "_id",
       );
 
       if (requestedBrands.length === 0) {
-        return res.status(404).json({ message: `Invalid brand ${brandSlugs}` });
+        return res.status(404).json({ message: "Invalid brand" });
       }
 
       filter.brand = { $in: requestedBrands.map((b) => b._id) };
     }
 
-    if (isFeatured === "true") {
+    if (dto.isFeatured) {
       filter.isFeatured = true;
     }
 
     //Create empty priceFilter Object
     const priceFilter: { $gte?: number; $lte?: number } = {};
+    priceFilter.$gte = dto.minPrice;
+    priceFilter.$lte = dto.maxPrice;
 
-    //Check if minPrice and maxPrice inputs are valid and turn the string to Number
-    const min = typeof minPrice === "string" ? Number(minPrice) : NaN;
-    const max = typeof maxPrice === "string" ? Number(maxPrice) : NaN;
-
-    //If the entry was valid the min and max would be over 0, if invalid not string NaN, and if negative avoided too.
-    //! TODO: Do the deeper input validation later on the middleware
-    if (min > 0) priceFilter.$gte = min;
-    if (max > 0) priceFilter.$lte = max;
     if (Object.keys(priceFilter).length) filter.price = priceFilter;
 
     // 4 is hardcoded here as the FE only offers 4star and above as an option "boolean"
-    if (highRated === "true") filter.rating = { $gte: 4 };
+    if (dto.highRated) filter.rating = { $gte: 4 };
 
-    const parsedLimit = typeof limit === "string" ? parseInt(limit, 10) : NaN;
-    const parsedPage = typeof page === "string" ? parseInt(page, 10) : NaN;
-
-    const safeLimit =
-      Number.isNaN(parsedLimit) || parsedLimit < 0 ? 0 : parsedLimit;
-    const safePage =
-      Number.isNaN(parsedPage) || parsedPage < 1 ? 0 : parsedPage;
-
-    const LIMIT = safePage ? safeLimit || DEFAULT_PAGE_LIMIT : safeLimit;
-    const SKIP = safePage
-      ? (safePage - 1) * (safeLimit || DEFAULT_PAGE_LIMIT)
-      : 0;
-
+    const LIMIT = dto.limit;
+    const SKIP = (dto.page - 1) * dto.limit;
     // Query
 
     const [products, total] = await Promise.all([
-      Product.find(filter, PUBLIC_FIELDS)
+      Product.find(filter, PUBLIC_PRODUCT_FIELDS)
         .sort(sortOption)
         .populate([
           { path: "category", select: PUBLIC_CATEGORY_FIELDS },
@@ -181,7 +135,7 @@ export const getProduct = async (
         _id: _id,
         isActive: true,
       },
-      PUBLIC_FIELDS,
+      PRODUCT_DETAILED_FIELDS,
     )
       .populate([
         { path: "category", select: PUBLIC_CATEGORY_FIELDS + " -image" },
