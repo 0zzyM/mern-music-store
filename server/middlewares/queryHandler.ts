@@ -5,8 +5,20 @@ type NumberRule = { type: "number"; min: number; max: number; default: number };
 type BoolRule = { type: "boolean" };
 type EnumRule = { type: "enum"; values: readonly string[] };
 type ListRule = { type: "list"; values: readonly string[]; maxItems: number };
+type StringRule = {
+  type: "string";
+  minLength: number;
+  maxLength: number;
+  required?: boolean;
+};
 
-export type FieldRule = IntRule | NumberRule | BoolRule | EnumRule | ListRule;
+export type FieldRule =
+  | IntRule
+  | NumberRule
+  | BoolRule
+  | EnumRule
+  | ListRule
+  | StringRule;
 
 export type QuerySpec = Record<string, FieldRule>;
 
@@ -19,7 +31,13 @@ export const validateQuery =
 
       // if default is absent like isFeatured shouldn't assign anything
       if (!qry) {
-        if ("default" in rule) dto[key] = rule.default;
+        if ("default" in rule) {
+          dto[key] = rule.default;
+        } else if ("required" in rule && rule.required) {
+          return res.status(400).json({
+            message: `Query(${key}) is required`,
+          });
+        }
         continue;
       }
 
@@ -85,6 +103,23 @@ export const validateQuery =
               .json({ message: `Invalid ${key} parameter` });
           }
           dto[key] = items;
+          break;
+        }
+
+        case "string": {
+          const trimmed = qry.trim();
+
+          if (trimmed.length < rule.minLength) {
+            return res.status(400).json({
+              message: `Invalid query: Query needs to have minimum ${rule.minLength} characters`,
+            });
+          }
+          if (trimmed.length > rule.maxLength) {
+            return res.status(400).json({
+              message: `Invalid query: Query can't have more than ${rule.maxLength} characters`,
+            });
+          }
+          dto[key] = trimmed;
           break;
         }
       }
