@@ -2,7 +2,9 @@ import Category from "../models/categoryModel.js";
 import Subcategory from "../models/subcategoryModel.js";
 import type { Request, Response } from "express";
 
-const PUBLIC_FIELDS = "-__v -createdAt -updatedAt -isActive";
+const PUBLIC_FIELDS = "name slug image description subcategories";
+const PUBLIC_SUBCATEGORY_FIELDS = "name slug";
+const SUBCATEGORY_LIST_FIELDS = "name slug image description";
 const DEFAULT_SORT = { createdAt: 1 } as const;
 
 export const getAllCategories = async (_req: Request, res: Response) => {
@@ -14,7 +16,7 @@ export const getAllCategories = async (_req: Request, res: Response) => {
       PUBLIC_FIELDS,
     )
       .sort(DEFAULT_SORT)
-      .populate("subcategories", PUBLIC_FIELDS)
+      .populate("subcategories", PUBLIC_SUBCATEGORY_FIELDS)
       .lean();
 
     if (categories.length === 0) {
@@ -41,7 +43,7 @@ export const getCategory = async (
       },
       PUBLIC_FIELDS,
     )
-      .populate("subcategories", PUBLIC_FIELDS)
+      .populate("subcategories", PUBLIC_SUBCATEGORY_FIELDS)
       .lean(); // Added populate to return full subcat data exc created updated dates instead of just the object id
     if (!category) {
       return res.status(404).json({ message: "Category was not found" });
@@ -76,7 +78,7 @@ export const getSubcategoriesByCategory = async (
         parentCategory: category._id,
         isActive: true,
       },
-      PUBLIC_FIELDS,
+      SUBCATEGORY_LIST_FIELDS,
     ).lean();
 
     if (subcategories.length === 0) {

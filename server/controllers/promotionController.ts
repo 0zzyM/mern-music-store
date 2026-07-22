@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import Promotion from "../models/promotionModel.js";
 
-const PUBLIC_FIELDS = "-__v -createdAt -updatedAt -isActive";
+const PUBLIC_FIELDS = "title subtitle image ctaText ctaLink order";
 
 const DEFAULT_SORT = { order: 1 } as const;
 

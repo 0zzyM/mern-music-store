@@ -2,8 +2,7 @@ import Subcategory from "../models/subcategoryModel.js";
 import type { Request, Response } from "express";
 
 const PUBLIC_FIELDS = "name slug image description parentCategory";
-const PARENT_PUBLIC_FIELDS =
-  "-__v -createdAt -updatedAt -isActive -subcategories";
+const PARENT_PUBLIC_FIELDS = "name slug";
 
 export const getAllSubCategories = async (_req: Request, res: Response) => {
   try {
