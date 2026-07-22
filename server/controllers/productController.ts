@@ -19,7 +19,7 @@ type SortKey = keyof typeof SORT_OPTIONS;
 const DEFAULT_SORT = { createdAt: 1 } as const;
 
 const PUBLIC_PRODUCT_FIELDS =
-  "name price images stock rating reviewCount isOnSale discountAmount isFeatured brand category subcategory";
+  "name price images stock rating reviewCount isOnSale discountAmount isFeatured brand category subcategory details";
 
 const PRODUCT_DETAILED_FIELDS = PUBLIC_PRODUCT_FIELDS + " details description";
 
