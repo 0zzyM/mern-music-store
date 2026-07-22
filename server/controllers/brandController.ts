@@ -1,19 +1,18 @@
 import Brand from "../models/brandModel.js";
 import type { Request, Response } from "express";
+import type { BrandQueryDTO } from "../validation/brandQuerySpecs.js";
 
-const PUBLIC_FIELDS = "-__v -createdAt -updatedAt -isActive";
+const PUBLIC_FIELDS = "name slug image description";
 
 const DEFAULT_SORT = { createdAt: 1 } as const;
 
 export const getAllBrands = async (req: Request, res: Response) => {
-  const { limit } = req.query;
-
-  const parsed = typeof limit === "string" ? parseInt(limit, 10) : NaN;
+  const dto = req.validatedQuery as BrandQueryDTO;
 
   try {
     const brands = await Brand.find({ isActive: true }, PUBLIC_FIELDS)
       .sort(DEFAULT_SORT)
-      .limit(Number.isNaN(parsed) || parsed < 0 ? 0 : parsed) //limit(0) means no limit did this in product too
+      .limit(dto.limit)
       .lean();
 
     if (brands.length === 0) {

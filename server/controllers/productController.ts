@@ -4,7 +4,7 @@ import Category from "../models/categoryModel.js";
 import Subcategory from "../models/subcategoryModel.js";
 import Brand from "../models/brandModel.js";
 import type { Request, Response } from "express";
-import { ProductListQueryDTO } from "../middlewares/queryHandler.js";
+import type { ProductListQueryDTO } from "../validation/productQuerySpecs.js";
 
 const SORT_OPTIONS = {
   newest: { createdAt: -1 },
