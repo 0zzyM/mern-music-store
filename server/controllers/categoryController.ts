@@ -1,23 +1,15 @@
-import Category from "../models/categoryModel.js";
-import Subcategory from "../models/subcategoryModel.js";
 import type { Request, Response } from "express";
+import {
+  getCategoryBySlug,
+  listCategories,
+  getCategoryIdBySlug,
+} from "../services/categoryService.js";
 
-const PUBLIC_FIELDS = "name slug image description subcategories";
-const PUBLIC_SUBCATEGORY_FIELDS = "name slug";
-const SUBCATEGORY_LIST_FIELDS = "name slug image description";
-const DEFAULT_SORT = { createdAt: 1 } as const;
+import { listSubcategoriesByCategory } from "../services/subcategoryService.js";
 
 export const getAllCategories = async (_req: Request, res: Response) => {
   try {
-    const categories = await Category.find(
-      {
-        isActive: true,
-      },
-      PUBLIC_FIELDS,
-    )
-      .sort(DEFAULT_SORT)
-      .populate("subcategories", PUBLIC_SUBCATEGORY_FIELDS)
-      .lean();
+    const categories = await listCategories();
 
     if (categories.length === 0) {
       return res.status(404).json({ message: "No categories found" });
@@ -36,15 +28,7 @@ export const getCategory = async (
   try {
     const { slug } = req.params;
 
-    const category = await Category.findOne(
-      {
-        slug: slug,
-        isActive: true,
-      },
-      PUBLIC_FIELDS,
-    )
-      .populate("subcategories", PUBLIC_SUBCATEGORY_FIELDS)
-      .lean(); // Added populate to return full subcat data exc created updated dates instead of just the object id
+    const category = await getCategoryBySlug(slug);
     if (!category) {
       return res.status(404).json({ message: "Category was not found" });
     }
@@ -61,25 +45,14 @@ export const getSubcategoriesByCategory = async (
 ) => {
   try {
     const { slug } = req.params;
-    const category = await Category.findOne(
-      {
-        slug: slug,
-        isActive: true,
-      },
-      "_id",
-    ).lean();
+
+    const category = await getCategoryIdBySlug(slug);
 
     if (!category) {
       return res.status(404).json({ message: "Category was not found" });
     }
 
-    const subcategories = await Subcategory.find(
-      {
-        parentCategory: category._id,
-        isActive: true,
-      },
-      SUBCATEGORY_LIST_FIELDS,
-    ).lean();
+    const subcategories = await listSubcategoriesByCategory(category._id);
 
     if (subcategories.length === 0) {
       return res
