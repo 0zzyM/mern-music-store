@@ -1,15 +1,9 @@
 import type { Request, Response } from "express";
-import Promotion from "../models/promotionModel.js";
-
-const PUBLIC_FIELDS = "title subtitle image ctaText ctaLink order";
-
-const DEFAULT_SORT = { order: 1 } as const;
+import { listPromotions } from "../services/promotionService.js";
 
 export const getAllPromotions = async (_req: Request, res: Response) => {
   try {
-    const promotions = await Promotion.find({ isActive: true }, PUBLIC_FIELDS)
-      .sort(DEFAULT_SORT)
-      .lean();
+    const promotions = await listPromotions();
 
     if (promotions.length === 0) {
       return res.status(404).json({ message: "No promotions found" });

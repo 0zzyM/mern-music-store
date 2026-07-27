@@ -1,19 +1,12 @@
-import Brand from "../models/brandModel.js";
 import type { Request, Response } from "express";
 import type { BrandQueryDTO } from "../validation/brandQuerySpecs.js";
-
-const PUBLIC_FIELDS = "name slug image description";
-
-const DEFAULT_SORT = { createdAt: 1 } as const;
+import { listBrand, listBrands } from "../services/brandService.js";
 
 export const getAllBrands = async (req: Request, res: Response) => {
   const dto = req.validatedQuery as BrandQueryDTO;
 
   try {
-    const brands = await Brand.find({ isActive: true }, PUBLIC_FIELDS)
-      .sort(DEFAULT_SORT)
-      .limit(dto.limit)
-      .lean();
+    const brands = await listBrands(dto.limit);
 
     if (brands.length === 0) {
       return res.status(404).json({ message: "No brands found" });
@@ -33,10 +26,7 @@ export const getBrand = async (
   try {
     const { slug } = req.params;
 
-    const brand = await Brand.findOne(
-      { slug: slug, isActive: true },
-      PUBLIC_FIELDS,
-    ).lean();
+    const brand = await listBrand(slug);
 
     if (!brand) {
       return res.status(404).json({ message: "Brand was not found" });
