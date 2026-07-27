@@ -1,38 +1,18 @@
-import Brand from "../models/brandModel.js";
-import Product from "../models/productModel.js";
-import Category from "../models/categoryModel.js";
-import Subcategory from "../models/subcategoryModel.js";
 import type { Request, Response } from "express";
 import type {
   SearchQueryDTO,
   SuggestQueryDTO,
 } from "../validation/searchQuerySpecs.js";
-
-const PRODUCT_SEARCH_FIELDS = "name images price stock isOnSale discountAmount";
-
-const BRAND_SEARCH_FIELDS = "name slug image";
-
-const CATEGORY_SEARCH_FIELDS = "name slug image";
-
-const SUBCATEGORY_SEARCH_FIELDS = "name slug image";
+import {
+  listSearchResults,
+  listSuggestedSearchResults,
+} from "../services/searchService.js";
 
 export const getAllSearchResults = async (req: Request, res: Response) => {
   try {
     const dto = req.validatedQuery as SearchQueryDTO;
 
-    const safeQuery = dto.q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").trim();
-
-    const regex = new RegExp(safeQuery, "i");
-
-    const productResults = await Product.find(
-      {
-        name: regex,
-        isActive: true,
-      },
-      PRODUCT_SEARCH_FIELDS,
-    )
-      .limit(dto.limit)
-      .lean();
+    const productResults = await listSearchResults(dto.q, dto.limit);
 
     //(!productResults) was removed as if none it  will be []
     if (productResults.length === 0) {
@@ -54,52 +34,12 @@ export const getSuggestedSearchResults = async (
   try {
     const dto = req.validatedQuery as SuggestQueryDTO;
 
-    const safeQuery = dto.q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").trim();
-
-    const regex = new RegExp(safeQuery, "i");
-
-    const [productResults, categoryResults, subcategoryResults, brandResults] =
-      await Promise.all([
-        Product.find(
-          {
-            name: regex,
-            isActive: true,
-          },
-          PRODUCT_SEARCH_FIELDS,
-        )
-          .limit(5)
-          .lean(),
-
-        Category.find(
-          {
-            name: regex,
-            isActive: true,
-          },
-          CATEGORY_SEARCH_FIELDS,
-        )
-          .limit(2)
-          .lean(),
-
-        Subcategory.find(
-          {
-            name: regex,
-            isActive: true,
-          },
-          SUBCATEGORY_SEARCH_FIELDS,
-        )
-          .limit(2)
-          .lean(),
-
-        Brand.find(
-          {
-            name: regex,
-            isActive: true,
-          },
-          BRAND_SEARCH_FIELDS,
-        )
-          .limit(3)
-          .lean(),
-      ]);
+    const {
+      productResults,
+      categoryResults,
+      subcategoryResults,
+      brandResults,
+    } = await listSuggestedSearchResults(dto.q);
 
     // Check any search  results exist  for any schema, FE can handle [] and show no result
     const hasResults =
