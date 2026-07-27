@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import type { BrandQueryDTO } from "../validation/brandQuerySpecs.js";
-import { listBrand, listBrands } from "../services/brandService.js";
+import { getBrandBySlug, listBrands } from "../services/brandService.js";
 
 export const getAllBrands = async (req: Request, res: Response) => {
   const dto = req.validatedQuery as BrandQueryDTO;
@@ -26,7 +26,7 @@ export const getBrand = async (
   try {
     const { slug } = req.params;
 
-    const brand = await listBrand(slug);
+    const brand = await getBrandBySlug(slug);
 
     if (!brand) {
       return res.status(404).json({ message: "Brand was not found" });

@@ -13,7 +13,7 @@ export const listBrands = async (limit: number) => {
   return brands;
 };
 
-export const listBrand = async (slug: string) => {
+export const getBrandBySlug = async (slug: string) => {
   const brand = await Brand.findOne(
     { slug: slug, isActive: true },
     PUBLIC_FIELDS,
