@@ -49,5 +49,5 @@ export const getCategoryIdBySlug = async (slug: string) => {
     throw new NotFoundError("Category ID not found");
   }
 
-  return category;
+  return category._id;
 };
