@@ -8,6 +8,7 @@ import categoryRouter from "./routers/categoryRouter.js";
 import brandRouter from "./routers/brandRouter.js";
 import promotionRouter from "./routers/promotionRouter.js";
 import searchRouter from "./routers/searchRouter.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
 
 // Only allowed here on ES modules bcs it is the top lvl no need for async fn
 await connectDB();
@@ -29,6 +30,11 @@ app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/brands", brandRouter);
 app.use("/api/v1/promotions", promotionRouter);
 app.use("/api/v1/search", searchRouter);
+// It is basically for all the paths  since no path specified as the first arg
+// Only the routes that don't exist will reach it
+app.use((_req, res) => res.status(404).json({ message: "Route not found" })); // unmatched routes
+
+app.use(errorHandler);
 
 //noUnusedParameters  doesn't allow to use req if I add _ before it will pass the test of it
 app.get("/", (_req, res) => {
