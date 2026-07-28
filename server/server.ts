@@ -30,16 +30,18 @@ app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/brands", brandRouter);
 app.use("/api/v1/promotions", promotionRouter);
 app.use("/api/v1/search", searchRouter);
+
+//noUnusedParameters  doesn't allow to use req if I add _ before it will pass the test of it
+//Health Check
+app.get("/", (_req, res) => {
+  res.send("Backend is running!!!");
+});
+
 // It is basically for all the paths  since no path specified as the first arg
 // Only the routes that don't exist will reach it
 app.use((_req, res) => res.status(404).json({ message: "Route not found" })); // unmatched routes
 
 app.use(errorHandler);
-
-//noUnusedParameters  doesn't allow to use req if I add _ before it will pass the test of it
-app.get("/", (_req, res) => {
-  res.send("Backend is running!!!");
-});
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
