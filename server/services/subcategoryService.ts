@@ -35,6 +35,22 @@ export const getSubcategoryBySlug = async (slug: string) => {
   return subcategory;
 };
 
+export const getSubcategoryIdBySlug = async (slug: string) => {
+  const subcategory = await Subcategory.findOne(
+    {
+      slug: slug,
+      isActive: true,
+    },
+    "_id",
+  ).lean();
+
+  if (!subcategory) {
+    throw new NotFoundError("Sub-category was not found");
+  }
+
+  return subcategory._id;
+};
+
 export const listSubcategoriesByCategory = async (id: Types.ObjectId) => {
   const subcategories = await Subcategory.find(
     {
