@@ -1,4 +1,3 @@
-import { NotFoundError } from "../errors/AppError.js";
 import Promotion from "../models/promotionModel.js";
 
 const PUBLIC_FIELDS = "title subtitle image ctaText ctaLink order";
