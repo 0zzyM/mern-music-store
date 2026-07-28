@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
+import { BadRequestError } from "../errors/AppError.js";
 
 type IntRule = { type: "int"; min: number; max: number; default: number };
 type NumberRule = { type: "number"; min: number; max: number; default: number };
@@ -23,7 +24,7 @@ export type FieldRule =
 export type QuerySpec = Record<string, FieldRule>;
 
 export const validateQuery =
-  (spec: QuerySpec) => (req: Request, res: Response, next: NextFunction) => {
+  (spec: QuerySpec) => (req: Request, _res: Response, next: NextFunction) => {
     const dto: Record<string, unknown> = {};
 
     for (const [key, rule] of Object.entries(spec)) {
@@ -34,17 +35,15 @@ export const validateQuery =
         if ("default" in rule) {
           dto[key] = rule.default;
         } else if ("required" in rule && rule.required) {
-          return res.status(400).json({
-            message: `Query(${key}) is required`,
-          });
+          throw new BadRequestError(`Query(${key}) is required`);
         }
         continue;
       }
 
       if (typeof qry !== "string") {
-        return res
-          .status(400)
-          .json({ message: `Invalid request ${key}, it can only be a string` });
+        throw new BadRequestError(
+          `Invalid request ${key}, it can only be a string`,
+        );
       }
 
       switch (rule.type) {
@@ -52,9 +51,9 @@ export const validateQuery =
           const parsedQry = parseInt(qry, 10);
 
           if (Number.isNaN(parsedQry) || parsedQry < rule.min) {
-            return res
-              .status(400)
-              .json({ message: `Invalid request ${key} parameter was called` });
+            throw new BadRequestError(
+              `Invalid request ${key} parameter was called`,
+            );
           }
 
           dto[key] = Math.min(parsedQry, rule.max);
@@ -66,9 +65,7 @@ export const validateQuery =
           const parsedQry = Number(qry);
 
           if (Number.isNaN(parsedQry) || parsedQry < rule.min) {
-            return res
-              .status(400)
-              .json({ message: `Invalid ${key} parameter was called` });
+            throw new BadRequestError(`Invalid ${key} parameter was called`);
           }
 
           dto[key] = Math.min(parsedQry, rule.max);
@@ -85,9 +82,7 @@ export const validateQuery =
           if (rule.values.includes(qry)) {
             dto[key] = qry;
           } else {
-            return res
-              .status(400)
-              .json({ message: `Invalid ${key} parameter was called` });
+            throw new BadRequestError(`Invalid ${key} parameter was called`);
           }
           break;
         }
@@ -95,12 +90,10 @@ export const validateQuery =
         case "list": {
           const items = qry.split(",");
           if (items.length > rule.maxItems) {
-            return res.status(400).json({ message: `Too many ${key} values` });
+            throw new BadRequestError(`Too many ${key} values`);
           }
           if (items.some((item) => !rule.values.includes(item))) {
-            return res
-              .status(400)
-              .json({ message: `Invalid ${key} parameter` });
+            throw new BadRequestError(`Invalid ${key} parameter was called`);
           }
           dto[key] = items;
           break;
@@ -110,14 +103,14 @@ export const validateQuery =
           const trimmed = qry.trim();
 
           if (trimmed.length < rule.minLength) {
-            return res.status(400).json({
-              message: `Invalid query: Query needs to have minimum ${rule.minLength} characters`,
-            });
+            throw new BadRequestError(
+              `Invalid query: Query needs to have minimum ${rule.minLength} characters`,
+            );
           }
           if (trimmed.length > rule.maxLength) {
-            return res.status(400).json({
-              message: `Invalid query: Query can't have more than ${rule.maxLength} characters`,
-            });
+            throw new BadRequestError(
+              `Invalid query: Query can't have more than ${rule.maxLength} characters`,
+            );
           }
           dto[key] = trimmed;
           break;
