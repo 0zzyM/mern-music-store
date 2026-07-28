@@ -5,34 +5,18 @@ import {
 } from "../services/subcategoryService.js";
 
 export const getAllSubCategories = async (_req: Request, res: Response) => {
-  try {
-    const subCategories = await listSubcategories();
+  const subcategories = await listSubcategories();
 
-    if (subCategories.length === 0) {
-      return res.status(404).json({ message: "No sub-categories found" });
-    }
-    res.status(200).json(subCategories);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
-  }
+  res.status(200).json(subcategories);
 };
 
 export const getSubCategory = async (
   req: Request<{ slug: string }>,
   res: Response,
 ) => {
-  try {
-    const { slug } = req.params;
+  const { slug } = req.params;
 
-    const subcategory = await getSubcategoryBySlug(slug);
+  const subcategory = await getSubcategoryBySlug(slug);
 
-    if (!subcategory) {
-      return res.status(404).json({ message: "Sub-category was not found" });
-    }
-    res.status(200).json(subcategory);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
-  }
+  res.status(200).json(subcategory);
 };
