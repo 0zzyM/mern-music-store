@@ -1,3 +1,4 @@
+import { NotFoundError } from "../errors/AppError.js";
 import Brand from "../models/brandModel.js";
 
 const PUBLIC_FIELDS = "name slug image description";
@@ -18,6 +19,10 @@ export const getBrandBySlug = async (slug: string) => {
     { slug: slug, isActive: true },
     PUBLIC_FIELDS,
   ).lean();
+
+  if (!brand) {
+    throw new NotFoundError("Brand was not found");
+  }
 
   return brand;
 };
