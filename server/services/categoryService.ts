@@ -1,3 +1,4 @@
+import { NotFoundError } from "../errors/AppError.js";
 import Category from "../models/categoryModel.js";
 
 const PUBLIC_FIELDS = "name slug image description subcategories";
@@ -29,6 +30,9 @@ export const getCategoryBySlug = async (slug: string) => {
     .populate("subcategories", PUBLIC_SUBCATEGORY_FIELDS)
     .lean(); // Added populate to return full subcat data exc created updated dates instead of just the object id
 
+  if (!category) {
+    throw new NotFoundError("Category was not found");
+  }
   return category;
 };
 
@@ -40,6 +44,10 @@ export const getCategoryIdBySlug = async (slug: string) => {
     },
     "_id",
   ).lean();
+
+  if (!category) {
+    throw new NotFoundError("Category ID not found");
+  }
 
   return category;
 };

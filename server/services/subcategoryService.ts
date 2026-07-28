@@ -1,5 +1,6 @@
 import { Types } from "mongoose";
 import Subcategory from "../models/subcategoryModel.js";
+import { NotFoundError } from "../errors/AppError.js";
 
 const PUBLIC_FIELDS = "name slug image description parentCategory";
 const PARENT_PUBLIC_FIELDS = "name slug";
@@ -26,6 +27,10 @@ export const getSubcategoryBySlug = async (slug: string) => {
   )
     .populate("parentCategory", PARENT_PUBLIC_FIELDS)
     .lean();
+
+  if (!subcategory) {
+    throw new NotFoundError("Sub-category was not found");
+  }
 
   return subcategory;
 };
