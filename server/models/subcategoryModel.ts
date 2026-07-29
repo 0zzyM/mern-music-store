@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import { CATEGORY_MAP } from "../config/constants.js";
 
-const ALL_SUBCATEGORIES = Object.values(CATEGORY_MAP).flat();
+// findOne({ slug: someString }) was failing on the inferred version as it was a union instead of string
+const ALL_SUBCATEGORIES: string[] = Object.values(CATEGORY_MAP).flat();
 
 // Create the Sub-Category schema
 const subcategorySchema = new mongoose.Schema(
