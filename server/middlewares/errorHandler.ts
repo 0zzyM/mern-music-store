@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import { AppError } from "../errors/AppError.js";
 
 export const errorHandler = (
-  err: Error,
+  err: unknown,
   _req: Request,
   res: Response,
   _next: NextFunction, //!this must be here (4 params) or Express won't treat as an error handler
