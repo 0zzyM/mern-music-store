@@ -11,6 +11,7 @@ import searchRouter from "./routers/searchRouter.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { appLimiter, searchLimiter } from "./middlewares/rateLimiter.js";
 import { NotFoundError } from "./errors/AppError.js";
+import helmet from "helmet";
 
 // Only allowed here on ES modules bcs it is the top lvl no need for async fn
 await connectDB();
@@ -19,6 +20,8 @@ const app = express();
 const PORT = Number(process.env.PORT) || 5000;
 
 app.set("trust proxy", 1);
+
+app.use(helmet());
 
 app.use(
   cors({
