@@ -35,5 +35,11 @@ export default defineConfig([
       reactRefresh.configs.vite,
     ],
     languageOptions: { globals: globals.browser },
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { varsIgnorePattern: "^[A-Z_]", argsIgnorePattern: "^_" },
+      ],
+    },
   },
 ]);
