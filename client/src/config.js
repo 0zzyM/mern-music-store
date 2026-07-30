@@ -56,7 +56,7 @@ export const CATEGORIES = [
     slug: "maintenance",
     subcategories: [
       { name: "Guitar Care", slug: "guitar-care" },
-      { name: "Guitar Tools", slug: "Guitar Tools" },
+      { name: "Guitar Tools", slug: "guitar-tools" },
     ],
   },
   {
