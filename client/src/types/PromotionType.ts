@@ -1,4 +1,4 @@
-export type Promotions = {
+export type Promotion = {
   _id: string;
   title: string;
   subtitle: string;
