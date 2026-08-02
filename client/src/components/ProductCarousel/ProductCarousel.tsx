@@ -3,10 +3,19 @@ import "./ProductCarousel.css";
 import { Link } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useState } from "react";
+import type { Product } from "../../types/ProductType";
 const VISIBLE_CARDS = 6;
 const SLIDE_AMOUNT = 300;
 
-export default function ProductCarousel({ products, title, viewAllLink }) {
+export default function ProductCarousel({
+  products,
+  title,
+  viewAllLink,
+}: {
+  products: Product[];
+  title: string;
+  viewAllLink: string;
+}) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const isLastSlide = currentIndex >= products.length - VISIBLE_CARDS;
