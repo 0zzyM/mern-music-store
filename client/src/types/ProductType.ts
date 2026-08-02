@@ -5,12 +5,12 @@ import type { Subcategory } from "./SubcategoryType";
 export type Product = {
   _id: string;
   name: string;
-  brand: Brand;
-  images: string[];
-  price: number;
-  stock: number;
-  category: Category;
-  subcategory: Subcategory;
+  brand?: Brand;
+  images?: string[];
+  price?: number;
+  stock?: number;
+  category?: Category;
+  subcategory?: Subcategory;
   reviewCount: number;
   rating: number;
   isOnSale: boolean;
@@ -25,7 +25,7 @@ export type ProductResponse = {
 };
 
 export type ProductCollectionProps = {
-  title: string;
+  title?: string;
   category?: string;
   subcategory?: string;
   sortOption?: string;

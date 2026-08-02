@@ -21,19 +21,13 @@ export default function ProductCollection({
 
   const products = data.products;
 
-  if (products.length === 0) return <p>No product Found...</p>;
-
-  const viewAllParams = new URLSearchParams();
-  if (subcategory) viewAllParams.set("subcategory", subcategory);
-  else if (category) viewAllParams.set("category", category); //if category and subcategory both exist weird URL will show up, nothing breaks but not consistent
-  if (sortOption) viewAllParams.set("sort", sortOption);
-  if (isFeatured) viewAllParams.set("isFeatured", "true");
+  if (data.products.length === 0) return <p>No product Found...</p>;
 
   return (
     <ProductCarousel
       products={products}
       title={title}
-      viewAllLink={`../products?${viewAllParams}`}
+      viewAllLink={`../products?subcategory=${subcategory}`}
     />
   );
 }
