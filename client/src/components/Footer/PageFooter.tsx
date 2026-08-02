@@ -1,27 +1,13 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./PageFooter.css";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { SERVER_URL } from "../../config.js";
+import { useCategories } from "../../hooks/useCategories";
 
 export default function PageFooter() {
-  const [categories, setCategories] = useState(null);
+  //TODO: Decide what to do here later cause looks like while fetching they just don't render and weird UI
+  const { data: categories, isPending } = useCategories();
 
-  useEffect(() => {
-    const getCategories = async () => {
-      const url = `${SERVER_URL}/api/v1/categories`;
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
-        setCategories(data);
-      } catch (error) {
-        console.error(`Error fetching ${url} `, error);
-      }
-    };
-
-    getCategories();
-  }, []);
-
+  if (isPending) return <p>Loading...</p>;
   return (
     <footer className="footer-container">
       <div className="footer-socials">

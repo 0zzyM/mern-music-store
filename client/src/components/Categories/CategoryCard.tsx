@@ -1,9 +1,10 @@
 import "./Categories.css";
 import { Link } from "react-router-dom";
+import type { Category } from "../../types/CategoryType";
 
-export default function CategoryCard({ category }) {
+export default function CategoryCard({ category }: { category: Category }) {
   return (
-    <Link to={`/categories/${category.slug}`} className="category">
+    <Link to={`/categories/${category.slug}`}>
       <div className="category">
         <div className="category-image-container">
           <img

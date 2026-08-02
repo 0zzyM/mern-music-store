@@ -1,9 +1,8 @@
-import PromotionBanner from "../components/PromotionBanner/PromotionBanner.jsx";
-import CategoriesGrid from "../components/Categories/CategoriesGrid.jsx";
-import ProductCollection from "../components/ProductCollection/ProductCollection.jsx";
-import BrandCarousel from "../components/Brands/BrandCarousel.jsx";
+import PromotionBanner from "../components/PromotionBanner/PromotionBanner";
+import CategoriesGrid from "../components/Categories/CategoriesGrid";
+import ProductCollection from "../components/ProductCollection/ProductCollection";
+import BrandCarousel from "../components/Brands/BrandCarousel";
 import "../App.css";
-import { SearchContext } from "../contexts/SearchContext.js";
 import { ITEMS_PER_PAGE } from "../config.js";
 
 export default function HomePage() {

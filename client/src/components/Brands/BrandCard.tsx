@@ -1,7 +1,8 @@
+import type { Brand } from "../../types/BrandType";
 import "./BrandCarousel.css";
 import { Link } from "react-router-dom";
 
-export default function BrandCard({ brand }) {
+export default function BrandCard({ brand }: { brand: Brand }) {
   return (
     <Link to={`/products/?brand=${brand.slug}`}>
       <div className="brand">

@@ -2,12 +2,28 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "./PromotionBanner.css";
 import { useState, useEffect } from "react";
 import PromotionBannerItem from "./PromotionBannerItem";
-import { SERVER_URL } from "../../config.js";
+import { usePromotions } from "../../hooks/usePromotions";
+import type { Promotion } from "../../types/PromotionType";
 
 export default function PromotionBanner() {
-  const [promotions, setPromotions] = useState(null);
-
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const { data: promotions, isPending, isError } = usePromotions();
+
+  useEffect(() => {
+    // initial load will return null
+    // promotions?.length === 0 did not work here
+    if (!promotions?.length) return;
+
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % promotions.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [promotions, currentImageIndex]); // only handles auto-swipe
+
+  //TODO: these all will change with skeletton loading
+  if (isPending) return <p>Loading...</p>;
+  if (isError) return <p>Error fetching promotions...</p>;
 
   const handleNext = () => {
     setCurrentImageIndex((prev) => (prev + 1) % promotions.length);
@@ -18,32 +34,6 @@ export default function PromotionBanner() {
       (prev) => (prev - 1 + promotions.length) % promotions.length,
     );
   };
-
-  useEffect(() => {
-    const getPromotions = async () => {
-      try {
-        const url = `${SERVER_URL}/api/v1/promotions`;
-        const res = await fetch(url);
-        const data = await res.json();
-        setPromotions(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getPromotions();
-  }, []);
-
-  useEffect(() => {
-    // initial load will return null
-    if (!promotions) return;
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % promotions.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [promotions, currentImageIndex]); // only handles auto-swipe
-
-  if (!promotions) return <p>Loading...</p>;
 
   return (
     <div className="promotion-container">

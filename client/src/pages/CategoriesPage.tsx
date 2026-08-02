@@ -1,5 +1,5 @@
-import CategoriesGrid from "../components/Categories/CategoriesGrid.jsx";
-import ProductCollection from "../components/ProductCollection/ProductCollection.jsx";
+import CategoriesGrid from "../components/Categories/CategoriesGrid";
+import ProductCollection from "../components/ProductCollection/ProductCollection";
 
 export default function CategoriesPage() {
   return (
