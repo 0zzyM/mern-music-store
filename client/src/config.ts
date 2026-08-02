@@ -1,4 +1,6 @@
-export const SERVER_URL = import.meta.env.VITE_API_URL;
+import type { NavCategory } from "./types/CategoryType";
+
+export const SERVER_URL: string = import.meta.env.VITE_API_URL;
 export const DEFAULT_CURRENCY = "€";
 
 // Used in homepage carousels
@@ -8,7 +10,7 @@ export const ITEMS_PER_PAGE = 12;
 export const PRODUCTS_PER_PAGE = 15;
 
 // Hardcoded used in Navbars
-export const CATEGORIES = [
+export const CATEGORIES: NavCategory[] = [
   {
     name: "Guitars",
     slug: "guitars",
