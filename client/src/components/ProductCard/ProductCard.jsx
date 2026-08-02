@@ -7,12 +7,11 @@ import { MdStarRate } from "react-icons/md";
 import { addItem, openCart } from "../../features/cartSlice";
 import { useDispatch } from "react-redux";
 import { resizeUrlForCard } from "../../utils/imageUtils";
-import type { Product } from "../../types/ProductType";
 
-export default function ProductCard({ product }: { product: Product }) {
+export default function ProductCard({ product }) {
   const dispatch = useDispatch();
 
-  const handleAddToCart = (product: Product, qty: number) => {
+  const handleAddToCart = (product, qty) => {
     dispatch(addItem({ product, qty }));
     dispatch(openCart());
   };
