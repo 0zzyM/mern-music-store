@@ -2,7 +2,7 @@ import "./App.css";
 import Navbar from "./components/Navbar/Navbar.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import CategoriesPage from "./pages/CategoriesPage.jsx";
-import CategoryPage from "./pages/CategoryPage.jsx";
+import CategoryPage from "./pages/CategoryPage";
 import ProductsPage from "./pages/ProductsPage.jsx";
 import ProductPage from "./pages/ProductPage.jsx";
 import CartPage from "./pages/CartPage.jsx";
