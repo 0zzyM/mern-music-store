@@ -6,7 +6,7 @@ import CategoryPage from "./pages/CategoryPage.jsx";
 import ProductsPage from "./pages/ProductsPage.jsx";
 import ProductPage from "./pages/ProductPage.jsx";
 import CartPage from "./pages/CartPage.jsx";
-import PageFooter from "./components/Footer/PageFooter";
+import PageFooter from "./components/Footer/PageFooter.jsx";
 import { Route, Routes } from "react-router-dom";
 import CartSidebar from "./components/Cart/CartSidebar.jsx";
 import { useSelector, useDispatch } from "react-redux";
