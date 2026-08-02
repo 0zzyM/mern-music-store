@@ -6,19 +6,15 @@ import { BrowserRouter } from "react-router-dom";
 import store from "./app/store";
 import { Provider } from "react-redux";
 import { SearchProvider } from "./contexts/SearchProvider.jsx";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "./app/reactQuery";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <Provider store={store}>
-        <SearchProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </SearchProvider>
-      </Provider>
-    </QueryClientProvider>
+    <Provider store={store}>
+      <SearchProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </SearchProvider>
+    </Provider>
   </StrictMode>,
 );
