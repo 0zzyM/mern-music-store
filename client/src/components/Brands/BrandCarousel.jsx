@@ -1,21 +1,33 @@
 import BrandCard from "./BrandCard";
-import "./BrandCarousel.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import "./BrandCarousel.css";
 import { Link } from "react-router-dom";
-import { useBrands } from "../../hooks/useBrands";
+import { SERVER_URL } from "../../config.js";
 
 const BRANDS_PER_PAGE = 12;
 const SLIDE_COUNT = 2;
 const FETCH_LIMIT = BRANDS_PER_PAGE * SLIDE_COUNT;
 
 export default function BrandsCarousel() {
+  const [brands, setBrands] = useState(null);
   const [index, setIndex] = useState(0);
 
-  const { data: brands, isPending, isError } = useBrands(FETCH_LIMIT);
+  useEffect(() => {
+    const getBrands = async () => {
+      const url = `${SERVER_URL}/api/v1/brands?limit=${FETCH_LIMIT}`;
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        setBrands(data);
+      } catch (error) {
+        console.error(`Error fetching ${url} `, error);
+      }
+    };
+    getBrands();
+  }, []);
 
-  if (isPending) return <p>Loading...</p>;
-  if (isError) return <p>Error Fetching Brands...</p>;
+  if (!brands) return <p>Loading...</p>;
 
   const totalPages = Math.ceil(brands.length / BRANDS_PER_PAGE);
 
@@ -31,6 +43,7 @@ export default function BrandsCarousel() {
   const handlePrev = () => {
     setIndex((prev) => (prev - 1 + totalPages) % totalPages);
   };
+
   return (
     <div className="brands-carousel-container">
       <div className="brand-carousel-header">
