@@ -1,10 +1,6 @@
 import { fetchApi } from "./fetchApi";
 import { ITEMS_PER_PAGE, SERVER_URL } from "../config";
-import type {
-  ProductResponse,
-  ProductQueryParams,
-  Product,
-} from "../types/ProductType";
+import type { ProductResponse, ProductQueryParams } from "../types/ProductType";
 
 export const getProducts = ({
   category,
@@ -35,6 +31,3 @@ export const getProducts = ({
 
   return fetchApi<ProductResponse>(`${url}`);
 };
-
-export const getProduct = (id: string) =>
-  fetchApi<Product>(`${SERVER_URL}/api/v1/products/${id}`);

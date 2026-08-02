@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getProduct, getProducts } from "../api/products";
+import { getProducts } from "../api/products";
 import type { ProductQueryParams } from "../types/ProductType";
 
 export const useProducts = (params: ProductQueryParams) =>
@@ -7,11 +7,4 @@ export const useProducts = (params: ProductQueryParams) =>
     queryKey: ["products", params],
     queryFn: () => getProducts(params),
     staleTime: 60 * 1000, //1 min
-  });
-
-export const useProduct = (id: string) =>
-  useQuery({
-    queryKey: ["product", id],
-    queryFn: () => getProduct(id),
-    staleTime: 30 * 1000, //30 secs
   });
