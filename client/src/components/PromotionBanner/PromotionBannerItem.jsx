@@ -1,12 +1,7 @@
-import type { Promotion } from "../../types/PromotionType";
 import "./PromotionBanner.css";
 import { Link } from "react-router-dom";
 
-export default function PromotionBannerItem({
-  promotion,
-}: {
-  promotion: Promotion;
-}) {
+export default function PromotionBannerItem({ promotion }) {
   return (
     <Link to={promotion.ctaLink} className="promotion-item-container">
       <div className="promotion-image-container">
