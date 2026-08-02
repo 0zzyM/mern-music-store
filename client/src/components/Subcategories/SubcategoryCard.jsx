@@ -1,12 +1,7 @@
-import type { Subcategory } from "../../types/SubcategoryType";
 import "./Subcategories.css";
 import { Link } from "react-router-dom";
 
-export default function SubcategoryCard({
-  subcategory,
-}: {
-  subcategory: Subcategory;
-}) {
+export default function SubcategoryCard({ subcategory }) {
   return (
     <Link to={`/products?subcategory=${subcategory.slug}`} className="category">
       <div className="subcategory">
