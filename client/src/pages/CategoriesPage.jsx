@@ -1,4 +1,4 @@
-import CategoriesGrid from "../components/Categories/CategoriesGrid";
+import CategoriesGrid from "../components/Categories/CategoriesGrid.jsx";
 import ProductCollection from "../components/ProductCollection/ProductCollection.jsx";
 
 export default function CategoriesPage() {
