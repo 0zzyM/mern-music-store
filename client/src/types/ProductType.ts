@@ -28,6 +28,7 @@ export type ProductCollectionProps = {
   title: string;
   category?: string;
   subcategory?: string;
+  brand?: string;
   sortOption?: string;
   isFeatured?: boolean;
   limit?: number;
