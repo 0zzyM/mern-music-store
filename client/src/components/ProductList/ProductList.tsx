@@ -1,14 +1,10 @@
-import { useEffect } from "react";
-import { useState } from "react";
 import ProductListCard from "./ProductListCard";
 import "./ProductList.css";
-import { SERVER_URL, PRODUCTS_PER_PAGE } from "../../config.js";
+import { PRODUCTS_PER_PAGE } from "../../config";
 import { useFilters } from "../../hooks/useFilters.js";
+import { useProductsFromUrl } from "../../hooks/useProducts";
 
-export default function ProductList({ filters, subcategory }) {
-  const [products, setProducts] = useState(null);
-  const [total, setTotal] = useState(null);
-
+export default function ProductList({ filters }: { filters: string }) {
   const {
     goToPage,
     goToNextPage,
@@ -20,24 +16,15 @@ export default function ProductList({ filters, subcategory }) {
 
   const currentPage = Number(page) || 1;
 
-  useEffect(() => {
-    const getProducts = async () => {
-      let url = `${SERVER_URL}/api/v1/products`;
-      if (filters) url += filters;
+  const { data, isPending, isError } = useProductsFromUrl(filters);
 
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
-        setProducts(data.products);
-        setTotal(data.total);
-      } catch (error) {
-        console.error(`Error fetching ${url}`, error);
-      }
-    };
-    getProducts();
-  }, [filters]);
+  // TODO: To be changed with proper err handling
 
-  if (!products) return <p>Loading...</p>;
+  if (isPending) return <p>Loading...</p>;
+
+  if (isError) return <p>Error fetching products.</p>;
+
+  const { products, total } = data;
 
   if (total === 0) return <p style={{ width: "960px" }}>No product Found...</p>;
 
@@ -47,31 +34,21 @@ export default function ProductList({ filters, subcategory }) {
     <div className="product-list-wrapper">
       <div className="product-list">
         {products.map((product) => {
-          return (
-            <ProductListCard
-              key={product._id}
-              product={product}
-              subcategory={subcategory}
-            />
-          );
+          return <ProductListCard key={product._id} product={product} />;
         })}
       </div>
 
       <div className="pagination-btn-wrapper">
         <button
           className="pagination-btn"
-          onClick={() => {
-            currentPage != 1 && goToFirstPage();
-          }}
+          onClick={() => currentPage != 1 && goToFirstPage()}
           aria-label="First page"
         >
           &lt; &lt;
         </button>
         <button
           className="pagination-btn"
-          onClick={() => {
-            currentPage != 1 && goToPrevPage();
-          }}
+          onClick={() => currentPage != 1 && goToPrevPage()}
           aria-label="Previous page"
         >
           &lt;
@@ -105,18 +82,18 @@ export default function ProductList({ filters, subcategory }) {
 
         <button
           className="pagination-btn"
-          onClick={() => {
-            currentPage != NO_OF_PAGES && goToNextPage(NO_OF_PAGES);
-          }}
+          onClick={() =>
+            currentPage != NO_OF_PAGES && goToNextPage(NO_OF_PAGES)
+          }
           aria-label="Last page"
         >
           &gt;
         </button>
         <button
           className="pagination-btn"
-          onClick={() => {
-            currentPage != NO_OF_PAGES && goToLastPage(NO_OF_PAGES);
-          }}
+          onClick={() =>
+            currentPage != NO_OF_PAGES && goToLastPage(NO_OF_PAGES)
+          }
         >
           &gt; &gt;
         </button>
