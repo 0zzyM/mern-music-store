@@ -17,6 +17,7 @@ export type Product = {
   isFeatured: boolean;
   discountAmount: number;
   details?: Record<string, string>;
+  description?: string;
 };
 
 export type ProductResponse = {
