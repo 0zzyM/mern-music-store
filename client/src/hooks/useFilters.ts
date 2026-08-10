@@ -48,27 +48,31 @@ export function useFilters() {
   };
 
   const toggleStock = () => {
-    inStock
-      ? setSearchParams((prev) => {
-          prev.delete("inStock");
-          return prev;
-        })
-      : setSearchParams((prev) => {
-          prev.set("inStock", "true");
-          return prev;
-        });
+    if (inStock) {
+      setSearchParams((prev) => {
+        prev.delete("inStock");
+        return prev;
+      });
+    } else {
+      setSearchParams((prev) => {
+        prev.set("inStock", "true");
+        return prev;
+      });
+    }
   };
 
   const toggleRating = () => {
-    highRated
-      ? setSearchParams((prev) => {
-          prev.delete("highRated");
-          return prev;
-        })
-      : setSearchParams((prev) => {
-          prev.set("highRated", "true");
-          return prev;
-        });
+    if (highRated) {
+      setSearchParams((prev) => {
+        prev.delete("highRated");
+        return prev;
+      });
+    } else {
+      setSearchParams((prev) => {
+        prev.set("highRated", "true");
+        return prev;
+      });
+    }
   };
 
   const toggleBrandFilter = (brand) => {

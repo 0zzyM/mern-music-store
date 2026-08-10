@@ -7,13 +7,18 @@ import { PiScales } from "react-icons/pi";
 import { addItem, openCart } from "../../features/cartSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
+import type { Product } from "../../types/ProductType";
 
-export default function ProductPurchasePanel({ product }) {
+export default function ProductPurchasePanel({
+  product,
+}: {
+  product: Product;
+}) {
   const dispatch = useDispatch();
 
   const [quantity, setQuantity] = useState(1);
 
-  function handleAddToCart(product, qty) {
+  function handleAddToCart(product: Product, qty: number) {
     dispatch(addItem({ product, qty }));
     dispatch(openCart());
   }
@@ -95,12 +100,13 @@ export default function ProductPurchasePanel({ product }) {
           <h4 className="delivery-title">Standard Delivery</h4>
           <p className="delivery-price">€5</p>
         </div>
-
         <p className="delivery-info-text">
           Delivery in approx. 5-10 business days
         </p>
-
-        <Link className="shipping-info-link">Shipping Information</Link>
+        {/*TODO: Decide what to do */}
+        <Link to="" className="shipping-info-link">
+          Shipping Information
+        </Link>
       </div>
     </div>
   );
