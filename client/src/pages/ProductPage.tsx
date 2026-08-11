@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
-import ProductGallery from "../components/ProductPage/ProductGallery.jsx";
-import ProductPurchasePanel from "../components/ProductPage/ProductPurchasePanel.jsx";
-import ProductInfo from "../components/ProductPage/ProductInfo.jsx";
+import ProductGallery from "../components/ProductPage/ProductGallery";
+import ProductPurchasePanel from "../components/ProductPage/ProductPurchasePanel";
+import ProductInfo from "../components/ProductPage/ProductInfo";
 import "../components/ProductPage/ProductPage.css";
 import { useProduct } from "../hooks/useProducts";
 

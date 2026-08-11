@@ -1,7 +1,7 @@
 const THUMBNAIL_RESIZE_OPTIONS = "h_240,c_scale,q_auto,f_auto";
 const CARD_RESIZE_OPTIONS = "h_480,c_scale,q_auto,f_auto";
 
-export const resizeUrlForThumbnail = (url) => {
+export const resizeUrlForThumbnail = (url: string) => {
   const firstIndex = url.indexOf("upload/");
   const lastIndex = url.indexOf("/v");
   // first condition checks if Cloudinary filter is forgotten seeding the DB
@@ -15,7 +15,7 @@ export const resizeUrlForThumbnail = (url) => {
   return finalUrl;
 };
 
-export const resizeUrlForCard = (url) => {
+export const resizeUrlForCard = (url: string) => {
   const firstIndex = url.indexOf("upload/");
   const lastIndex = url.indexOf("/v");
   if (firstIndex + 7 === lastIndex || firstIndex < 0 || lastIndex < 0)

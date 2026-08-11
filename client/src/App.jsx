@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar/Navbar.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import CategoriesPage from "./pages/CategoriesPage.jsx";
 import CategoryPage from "./pages/CategoryPage";
-import ProductsPage from "./pages/ProductsPage.jsx";
+import ProductsPage from "./pages/ProductsPage";
 import ProductPage from "./pages/ProductPage.jsx";
 import CartPage from "./pages/CartPage.jsx";
 import PageFooter from "./components/Footer/PageFooter";
