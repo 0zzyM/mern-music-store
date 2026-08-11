@@ -1,30 +1,22 @@
 import { FiSearch } from "react-icons/fi";
-import { SERVER_URL } from "../../config.js";
 import { useFilters } from "../../hooks/useFilters.js";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import type { ChangeEvent } from "react";
+import { useBrands } from "../../hooks/useBrands.js";
 
 export default function BrandFilter() {
-  const [brands, setBrands] = useState(null);
   const { brandParams, toggleBrandFilter } = useFilters();
   const [query, setQuery] = useState("");
 
-  const changeQuery = (e) => {
+  const changeQuery = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
 
-  useEffect(() => {
-    const getBrands = async () => {
-      try {
-        const res = await fetch(`${SERVER_URL}/api/v1/brands`);
-        const data = await res.json();
-        setBrands(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  //TODO: Used 999 as a workaround limit should be on FE not on fetch figure out later here.
+  const { data: brands, isPending, isError } = useBrands(999);
 
-    getBrands();
-  }, []);
+  if (isPending) return <p>Loading....</p>;
+  if (isError) return <p>Error fetching brands</p>;
 
   const filteredBrands =
     brands?.filter((brand) =>
