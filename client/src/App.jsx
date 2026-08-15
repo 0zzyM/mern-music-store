@@ -11,8 +11,7 @@ import { Route, Routes } from "react-router-dom";
 import CartSidebar from "./components/Cart/CartSidebar.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { closeCart } from "./features/cartSlice";
-import { useContext } from "react";
-import { SearchContext } from "./contexts/SearchContext.js";
+import { useSearch } from "./contexts/SearchContext";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop.jsx";
 
 function App() {
@@ -20,8 +19,7 @@ function App() {
 
   const dispatch = useDispatch();
 
-  const { isSearching, setIsSearching, setSuggestions } =
-    useContext(SearchContext);
+  const { isSearching, setIsSearching } = useSearch();
 
   return (
     <>
@@ -48,7 +46,6 @@ function App() {
           onClick={() => {
             dispatch(closeCart());
             setIsSearching(false);
-            setSuggestions(null);
           }}
         ></div>
       </main>
