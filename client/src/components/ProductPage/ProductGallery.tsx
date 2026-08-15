@@ -9,12 +9,13 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { resizeUrlForThumbnail } from "../../utils/imageUtils";
+import type { Product } from "../../types/ProductType";
 
 const VISIBLE_IMG = 6;
 
 // TODO: Add Img Zoom
 
-export default function ProductGallery({ product }) {
+export default function ProductGallery({ product }: { product: Product }) {
   const [imgIndex, setImgIndex] = useState(0);
 
   // For thumbnail
@@ -88,16 +89,13 @@ export default function ProductGallery({ product }) {
                     setImgIndex(index);
                   }}
                 >
-                  {/* If the index equals to imgIndex Matches the border color to product.color or orange as a fall back*/}
                   <img
                     className="product-page-image-thumbnail"
                     src={resizeUrlForThumbnail(image)}
                     alt={`${product.name} thumbnail ${index + 1}`}
-                    style={
-                      index === imgIndex
-                        ? { border: `2px solid ${product.color || "orange"}` }
-                        : null
-                    }
+                    style={{
+                      border: index === imgIndex ? `2px solid orange` : ``,
+                    }}
                   />
                 </button>
               ))}

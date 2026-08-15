@@ -1,18 +1,21 @@
 import "./Navbar.css";
-import React, { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import type { SubmitEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaHeart, FaUser } from "react-icons/fa";
-import { LuShoppingCart, LuSearch } from "react-icons/lu";
-import { SearchContext } from "../../contexts/SearchContext.js";
-import { SERVER_URL } from "../../config.js";
-import { resizeUrlForThumbnail } from "../../utils/imageUtils.js";
+import { LuSearch } from "react-icons/lu";
+import { useSearch } from "../../contexts/SearchContext";
+import { resizeUrlForThumbnail } from "../../utils/imageUtils";
+import { useSearchSuggestion } from "../../hooks/useSearchSuggestion";
 
 export default function NavbarSearch() {
   const [searchIndex, setSearchIndex] = useState("");
-  const { isSearching, setIsSearching, suggestions, setSuggestions } =
-    useContext(SearchContext);
+  const [debouncedIndex, setDebouncedIndex] = useState("");
+
+  const { isSearching, setIsSearching } = useSearch();
 
   const navigate = useNavigate();
+
+  const { data: suggestions } = useSearchSuggestion(debouncedIndex);
 
   const hasNoResults =
     suggestions &&
@@ -30,13 +33,17 @@ export default function NavbarSearch() {
     suggestions.subcategoryResults.length === 0 &&
     suggestions.brandResults.length === 0;
 
+  const isStale = debouncedIndex !== searchIndex;
+
+  const showResults = suggestions !== undefined && !isStale;
+
   const handleReset = () => {
     setSearchIndex("");
-    setSuggestions(null);
+    setDebouncedIndex("");
     setIsSearching(false);
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (searchIndex.length >= 2) {
       navigate(`/products?q=${searchIndex}`);
@@ -48,39 +55,17 @@ export default function NavbarSearch() {
     // IMPORTANT: debouncing so not every keystroke makes an API call
     const searchQuery = setTimeout(() => {
       if (searchIndex.length < 2) {
-        setSuggestions(null);
+        setDebouncedIndex("");
         setIsSearching(false);
         return;
       }
-      const getSuggestions = async () => {
-        try {
-          const url = `${SERVER_URL}/api/v1/search/suggest?q=${searchIndex}`;
-          const res = await fetch(url);
-
-          // If the search returns 404 set it to empty response
-          if (!res.ok) {
-            setSuggestions({
-              productResults: [],
-              categoryResults: [],
-              subcategoryResults: [],
-              brandResults: [],
-            });
-            setIsSearching(true);
-            return;
-          }
-          const data = await res.json();
-          setIsSearching(true);
-          setSuggestions(data);
-        } catch (error) {
-          console.error(error);
-          setIsSearching(false);
-        }
-      };
-      getSuggestions();
+      setIsSearching(true);
+      setDebouncedIndex(searchIndex);
     }, 300);
 
     return () => clearTimeout(searchQuery);
-  }, [searchIndex, setIsSearching, setSuggestions]);
+  }, [searchIndex, setIsSearching]);
+
   return (
     <div className="page-search-bar-wrapper">
       <form onSubmit={(e) => handleSearch(e)} role="search">
@@ -107,7 +92,7 @@ export default function NavbarSearch() {
         </button>
       </form>
 
-      {suggestions && isSearching && (
+      {showResults && isSearching && (
         <div
           className="search-bar-dropdown"
           style={

@@ -7,7 +7,7 @@ export const DEFAULT_CURRENCY = "€";
 export const ITEMS_PER_PAGE = 12;
 
 // Used in Products Page
-export const PRODUCTS_PER_PAGE = 15;
+export const PRODUCTS_PER_PAGE = 15; //TODO: Move this to server  side
 
 // Hardcoded used in Navbars
 export const CATEGORIES: NavCategory[] = [

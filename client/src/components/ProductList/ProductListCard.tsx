@@ -3,15 +3,17 @@ import "./ProductList.css";
 import { FaStar } from "react-icons/fa";
 import { CiHeart, CiShoppingCart } from "react-icons/ci";
 import { PiScales } from "react-icons/pi";
-import { GoDot, GoDotFill } from "react-icons/go";
+import { GoDotFill } from "react-icons/go";
 import { addItem, openCart } from "../../features/cartSlice.js";
 import { useDispatch } from "react-redux";
 import { resizeUrlForCard } from "../../utils/imageUtils.js";
+import type { Product } from "../../types/ProductType";
+import type { Subcategory } from "../../types/SubcategoryType";
 
-export default function ProductListCard({ product }) {
+export default function ProductListCard({ product }: { product: Product }) {
   const dispatch = useDispatch();
 
-  function handleAddToCart(product, qty) {
+  function handleAddToCart(product: Product, qty: number) {
     dispatch(addItem({ product, qty }));
     dispatch(openCart());
   }

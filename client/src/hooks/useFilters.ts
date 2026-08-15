@@ -1,6 +1,8 @@
 import { useSearchParams } from "react-router-dom";
 import { useRef } from "react";
 
+//FIXME: BUG methods don't reset the pagination!!!!
+
 export function useFilters() {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -12,14 +14,18 @@ export function useFilters() {
   const maxPrice = searchParams.get("maxPrice");
   const page = Number(searchParams.get("page")) || 1;
 
-  const minTimerRef = useRef(null);
-  const maxTimerRef = useRef(null);
+  const minTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
+  const maxTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
 
   const subcategory = searchParams.get("subcategory");
   const category = searchParams.get("category");
   const filters = searchParams.toString() ? `?${searchParams.toString()}` : "";
 
-  const handleMinPrice = (value, onError) => {
+  const handleMinPrice = (value: string, onError?: () => void) => {
     clearTimeout(minTimerRef.current);
     minTimerRef.current = setTimeout(() => {
       if (maxPrice && Number(value) > Number(maxPrice)) {
@@ -33,8 +39,19 @@ export function useFilters() {
     }, 700);
   };
 
-  const handleMaxPrice = (value, onError) => {
-    clearTimeout(maxTimerRef.current);
+  /* Forget and confused once already onError is passing this on PriceFilter
+      handleMinPrice(e.target.value, () => {
+              setLocalMin(minPrice ?? "");
+              setErr("Minimum price can't be higher than maximum price");
+            });*/
+
+  const handleMaxPrice = (value: string, onError?: () => void) => {
+    clearTimeout(maxTimerRef.current); //debounce every key stroke
+
+    // schedules the task with 700ms
+    // validate the input if smaller then min price
+    // onError runs and returns
+
     maxTimerRef.current = setTimeout(() => {
       if (minPrice && Number(value) < Number(minPrice)) {
         onError?.();
@@ -48,30 +65,34 @@ export function useFilters() {
   };
 
   const toggleStock = () => {
-    inStock
-      ? setSearchParams((prev) => {
-          prev.delete("inStock");
-          return prev;
-        })
-      : setSearchParams((prev) => {
-          prev.set("inStock", "true");
-          return prev;
-        });
+    if (inStock) {
+      setSearchParams((prev) => {
+        prev.delete("inStock");
+        return prev;
+      });
+    } else {
+      setSearchParams((prev) => {
+        prev.set("inStock", "true");
+        return prev;
+      });
+    }
   };
 
   const toggleRating = () => {
-    highRated
-      ? setSearchParams((prev) => {
-          prev.delete("highRated");
-          return prev;
-        })
-      : setSearchParams((prev) => {
-          prev.set("highRated", "true");
-          return prev;
-        });
+    if (highRated) {
+      setSearchParams((prev) => {
+        prev.delete("highRated");
+        return prev;
+      });
+    } else {
+      setSearchParams((prev) => {
+        prev.set("highRated", "true");
+        return prev;
+      });
+    }
   };
 
-  const toggleBrandFilter = (brand) => {
+  const toggleBrandFilter = (brand: string) => {
     const newBrands = brandParams.includes(brand)
       ? brandParams.filter((b) => b !== brand) // remove
       : [...brandParams, brand]; // add
@@ -91,11 +112,11 @@ export function useFilters() {
 
   // Pagination Functions
 
-  const goToNextPage = (noOfPages) => {
+  const goToNextPage = (noOfPages: number) => {
     setSearchParams((prev) => {
       if (page === noOfPages) return prev;
       else {
-        prev.set("page", page + 1);
+        prev.set("page", String(page + 1));
         return prev;
       }
     });
@@ -105,7 +126,7 @@ export function useFilters() {
     setSearchParams((prev) => {
       if (page <= 1) return prev;
       else {
-        prev.set("page", page - 1);
+        prev.set("page", String(page - 1));
         return prev;
       }
     });
@@ -113,21 +134,21 @@ export function useFilters() {
 
   const goToFirstPage = () => {
     setSearchParams((prev) => {
-      prev.set("page", 1);
+      prev.set("page", "1");
       return prev;
     });
   };
 
-  const goToLastPage = (noOfPages) => {
+  const goToLastPage = (noOfPages: number) => {
     setSearchParams((prev) => {
-      prev.set("page", Number(noOfPages));
+      prev.set("page", String(noOfPages));
       return prev;
     });
   };
 
-  const goToPage = (pageNumber) => {
+  const goToPage = (pageNumber: number) => {
     setSearchParams((prev) => {
-      prev.set("page", pageNumber);
+      prev.set("page", String(pageNumber));
       return prev;
     });
   };

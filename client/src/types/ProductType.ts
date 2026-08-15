@@ -17,6 +17,7 @@ export type Product = {
   isFeatured: boolean;
   discountAmount: number;
   details?: Record<string, string>;
+  description?: string;
 };
 
 export type ProductResponse = {
@@ -28,6 +29,7 @@ export type ProductCollectionProps = {
   title: string;
   category?: string;
   subcategory?: string;
+  brand?: string;
   sortOption?: string;
   isFeatured?: boolean;
   limit?: number;

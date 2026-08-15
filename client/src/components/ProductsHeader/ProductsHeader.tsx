@@ -5,20 +5,21 @@ import { useState } from "react";
 import { IoIosList } from "react-icons/io";
 import { useSearchParams } from "react-router-dom";
 import { BsFilterRight } from "react-icons/bs";
+import type { ChangeEvent } from "react";
 
-export default function ProductsHeader({ title }) {
+export default function ProductsHeader({ title }: { title: string }) {
   const [listView, setListView] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const sortOption = searchParams.get("sort");
 
-  const handleSort = (e) => {
+  const handleSort = (e: ChangeEvent<HTMLSelectElement>) => {
     searchParams.set("sort", e.target.value);
     setSearchParams(searchParams);
   };
 
   const toggleView = () => {
-    listView ? setListView(false) : setListView(true);
+    setListView((prev) => !prev);
   };
 
   return (

@@ -1,9 +1,10 @@
 import "./ProductInfo.css";
 import { useState } from "react";
+import type { Product } from "../../types/ProductType";
 
-export default function ProductInfo({ product }) {
+export default function ProductInfo({ product }: { product: Product }) {
   // Use for formating the field keys into user readable text
-  const formatKey = (key) =>
+  const formatKey = (key: string) =>
     key.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase());
 
   const [isDetailsOpen, setIsDetailsOpen] = useState(true);
@@ -40,13 +41,11 @@ export default function ProductInfo({ product }) {
           </div>
           {isDetailsOpen && (
             <div className="product-specs">
-              {Object.keys(product.details).map((field) => {
+              {Object.keys(details).map((field) => {
                 return (
                   <div className="product-spec" key={field}>
                     <p className="product-spec-name">{formatKey(field)}</p>
-                    <p className="product-spec-value">
-                      {product.details[field]}
-                    </p>
+                    <p className="product-spec-value">{details[field]}</p>
                   </div>
                 );
               })}

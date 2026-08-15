@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { SearchContext } from "./SearchContext";
+import type { ReactNode } from "react";
 
-export function SearchProvider({ children }) {
+export function SearchProvider({ children }: { children: ReactNode }) {
   const [isSearching, setIsSearching] = useState(false);
-  const [suggestions, setSuggestions] = useState(null);
 
   return (
     <SearchContext.Provider
-      value={{ isSearching, setIsSearching, suggestions, setSuggestions }}
+      value={{
+        isSearching,
+        setIsSearching,
+      }}
     >
       {children}
     </SearchContext.Provider>

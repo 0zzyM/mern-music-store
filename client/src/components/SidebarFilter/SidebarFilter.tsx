@@ -1,9 +1,9 @@
 import "./SidebarFilter.css";
 
-import PriceFilter from "./PriceFilter.jsx";
-import StockFilter from "./StockFilter.jsx";
-import RatingFilter from "./RatingFilter.jsx";
-import BrandFilter from "./BrandFilter.jsx";
+import PriceFilter from "./PriceFilter";
+import StockFilter from "./StockFilter";
+import RatingFilter from "./RatingFilter";
+import BrandFilter from "./BrandFilter";
 
 export default function SidebarFilter() {
   return (

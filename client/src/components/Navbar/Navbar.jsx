@@ -3,8 +3,8 @@ import { FaHeart, FaUser } from "react-icons/fa";
 import { LuShoppingCart } from "react-icons/lu";
 import "./Navbar.css";
 import NavbarSearch from "./NavbarSearch";
-import { useContext, useState } from "react";
-import { SearchContext } from "../../contexts/SearchContext";
+import { useState } from "react";
+import { useSearch } from "../../contexts/SearchContext";
 import { useDispatch, useSelector } from "react-redux";
 import { closeCart, openCart } from "../../features/cartSlice";
 import { RxHamburgerMenu } from "react-icons/rx";
@@ -14,7 +14,7 @@ import DesktopBottomNavbar from "./DesktopBottomNavbar.jsx";
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const { isSearching } = useContext(SearchContext);
+  const { isSearching } = useSearch();
 
   const isCartView = useSelector((state) => state.cart.isCartOpen);
 
