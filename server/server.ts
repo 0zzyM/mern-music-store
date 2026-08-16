@@ -12,6 +12,7 @@ import { errorHandler } from "./middlewares/errorHandler.js";
 import { appLimiter, searchLimiter } from "./middlewares/rateLimiter.js";
 import { NotFoundError } from "./errors/AppError.js";
 import helmet from "helmet";
+import userRouter from "./routers/userRouter.js";
 
 // Only allowed here on ES modules bcs it is the top lvl no need for async fn
 await connectDB();
@@ -45,6 +46,7 @@ app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/brands", brandRouter);
 app.use("/api/v1/promotions", promotionRouter);
 app.use("/api/v1/search", searchLimiter, searchRouter);
+app.use("/api/v1/users", userRouter);
 
 // It is basically for all the paths  since no path specified as the first arg
 // Only the routes that don't exist will reach it
