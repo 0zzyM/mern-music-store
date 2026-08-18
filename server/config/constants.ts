@@ -61,3 +61,5 @@ export const SORT_OPTIONS = {
   priceAsc: { price: 1 },
   priceDesc: { price: -1 },
 } as const;
+
+export const saltRounds = 10;
