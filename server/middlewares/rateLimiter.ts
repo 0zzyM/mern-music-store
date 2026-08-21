@@ -5,9 +5,7 @@ import { TooManyRequestsError } from "../errors/AppError.js";
 //FIXME: Write a function to simplify all these
 export const appLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 mins
-
-  //TODO: Change this number after ReactQuery a lot of refetches going on rn!!!
-  limit: 1500, // Limit each IP to 1500 requests per `window`
+  limit: 750, // Limit each IP to 1500 requests per `window`
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   ipv6Subnet: 56, // Set to 60 or 64 to be less aggressive, or 52 or 48 to be more aggressive
