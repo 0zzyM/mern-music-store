@@ -2,7 +2,7 @@ import { rateLimit } from "express-rate-limit";
 import { TooManyRequestsError } from "../errors/AppError.js";
 
 // Can add a factory here later when there are more limiters.
-
+//FIXME: Write a function to simplify all these
 export const appLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 mins
 
@@ -35,6 +35,42 @@ export const searchLimiter = rateLimit({
     next(
       new TooManyRequestsError(
         `You can only make ${options.limit} requests every ${seconds} seconds`,
+      ),
+    );
+  },
+});
+
+export const registrationHourlyLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 60 mins
+  //TODO: Might need to change this
+  limit: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  ipv6Subnet: 56,
+  handler: (_req, _res, next, options) => {
+    const mins = options.windowMs / 60000;
+
+    next(
+      new TooManyRequestsError(
+        `You can only make ${options.limit} requests every ${mins} minutes`,
+      ),
+    );
+  },
+});
+
+export const registrationDailyLimiter = rateLimit({
+  windowMs: 24 * 60 * 60 * 1000, //24h
+  //TODO: Might need to change this
+  limit: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  ipv6Subnet: 56,
+  handler: (_req, _res, next, options) => {
+    const hours = options.windowMs / 3600000;
+
+    next(
+      new TooManyRequestsError(
+        `You can only make ${options.limit} requests every ${hours} hours`,
       ),
     );
   },
