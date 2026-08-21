@@ -27,3 +27,9 @@ export class TooManyRequestsError extends AppError {
     super(message, 429);
   }
 }
+
+export class AlreadyExistsError extends AppError {
+  constructor(message = "Already exists") {
+    super(message, 409);
+  }
+}
