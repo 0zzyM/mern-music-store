@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { BadRequestError } from "../errors/AppError.js";
+import { checkLength } from "../validation/lengthCheck.js";
 
 type IntRule = { type: "int"; min: number; max: number; default: number };
 type NumberRule = { type: "number"; min: number; max: number; default: number };
@@ -101,17 +102,7 @@ export const validateQuery =
 
         case "string": {
           const trimmed = qry.trim();
-
-          if (trimmed.length < rule.minLength) {
-            throw new BadRequestError(
-              `Invalid query: Query needs to have minimum ${rule.minLength} characters`,
-            );
-          }
-          if (trimmed.length > rule.maxLength) {
-            throw new BadRequestError(
-              `Invalid query: Query can't have more than ${rule.maxLength} characters`,
-            );
-          }
+          checkLength(key, trimmed, rule.minLength, rule.maxLength);
           dto[key] = trimmed;
           break;
         }
