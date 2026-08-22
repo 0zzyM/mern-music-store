@@ -33,3 +33,9 @@ export class AlreadyExistsError extends AppError {
     super(message, 409);
   }
 }
+
+export class InvalidCredentialsError extends AppError {
+  constructor(message = "Invalid Credentials") {
+    super(message, 401);
+  }
+}
