@@ -1,8 +1,9 @@
 import bcrypt from "bcryptjs";
 import { InvalidCredentialsError } from "../errors/AppError.js";
-import User, { UserDoc } from "../models/userModel.js";
+import User from "../models/userModel.js";
+import type { LoginBodyDTO } from "../validation/loginBodySpecs.js";
 
-export const handleLogin = async (user: UserDoc) => {
+export const handleLogin = async (user: LoginBodyDTO) => {
   const dbUser = await User.findOne({ email: user.email })
     .select("+password")
     .lean();
