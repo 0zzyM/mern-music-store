@@ -2,7 +2,7 @@ import { saltRounds } from "../config/constants.js";
 import { AlreadyExistsError } from "../errors/AppError.js";
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
-import type { registrationBodyDTO } from "../validation/registrationBodySpecs.js";
+import type { RegistrationBodyDTO } from "../validation/registrationBodySpecs.js";
 
 export const isUserMailExist = async (email: string) => {
   const user = await User.findOne({ email: email }).lean();
@@ -14,7 +14,7 @@ export const isPhoneNumberExist = async (phoneNumber: string) => {
   return user ? true : false;
 };
 
-export const handleRegistration = async (user: registrationBodyDTO) => {
+export const handleRegistration = async (user: RegistrationBodyDTO) => {
   if (await isUserMailExist(user.email)) {
     throw new AlreadyExistsError(
       `User with email:${user.email} already exists`,

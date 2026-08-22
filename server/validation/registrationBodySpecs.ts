@@ -29,7 +29,7 @@ export const registrationBodySpecs: BodySpec = {
   },
 };
 
-export type registrationBodyDTO = {
+export type RegistrationBodyDTO = {
   name: string;
   surname: string;
   email: string;
