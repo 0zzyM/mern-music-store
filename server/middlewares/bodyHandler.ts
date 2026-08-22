@@ -2,7 +2,10 @@ import type { Request, Response, NextFunction } from "express";
 import { BadRequestError } from "../errors/AppError.js";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { checkLength } from "../validation/lengthCheck.js";
-import { validatePassword } from "../validation/passwordValidation.js";
+import {
+  MAX_PASS_LENGTH,
+  validatePassword,
+} from "../validation/passwordValidation.js";
 import { validateAndNormalizeMail } from "../validation/mailValidation.js";
 
 type StringRule = {
@@ -28,7 +31,17 @@ type PhoneNumberRule = {
   required: boolean;
 };
 
-export type FieldRule = StringRule | MailRule | PasswordRule | PhoneNumberRule;
+type CredentialRule = {
+  type: "credential";
+  required: boolean;
+};
+
+export type FieldRule =
+  | StringRule
+  | MailRule
+  | PasswordRule
+  | PhoneNumberRule
+  | CredentialRule;
 
 export type BodySpec = Record<string, FieldRule>;
 
@@ -112,6 +125,20 @@ export const validateBody =
             throw new BadRequestError(`Please provide a valid phone number`);
 
           dto[key] = parsed.number;
+          break;
+        }
+
+        case "credential": {
+          if (typeof value !== "string") {
+            throw new BadRequestError(
+              `Invalid request ${key}, it can only be a string`,
+            );
+          }
+
+          if (Buffer.byteLength(value, "utf-8") > MAX_PASS_LENGTH)
+            throw new BadRequestError(`${key} is too long`);
+
+          dto[key] = value;
           break;
         }
       }
