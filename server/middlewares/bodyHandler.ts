@@ -53,11 +53,11 @@ export const validateBody =
       // value is type any here unlike req.query which is parsedQs[]
       // better approach here is to use unknown as any can silently break if no typecheck later
       // check loginMailKeygen on rateLimiter.ts
-      // !careful with ? after body if undefined then would throw 5XX instead 4XX
+      // !careful with ? here it is required, if it is not used and req.body is undefined when no body parser matched it would throw a TypeError and becomes a 500 instead of a 400
       const value: unknown = req.body?.[key];
 
       // Unless QueryHandler no defaulting here so wasn't used
-      // !value is falsy here cause  cause body is JSON and value can be 0 or false etc.
+      // !value is wrong here cause body is JSON and value can be falsy(0 or false) etc.
       if (value === undefined || value === null) {
         if ("required" in rule && rule.required) {
           throw new BadRequestError(`(${key}) is required`);
