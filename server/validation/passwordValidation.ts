@@ -1,7 +1,7 @@
 import { BadRequestError } from "../errors/AppError.js";
 
 const MIN_PASS_LENGTH = 8;
-const MAX_PASS_LENGTH = 72; //bcrypt limit
+export const MAX_PASS_LENGTH = 72; //bcrypt limit
 
 //TODO: Make sure FE validation will implement this correctly as a lot of copying will take plcae
 export const validatePassword = (pw: string) => {

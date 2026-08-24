@@ -2,7 +2,10 @@ import type { Request, Response, NextFunction } from "express";
 import { BadRequestError } from "../errors/AppError.js";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { checkLength } from "../validation/lengthCheck.js";
-import { validatePassword } from "../validation/passwordValidation.js";
+import {
+  MAX_PASS_LENGTH,
+  validatePassword,
+} from "../validation/passwordValidation.js";
 import { validateAndNormalizeMail } from "../validation/mailValidation.js";
 
 type StringRule = {
@@ -28,7 +31,17 @@ type PhoneNumberRule = {
   required: boolean;
 };
 
-export type FieldRule = StringRule | MailRule | PasswordRule | PhoneNumberRule;
+type CredentialRule = {
+  type: "credential";
+  required: boolean;
+};
+
+export type FieldRule =
+  | StringRule
+  | MailRule
+  | PasswordRule
+  | PhoneNumberRule
+  | CredentialRule;
 
 export type BodySpec = Record<string, FieldRule>;
 
@@ -37,10 +50,14 @@ export const validateBody =
     const dto: Record<string, unknown> = {};
 
     for (const [key, rule] of Object.entries(spec)) {
-      const value = req.body[key];
+      // value is type any here unlike req.query which is parsedQs[]
+      // better approach here is to use unknown as any can silently break if no typecheck later
+      // check loginMailKeygen on rateLimiter.ts
+      // !careful with ? here it is required, if it is not used and req.body is undefined when no body parser matched it would throw a TypeError and becomes a 500 instead of a 400
+      const value: unknown = req.body?.[key];
 
       // Unless QueryHandler no defaulting here so wasn't used
-      // !value is falsy here cause  cause body is JSON and value can be 0 or false etc.
+      // !value is wrong here cause body is JSON and value can be falsy(0 or false) etc.
       if (value === undefined || value === null) {
         if ("required" in rule && rule.required) {
           throw new BadRequestError(`(${key}) is required`);
@@ -112,6 +129,20 @@ export const validateBody =
             throw new BadRequestError(`Please provide a valid phone number`);
 
           dto[key] = parsed.number;
+          break;
+        }
+
+        case "credential": {
+          if (typeof value !== "string") {
+            throw new BadRequestError(
+              `Invalid request ${key}, it can only be a string`,
+            );
+          }
+
+          if (Buffer.byteLength(value, "utf-8") > MAX_PASS_LENGTH)
+            throw new BadRequestError(`${key} is too long`);
+
+          dto[key] = value;
           break;
         }
       }
