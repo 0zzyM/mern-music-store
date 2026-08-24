@@ -50,7 +50,11 @@ export const validateBody =
     const dto: Record<string, unknown> = {};
 
     for (const [key, rule] of Object.entries(spec)) {
-      const value = req.body[key];
+      // value is type any here unlike req.query which is parsedQs[]
+      // better approach here is to use unknown as any can silently break if no typecheck later
+      // check loginMailKeygen on rateLimiter.ts
+      // !careful with ? after body if undefined then would throw 5XX instead 4XX
+      const value: unknown = req.body?.[key];
 
       // Unless QueryHandler no defaulting here so wasn't used
       // !value is falsy here cause  cause body is JSON and value can be 0 or false etc.
