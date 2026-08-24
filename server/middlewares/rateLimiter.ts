@@ -2,6 +2,8 @@ import { rateLimit, ipKeyGenerator } from "express-rate-limit";
 import { TooManyRequestsError } from "../errors/AppError.js";
 import type { Request } from "express";
 
+const IPV6_SUBNET = 56
+
 const timeMultiplier = {
   secs: 1000,
   mins: 60000,
@@ -37,7 +39,8 @@ const loginMailKeygen = (req: Request) => {
 
   // fallback to ip address
   // req.ip should never be undefined because there is trust proxy but TS needs validation
-  return ipKeyGenerator(req.ip ?? "", 56);
+  // TODO: Think about a better alternative then empty  string here
+  return ipKeyGenerator(req.ip ?? "", IPV6_SUBNET);
 };
 
 const buildLimiter = ({ window, timeUnit, limit, ...rest }: LimiterOptions) => {
@@ -48,7 +51,7 @@ const buildLimiter = ({ window, timeUnit, limit, ...rest }: LimiterOptions) => {
     limit: limit, // Limit each IP to "limit" amount of requests per "window"
     standardHeaders: true, // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-    ipv6Subnet: 56, // Set to 60 or 64 to be less aggressive, or 52 or 48 to be more aggressive
+    ...rest.keyGenerator ? {} : {ipv6Subnet: IPV6_SUBNET},
     ...rest, //! Looked up a lot for this, super useful for the  future check again if you comeback can be used in context of another factory
     handler: (_req, _res, next) => {
       next(
