@@ -28,6 +28,12 @@ const userSchema = new mongoose.Schema(
       required: true,
       select: false, //!so it won't be leaked!!
     },
+    role: {
+      type: String,
+      enum: ["user", "admin", "owner"],
+      required: true,
+      default: "user",
+    },
   },
   { timestamps: true },
 );
