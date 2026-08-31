@@ -63,3 +63,6 @@ export const SORT_OPTIONS = {
 } as const;
 
 export const saltRounds = 10;
+
+export const USER_ROLES = ["user", "admin", "owner"] as const;
+export type UserRole = (typeof USER_ROLES)[number];
