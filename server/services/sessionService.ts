@@ -1,4 +1,5 @@
 import { isValidObjectId } from "mongoose";
+import type { Types } from "mongoose";
 import {
   BadRequestError,
   NotFoundError,
@@ -24,21 +25,14 @@ export const validateSession = async (sessionID: string) => {
   return session;
 };
 
-// At this point user will be pulled from the database.
-// Will still validate it in case of mistakes on the service calling the method]#
-// I guess the error messages should be generic
-export const createSession = async (userID: string, expiresAt: Date) => {
-  if (!isValidObjectId(userID)) {
-    throw new BadRequestError("Something went wrong during session creation.");
-  }
-
-  if (expiresAt <= new Date()) {
-    throw new BadRequestError("Something went wrong during session creation.");
-  }
+//Removed isValidObjectID validation, fn accepts only ObjectID now
+export const createSession = async (userID: Types.ObjectId) => {
+  const sessionExpiresAt = new Date();
+  sessionExpiresAt.setDate(sessionExpiresAt.getDate() + 30); // Adds 30 days
 
   const session = await Session.create({
     userId: userID,
-    expiresAt: expiresAt,
+    expiresAt: sessionExpiresAt,
   });
 
   return session;
