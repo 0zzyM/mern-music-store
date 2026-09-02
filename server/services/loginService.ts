@@ -3,6 +3,8 @@ import { InvalidCredentialsError } from "../errors/AppError.js";
 import User from "../models/userModel.js";
 import type { LoginBodyDTO } from "../validation/loginBodySpecs.js";
 import { saltRounds } from "../config/constants.js";
+import { createAccessToken, createRefreshToken } from "./tokenService.js";
+import { createSession } from "./sessionService.js";
 
 // !Declared outside the function so hashes only on module load.
 // This was necessary  as I found out if no dummy  password compare, from response times it is possible to understand,
@@ -23,5 +25,22 @@ export const handleLogin = async (user: LoginBodyDTO) => {
     throw new InvalidCredentialsError("Invalid email or password");
   }
 
-  return { message: "Login is successful" };
+  const session = await createSession(dbUser._id);
+
+  const accessToken = createAccessToken(
+    dbUser._id.toHexString(),
+    session._id.toHexString(),
+    dbUser.role,
+  );
+
+  //TODO: Decide if to remove permanently
+  /*
+  const refreshToken = createRefreshToken(
+    dbUser._id.toHexString(),
+    session._id.toHexString(),
+    dbUser.role,
+  );
+  */
+
+  return accessToken;
 };
