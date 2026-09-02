@@ -33,14 +33,12 @@ export const handleLogin = async (user: LoginBodyDTO) => {
     dbUser.role,
   );
 
-  //TODO: Decide if to remove permanently
-  /*
+  //TODO: decide if to change to opaque token instead of JWT
   const refreshToken = createRefreshToken(
     dbUser._id.toHexString(),
     session._id.toHexString(),
     dbUser.role,
   );
-  */
 
-  return accessToken;
+  return { accessToken, refreshToken };
 };

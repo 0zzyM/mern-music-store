@@ -12,6 +12,13 @@ export const registerUser = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   const user = req.validatedBody as LoginBodyDTO;
-  const response = await handleLogin(user);
-  res.status(200).json(response);
+  const { accessToken, refreshToken } = await handleLogin(user);
+
+  console.log(accessToken, refreshToken);
+
+  //TODO: decide if to use opaque refresh token or JWT
+  //TODO: decide if accessToken is stored in mem(redux) only or both as httpOnly cookie
+
+  //Don't return anything yet!
+  res.status(200).json("Login Successful");
 };
