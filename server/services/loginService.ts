@@ -5,6 +5,7 @@ import type { LoginBodyDTO } from "../validation/loginBodySpecs.js";
 import { saltRounds } from "../config/constants.js";
 import { createAccessToken, createRefreshToken } from "./tokenService.js";
 import { createSession } from "./sessionService.js";
+import { createHash } from "node:crypto";
 
 // !Declared outside the function so hashes only on module load.
 // This was necessary  as I found out if no dummy  password compare, from response times it is possible to understand,
@@ -27,18 +28,26 @@ export const handleLogin = async (user: LoginBodyDTO) => {
 
   const session = await createSession(dbUser._id);
 
+  const sessionExpiresAt = session.expiresAt;
+
   const accessToken = createAccessToken(
     dbUser._id.toHexString(),
     session._id.toHexString(),
     dbUser.role,
   );
 
-  //TODO: decide if to change to opaque token instead of JWT
+  //Using opaque token instead of JWT
   const refreshToken = createRefreshToken(
     dbUser._id.toHexString(),
     session._id.toHexString(),
-    dbUser.role,
+    session.expiresAt,
   );
 
-  return { accessToken, refreshToken };
+  session.hashedRefreshToken = createHash("sha256")
+    .update(refreshToken)
+    .digest("hex");
+
+  await session.save();
+
+  return { accessToken, refreshToken, sessionExpiresAt };
 };
