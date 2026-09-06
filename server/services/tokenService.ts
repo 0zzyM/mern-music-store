@@ -1,5 +1,8 @@
 import jwt from "jsonwebtoken";
-import type { UserRole } from "../config/constants.js";
+import {
+  ACCESS_TOKEN_EXPIRES_MINS,
+  type UserRole,
+} from "../config/constants.js";
 import { UnauthorizedError } from "../errors/AppError.js";
 
 export const createAccessToken = (
@@ -13,7 +16,8 @@ export const createAccessToken = (
   if (!secret) throw new Error("JWT_SECRET is not defined");
 
   const accessToken = jwt.sign(payload, secret, {
-    expiresIn: "15m",
+    expiresIn: `${ACCESS_TOKEN_EXPIRES_MINS}m`,
+    algorithm: "HS256", //* At the moment symethric algorthm is appopriate
   });
 
   return accessToken;
@@ -22,15 +26,19 @@ export const createAccessToken = (
 export const createRefreshToken = (
   userID: string,
   sessionID: string,
-  role: UserRole,
+  sessionExpiresAt: Date,
 ) => {
-  const payload = { sub: userID, sid: sessionID, role };
+  const payload = {
+    sub: userID,
+    sid: sessionID,
+    exp: Math.floor(sessionExpiresAt.getTime() / 1000), //exp is using secs while JS Date time is ms
+  };
   const secret = process.env.JWT_REFRESH_SECRET;
 
   if (!secret) throw new Error("JWT_REFRESH_SECRET is not defined");
 
   const refreshToken = jwt.sign(payload, secret, {
-    expiresIn: "30d",
+    algorithm: "HS256",
   });
 
   return refreshToken;
@@ -43,8 +51,10 @@ export const validateRefreshToken = (token: string) => {
 
   //need try-catch as verify method throws directly doesn't return a promise etc. its syn
   try {
-    jwt.verify(token, secret);
-  } catch (error) {
+    return jwt.verify(token, secret, {
+      algorithms: ["HS256"],
+    });
+  } catch {
     throw new UnauthorizedError("Invalid token, login to continue.");
   }
 };
