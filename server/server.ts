@@ -14,6 +14,7 @@ import { NotFoundError } from "./errors/AppError.js";
 import helmet from "helmet";
 import userRouter from "./routers/userRouter.js";
 import authRouter from "./routers/authRouter.js";
+import cookieParser from "cookie-parser";
 
 // Only allowed here on ES modules bcs it is the top lvl no need for async fn
 await connectDB();
@@ -40,6 +41,7 @@ app.get("/", (_req, res) => {
 app.use(appLimiter);
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/subcategories", subCategoryRouter);
