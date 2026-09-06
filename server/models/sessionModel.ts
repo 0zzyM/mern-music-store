@@ -11,6 +11,9 @@ const sessionSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    hashedRefreshToken: {
+      type: String,
+    },
   },
   { timestamps: true }, //keep it will needed for logged in time
 );
