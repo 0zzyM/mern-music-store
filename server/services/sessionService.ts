@@ -19,9 +19,7 @@ export const validateSession = async (sessionID: string) => {
     expiresAt: { $gt: new Date() },
   });
 
-  if (!session || session.expiresAt < new Date())
-    throw new UnauthorizedError("Session Expired");
-
+  if (!session) throw new UnauthorizedError("Session Expired");
   return session;
 };
 
@@ -45,6 +43,7 @@ export const endSession = async (sessionID: string) => {
 
   const result = await Session.deleteOne({ _id: sessionID });
 
+  //TODO: Maybe can just log this instead of throwing 404
   if (result.deletedCount === 0) {
     throw new NotFoundError("Error ending the session, session not found");
   }
