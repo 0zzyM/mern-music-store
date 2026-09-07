@@ -36,7 +36,6 @@ export const handleLogin = async (user: LoginBodyDTO) => {
     dbUser.role,
   );
 
-  //Using opaque token instead of JWT
   const refreshToken = createRefreshToken(
     dbUser._id.toHexString(),
     session._id.toHexString(),
