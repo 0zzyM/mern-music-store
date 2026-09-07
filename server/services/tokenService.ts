@@ -44,6 +44,21 @@ export const createRefreshToken = (
   return refreshToken;
 };
 
+export const validateAccessToken = (token: string) => {
+  const secret = process.env.JWT_SECRET;
+
+  if (!secret) throw new Error("JWT_SECRET is not defined");
+
+  //need try-catch as verify method throws directly doesn't return a promise etc. its syn
+  try {
+    return jwt.verify(token, secret, {
+      algorithms: ["HS256"],
+    });
+  } catch {
+    throw new UnauthorizedError("Invalid token, login to continue.");
+  }
+};
+
 export const validateRefreshToken = (token: string) => {
   const secret = process.env.JWT_REFRESH_SECRET;
 
