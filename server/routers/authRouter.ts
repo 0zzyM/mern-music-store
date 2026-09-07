@@ -1,5 +1,5 @@
 import express from "express";
-import { login, registerUser } from "../controllers/authController.js";
+import { login, logout, registerUser } from "../controllers/authController.js";
 import { validateBody } from "../middlewares/bodyHandler.js";
 import { registrationBodySpecs } from "../validation/registrationBodySpecs.js";
 import {
@@ -27,5 +27,8 @@ authRouter.post(
   validateBody(loginBodySpecs),
   login,
 );
+
+//TODO: wire middlewares
+authRouter.post("/logout", logout);
 
 export default authRouter;
