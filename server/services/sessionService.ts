@@ -24,7 +24,7 @@ export const validateSession = async (sessionID: string) => {
 };
 
 //Removed isValidObjectID validation, fn accepts only ObjectID now
-export const createSession = async (userID: Types.ObjectId) => {
+export const createSession = async (userID: string | Types.ObjectId) => {
   const sessionExpiresAt = new Date();
   sessionExpiresAt.setDate(sessionExpiresAt.getDate() + 30); // Adds 30 days
 
@@ -36,7 +36,7 @@ export const createSession = async (userID: Types.ObjectId) => {
   return session;
 };
 
-export const endSession = async (sessionID: string) => {
+export const endSession = async (sessionID: string | Types.ObjectId) => {
   if (!isValidObjectId(sessionID)) {
     throw new BadRequestError("Invalid SessionID");
   }
