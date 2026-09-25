@@ -1,5 +1,10 @@
 import express from "express";
-import { login, logout, registerUser } from "../controllers/authController.js";
+import {
+  login,
+  logout,
+  refreshAndRotateTokens,
+  registerUser,
+} from "../controllers/authController.js";
 import { validateBody } from "../middlewares/bodyHandler.js";
 import { registrationBodySpecs } from "../validation/registrationBodySpecs.js";
 import {
@@ -30,5 +35,7 @@ authRouter.post(
 
 //TODO: wire middlewares
 authRouter.post("/logout", logout);
+
+authRouter.post("/refresh", refreshAndRotateTokens);
 
 export default authRouter;
