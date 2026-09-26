@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import {
   ACCESS_TOKEN_EXPIRES_MINS,
+  USER_ROLES,
   type UserRole,
 } from "../config/constants.js";
 import { UnauthorizedError } from "../errors/AppError.js";
@@ -17,7 +18,7 @@ export const createAccessToken = (
 
   const accessToken = jwt.sign(payload, secret, {
     expiresIn: `${ACCESS_TOKEN_EXPIRES_MINS}m`,
-    algorithm: "HS256", //* At the moment symethric algorthm is appopriate
+    algorithm: "HS256", //* At the moment symmetrical algorthm is appopriate
   });
 
   return accessToken;
@@ -51,9 +52,29 @@ export const validateAccessToken = (token: string) => {
 
   //need try-catch as verify method throws directly doesn't return a promise etc. its syn
   try {
-    return jwt.verify(token, secret, {
+    const decoded = jwt.verify(token, secret, {
       algorithms: ["HS256"],
     });
+
+    if (typeof decoded === "string") {
+      throw new Error();
+    }
+
+    if (
+      typeof decoded.sub !== "string" ||
+      typeof decoded.sid !== "string" ||
+      typeof decoded.exp !== "number" ||
+      typeof decoded.role !== "string" ||
+      !USER_ROLES.includes(decoded.role as UserRole) //Only way to work this out in run time
+    ) {
+      throw new Error();
+    }
+
+    return {
+      sub: decoded.sub,
+      sid: decoded.sid,
+      role: decoded.role as UserRole, //otherwise TS infers as string
+    };
   } catch {
     throw new UnauthorizedError("Invalid token, login to continue.");
   }
@@ -66,9 +87,27 @@ export const validateRefreshToken = (token: string) => {
 
   //need try-catch as verify method throws directly doesn't return a promise etc. its syn
   try {
-    return jwt.verify(token, secret, {
+    const decoded = jwt.verify(token, secret, {
       algorithms: ["HS256"],
     });
+
+    if (typeof decoded === "string") {
+      throw new Error();
+    }
+
+    if (
+      typeof decoded.sub !== "string" ||
+      typeof decoded.sid !== "string" ||
+      typeof decoded.exp !== "number"
+    ) {
+      throw new Error();
+    }
+
+    return {
+      sub: decoded.sub,
+      sid: decoded.sid,
+      exp: decoded.exp,
+    };
   } catch {
     throw new UnauthorizedError("Invalid token, login to continue.");
   }
