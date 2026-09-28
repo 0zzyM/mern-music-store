@@ -11,10 +11,13 @@ import {
   validateRefreshToken,
 } from "../services/tokenService.js";
 import { BadRequestError, UnauthorizedError } from "../errors/AppError.js";
-import { endSession } from "../services/sessionService.js";
-import Session from "../models/sessionModel.js";
-import User from "../models/userModel.js";
+import {
+  endSession,
+  rotateRefreshTokenHash,
+  validateSession,
+} from "../services/sessionService.js";
 import { createHash } from "node:crypto";
+import { getUserRolebyId } from "../services/userService.js";
 
 export const registerUser = async (req: Request, res: Response) => {
   const user = req.validatedBody as RegistrationBodyDTO;
@@ -46,16 +49,22 @@ export const login = async (req: Request, res: Response) => {
   res.status(200).json("Login Successful");
 };
 
-//TODO: clean the code
 export const logout = async (req: Request, res: Response) => {
   const refreshToken = req.cookies.refreshToken;
+  const accessToken = req.cookies.accessToken;
 
-  //TODO: Decide if to count these fails as a suspicios activity and lock the account!
+  //Clear the cookies first anyway even if the req is failed, this is better done!
+  res.clearCookie("refreshToken", { path: "/api/v1/auth" }); //* If I didn't add path as an option here didn't clear the cookie.
+  res.clearCookie("accessToken");
 
   // if refreshToken is not valid fall back to accessToken
   if (!refreshToken || typeof refreshToken !== "string") {
-    const accessToken = req.cookies.accessToken;
+    res.clearCookie("refreshToken", { path: "/api/v1/auth" }); //* If I didn't add path as an option here didn't clear the cookie.
     if (!accessToken) {
+      res.clearCookie("accessToken");
+      console.log(
+        "Something is wrong, user provided invalid tokens on logout request!\n Check the session ",
+      );
       throw new BadRequestError("Something went wrong, invalid cookies");
     }
     const decoded = validateAccessToken(accessToken);
@@ -67,22 +76,13 @@ export const logout = async (req: Request, res: Response) => {
     }
 
     await endSession(decoded.sid);
-    res.clearCookie("accessToken");
-    res.clearCookie("refreshToken", { path: "/api/v1/auth" }); //* If I didn't add path as an option here didn't clear the cookie.
     return res.status(200).json("Logout Successful with Access token");
   }
 
   const decoded = validateRefreshToken(refreshToken);
 
-  if (typeof decoded === "string")
-    throw new UnauthorizedError("Invalid token, logout failed");
-
-  if (!decoded.sid || typeof decoded.sid !== "string") {
-    throw new UnauthorizedError("Invalid Auth Token");
-  }
   await endSession(decoded.sid);
-  res.clearCookie("accessToken");
-  res.clearCookie("refreshToken", { path: "/api/v1/auth" }); //* If I didn't add path as an option here didn't clear the cookie.
+
   res.status(200).json("Logout Successful");
 };
 
@@ -95,47 +95,24 @@ export const refreshAndRotateTokens = async (req: Request, res: Response) => {
   }
 
   const decoded = validateRefreshToken(refreshToken);
+  const session = await validateSession(decoded.sid);
 
-  //TODO: Should be 2 different fix here
-  if (typeof decoded === "string") {
-    res.clearCookie("accessToken");
-    res.clearCookie("refreshToken", { path: "/api/v1/auth" });
-    throw new UnauthorizedError("Invalid token, login again");
-  }
-  // or do input validation for the cookie and throw before
-  if (
-    !decoded.sub ||
-    !decoded.exp ||
-    !decoded.sid ||
-    typeof decoded.sid !== "string" ||
-    typeof decoded.sub !== "string"
-  ) {
-    res.clearCookie("accessToken");
-    res.clearCookie("refreshToken", { path: "/api/v1/auth" });
-    throw new UnauthorizedError("Invalid token, login again");
-  }
-
-  //Clear cookies first
   res.clearCookie("accessToken");
   res.clearCookie("refreshToken", { path: "/api/v1/auth" });
-
-  //Validate session
-  const session = await Session.findOne({ _id: decoded.sid });
-  if (!session)
-    throw new UnauthorizedError("Session expired, please login continue");
 
   //Validate refresh token over hashed value on sessions
   if (
     createHash("sha256").update(refreshToken).digest("hex") !==
     session.hashedRefreshToken
   ) {
+    //TODO: Is this over protective?
+    // Basically if the token hash send doesn't match the one on Session document
+    // It will log the user out?
     await endSession(session._id);
     throw new UnauthorizedError("Invalid token login to continue again");
   }
-  const user = await User.findOne({ _id: session?.userId });
-  //TODO: Should this be marked?
-  if (!user)
-    throw new UnauthorizedError("User not found, please login to continue");
+
+  const userRole = await getUserRolebyId(String(session.userId));
 
   //Create new refresh token
   //decoded.exp is number --> which is the number of seconds since Jan 1 1970. --> have to convert to ms so multiply by thousand
@@ -145,18 +122,14 @@ export const refreshAndRotateTokens = async (req: Request, res: Response) => {
     new Date(decoded.exp * 1000),
   );
 
-  //Create new access token
-  const newAccessToken = createAccessToken(decoded.sub, decoded.sid, user.role);
+  const newAccessToken = createAccessToken(decoded.sub, decoded.sid, userRole);
 
   const newHashedRefreshToken = createHash("sha256")
     .update(newRefreshToken)
     .digest("hex");
 
   //Rotate the Token
-  await Session.findOneAndUpdate(
-    { _id: decoded.sid },
-    { hashedRefreshToken: newHashedRefreshToken },
-  );
+  await rotateRefreshTokenHash(decoded.sid, newHashedRefreshToken);
 
   res.cookie("accessToken", newAccessToken, {
     httpOnly: true,
