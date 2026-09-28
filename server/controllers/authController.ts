@@ -25,6 +25,7 @@ export const registerUser = async (req: Request, res: Response) => {
   res.status(201).json(response);
 };
 
+//TODO: consider writing logout service
 export const login = async (req: Request, res: Response) => {
   const user = req.validatedBody as LoginBodyDTO;
 
@@ -87,7 +88,7 @@ export const logout = async (req: Request, res: Response) => {
 };
 
 export const refreshAndRotateTokens = async (req: Request, res: Response) => {
-  const refreshToken = req.validatedCookies?.refreshToken;
+  const refreshToken = req.cookies.refreshToken;
 
   //TODO: All these should be handled on input validation
   if (!refreshToken || typeof refreshToken !== "string") {
@@ -97,14 +98,13 @@ export const refreshAndRotateTokens = async (req: Request, res: Response) => {
   const decoded = validateRefreshToken(refreshToken);
   const session = await validateSession(decoded.sid);
 
+  const incomingHash = createHash("sha256").update(refreshToken).digest("hex");
+
   res.clearCookie("accessToken");
   res.clearCookie("refreshToken", { path: "/api/v1/auth" });
 
   //Validate refresh token over hashed value on sessions
-  if (
-    createHash("sha256").update(refreshToken).digest("hex") !==
-    session.hashedRefreshToken
-  ) {
+  if (incomingHash !== session.hashedRefreshToken) {
     //TODO: Is this over protective?
     // Basically if the token hash send doesn't match the one on Session document
     // It will log the user out?
@@ -129,7 +129,11 @@ export const refreshAndRotateTokens = async (req: Request, res: Response) => {
     .digest("hex");
 
   //Rotate the Token
-  await rotateRefreshTokenHash(decoded.sid, newHashedRefreshToken);
+  await rotateRefreshTokenHash(
+    decoded.sid,
+    incomingHash,
+    newHashedRefreshToken,
+  );
 
   res.cookie("accessToken", newAccessToken, {
     httpOnly: true,

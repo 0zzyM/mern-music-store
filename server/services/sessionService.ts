@@ -51,10 +51,21 @@ export const endSession = async (sessionID: string | Types.ObjectId) => {
 
 export const rotateRefreshTokenHash = async (
   id: string,
-  hashedToken: string,
+  expectedHash: string,
+  newHash: string,
 ) => {
-  await Session.findOneAndUpdate(
-    { _id: id },
-    { hashedRefreshToken: hashedToken },
+  const result = await Session.updateOne(
+    {
+      _id: id,
+      hashedRefreshToken: expectedHash,
+      expiresAt: { $gt: new Date() },
+    },
+    {
+      $set: { hashedRefreshToken: newHash },
+    },
   );
+
+  if (result.matchedCount === 0) {
+    throw new UnauthorizedError("Refresh token is no longer valid");
+  }
 };
