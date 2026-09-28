@@ -48,3 +48,13 @@ export const endSession = async (sessionID: string | Types.ObjectId) => {
     throw new NotFoundError("Error ending the session, session not found");
   }
 };
+
+export const rotateRefreshTokenHash = async (
+  id: string,
+  hashedToken: string,
+) => {
+  await Session.findOneAndUpdate(
+    { _id: id },
+    { hashedRefreshToken: hashedToken },
+  );
+};
