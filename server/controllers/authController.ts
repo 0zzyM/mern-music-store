@@ -50,40 +50,45 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const logout = async (req: Request, res: Response) => {
-  const refreshToken = req.cookies.refreshToken;
-  const accessToken = req.cookies.accessToken;
+  const refreshToken: unknown = req.cookies?.refreshToken;
+  const accessToken: unknown = req.cookies?.accessToken;
 
-  //Clear the cookies first anyway even if the req is failed, this is better done!
-  res.clearCookie("refreshToken", { path: "/api/v1/auth" }); //* If I didn't add path as an option here didn't clear the cookie.
+  res.clearCookie("refreshToken", {
+    path: "/api/v1/auth",
+  });
   res.clearCookie("accessToken");
 
-  // if refreshToken is not valid fall back to accessToken
-  if (!refreshToken || typeof refreshToken !== "string") {
-    res.clearCookie("refreshToken", { path: "/api/v1/auth" }); //* If I didn't add path as an option here didn't clear the cookie.
-    if (!accessToken) {
-      res.clearCookie("accessToken");
-      console.log(
-        "Something is wrong, user provided invalid tokens on logout request!\n Check the session ",
-      );
-      throw new UnauthorizedError("Something went wrong, invalid cookies");
-    }
-    const decoded = validateAccessToken(accessToken);
-    if (typeof decoded === "string")
-      throw new UnauthorizedError("Invalid token, logout failed");
+  let sessionId: string | undefined;
 
-    if (!decoded.sid || typeof decoded.sid !== "string") {
-      throw new UnauthorizedError("Invalid token content, logout failed");
+  if (typeof refreshToken === "string" && refreshToken.length > 0) {
+    try {
+      sessionId = validateRefreshToken(refreshToken).sid;
+    } catch (error) {
+      if (!(error instanceof UnauthorizedError)) {
+        throw error;
+      }
     }
-
-    await endSession(decoded.sid);
-    return res.status(200).json("Logout Successful with Access token");
   }
 
-  const decoded = validateRefreshToken(refreshToken);
+  if (
+    sessionId === undefined &&
+    typeof accessToken === "string" &&
+    accessToken.length > 0
+  ) {
+    try {
+      sessionId = validateAccessToken(accessToken).sid;
+    } catch (error) {
+      if (!(error instanceof UnauthorizedError)) {
+        throw error;
+      }
+    }
+  }
 
-  await endSession(decoded.sid);
+  if (sessionId !== undefined) {
+    await endSession(sessionId);
+  }
 
-  res.status(200).json("Logout Successful");
+  res.status(200).json({ message: "Logout successful" });
 };
 
 export const refreshAndRotateTokens = async (req: Request, res: Response) => {
