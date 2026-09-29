@@ -3,14 +3,14 @@ import { handleRegistration } from "../services/registrationService.js";
 import type { RegistrationBodyDTO } from "../validation/registrationBodySpecs.js";
 import { handleLogin } from "../services/loginService.js";
 import type { LoginBodyDTO } from "../validation/loginBodySpecs.js";
-import { ACCESS_TOKEN_EXPIRES_MS } from "../config/constants.js";
+import { ACCESS_TOKEN_EXPIRES_MS, isEnvProd } from "../config/constants.js";
 import {
   createAccessToken,
   createRefreshToken,
   validateAccessToken,
   validateRefreshToken,
 } from "../services/tokenService.js";
-import { BadRequestError, UnauthorizedError } from "../errors/AppError.js";
+import { UnauthorizedError } from "../errors/AppError.js";
 import {
   endSession,
   rotateRefreshTokenHash,
@@ -25,7 +25,6 @@ export const registerUser = async (req: Request, res: Response) => {
   res.status(201).json(response);
 };
 
-//TODO: consider writing logout service
 export const login = async (req: Request, res: Response) => {
   const user = req.validatedBody as LoginBodyDTO;
 
@@ -34,14 +33,14 @@ export const login = async (req: Request, res: Response) => {
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: isEnvProd,
     sameSite: "strict", //TODO: later consider lax here again instead of strict
     maxAge: ACCESS_TOKEN_EXPIRES_MS, //15 mins
   });
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: isEnvProd,
     sameSite: "strict",
     path: "/api/v1/auth",
     expires: sessionExpiresAt,
@@ -66,7 +65,7 @@ export const logout = async (req: Request, res: Response) => {
       console.log(
         "Something is wrong, user provided invalid tokens on logout request!\n Check the session ",
       );
-      throw new BadRequestError("Something went wrong, invalid cookies");
+      throw new UnauthorizedError("Something went wrong, invalid cookies");
     }
     const decoded = validateAccessToken(accessToken);
     if (typeof decoded === "string")
@@ -90,36 +89,31 @@ export const logout = async (req: Request, res: Response) => {
 export const refreshAndRotateTokens = async (req: Request, res: Response) => {
   const refreshToken = req.cookies.refreshToken;
 
-  //TODO: All these should be handled on input validation
+  //TODO: Consider input validation
   if (!refreshToken || typeof refreshToken !== "string") {
-    throw new BadRequestError("Something went wrong, invalid cookies");
+    throw new UnauthorizedError(
+      "Something went wrong, missing or invalid cookie",
+    );
   }
 
   const decoded = validateRefreshToken(refreshToken);
   const session = await validateSession(decoded.sid);
+  const sessionUserId = String(session.userId);
 
-  const incomingHash = createHash("sha256").update(refreshToken).digest("hex");
-
-  res.clearCookie("accessToken");
-  res.clearCookie("refreshToken", { path: "/api/v1/auth" });
-
-  //Validate refresh token over hashed value on sessions
-  if (incomingHash !== session.hashedRefreshToken) {
-    //TODO: Is this over protective?
-    // Basically if the token hash send doesn't match the one on Session document
-    // It will log the user out?
-    await endSession(session._id);
-    throw new UnauthorizedError("Invalid token login to continue again");
+  if (decoded.sub !== sessionUserId) {
+    throw new UnauthorizedError("Token does not match the session");
   }
 
-  const userRole = await getUserRolebyId(String(session.userId));
+  const incomingHash = createHash("sha256").update(refreshToken).digest("hex");
+  const userRole = await getUserRolebyId(sessionUserId);
+  const refreshExpiresAt = new Date(decoded.exp * 1000);
 
   //Create new refresh token
   //decoded.exp is number --> which is the number of seconds since Jan 1 1970. --> have to convert to ms so multiply by thousand
   const newRefreshToken = createRefreshToken(
     decoded.sub,
     decoded.sid,
-    new Date(decoded.exp * 1000),
+    refreshExpiresAt,
   );
 
   const newAccessToken = createAccessToken(decoded.sub, decoded.sid, userRole);
@@ -128,7 +122,6 @@ export const refreshAndRotateTokens = async (req: Request, res: Response) => {
     .update(newRefreshToken)
     .digest("hex");
 
-  //Rotate the Token
   await rotateRefreshTokenHash(
     decoded.sid,
     incomingHash,
@@ -137,17 +130,17 @@ export const refreshAndRotateTokens = async (req: Request, res: Response) => {
 
   res.cookie("accessToken", newAccessToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: isEnvProd,
     sameSite: "strict",
     maxAge: ACCESS_TOKEN_EXPIRES_MS, //15 mins
   });
 
   res.cookie("refreshToken", newRefreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: isEnvProd,
     sameSite: "strict",
     path: "/api/v1/auth",
-    expires: new Date(decoded.exp * 1000),
+    expires: refreshExpiresAt,
   });
 
   res.status(200).json({ message: "Success" });

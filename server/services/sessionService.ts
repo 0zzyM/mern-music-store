@@ -1,10 +1,6 @@
 import { isValidObjectId } from "mongoose";
 import type { Types } from "mongoose";
-import {
-  BadRequestError,
-  NotFoundError,
-  UnauthorizedError,
-} from "../errors/AppError.js";
+import { BadRequestError, UnauthorizedError } from "../errors/AppError.js";
 import Session from "../models/sessionModel.js";
 
 // Validating if the useragent has a valid session
@@ -41,12 +37,7 @@ export const endSession = async (sessionID: string | Types.ObjectId) => {
     throw new BadRequestError("Invalid SessionID");
   }
 
-  const result = await Session.deleteOne({ _id: sessionID });
-
-  //TODO: Maybe can just log this instead of throwing 404
-  if (result.deletedCount === 0) {
-    throw new NotFoundError("Error ending the session, session not found");
-  }
+  await Session.deleteOne({ _id: sessionID });
 };
 
 export const rotateRefreshTokenHash = async (
