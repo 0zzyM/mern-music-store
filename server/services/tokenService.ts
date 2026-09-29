@@ -5,6 +5,7 @@ import {
   type UserRole,
 } from "../config/constants.js";
 import { UnauthorizedError } from "../errors/AppError.js";
+import { randomUUID } from "node:crypto";
 
 export const createAccessToken = (
   userID: string,
@@ -33,6 +34,7 @@ export const createRefreshToken = (
     sub: userID,
     sid: sessionID,
     exp: Math.floor(sessionExpiresAt.getTime() / 1000), //exp is using secs while JS Date time is ms
+    jti: randomUUID(),
   };
   const secret = process.env.JWT_REFRESH_SECRET;
 
