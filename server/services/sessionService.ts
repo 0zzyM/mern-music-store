@@ -5,9 +5,9 @@ import Session from "../models/sessionModel.js";
 
 // Validating if the useragent has a valid session
 // TODO: Centralize the input validation !!!
-export const validateSession = async (sessionID: string) => {
+export const validateSession = async (sessionID: string | Types.ObjectId) => {
   if (!isValidObjectId(sessionID)) {
-    throw new BadRequestError("Invalid SessionID");
+    throw new UnauthorizedError("Invalid SessionID");
   }
 
   const session = await Session.findOne({
