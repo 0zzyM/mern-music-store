@@ -59,7 +59,7 @@ export const validateAccessToken = (token: string) => {
     });
 
     if (typeof decoded === "string") {
-      throw new Error();
+      throw new UnauthorizedError();
     }
 
     if (
@@ -69,7 +69,7 @@ export const validateAccessToken = (token: string) => {
       typeof decoded.role !== "string" ||
       !USER_ROLES.includes(decoded.role as UserRole) //Only way to work this out in run time
     ) {
-      throw new Error();
+      throw new UnauthorizedError();
     }
 
     return {
@@ -94,7 +94,7 @@ export const validateRefreshToken = (token: string) => {
     });
 
     if (typeof decoded === "string") {
-      throw new Error();
+      throw new UnauthorizedError();
     }
 
     if (
@@ -102,7 +102,7 @@ export const validateRefreshToken = (token: string) => {
       typeof decoded.sid !== "string" ||
       typeof decoded.exp !== "number"
     ) {
-      throw new Error();
+      throw new UnauthorizedError();
     }
 
     return {
