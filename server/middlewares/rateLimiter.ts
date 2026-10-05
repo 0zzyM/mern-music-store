@@ -2,7 +2,7 @@ import { rateLimit, ipKeyGenerator } from "express-rate-limit";
 import { TooManyRequestsError } from "../errors/AppError.js";
 import type { Request } from "express";
 
-const IPV6_SUBNET = 56
+const IPV6_SUBNET = 56;
 
 const timeMultiplier = {
   secs: 1000,
@@ -51,7 +51,8 @@ const buildLimiter = ({ window, timeUnit, limit, ...rest }: LimiterOptions) => {
     limit: limit, // Limit each IP to "limit" amount of requests per "window"
     standardHeaders: true, // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-    ...rest.keyGenerator ? {} : {ipv6Subnet: IPV6_SUBNET},
+    skip: () => process.env.NODE_ENV === "test",
+    ...(rest.keyGenerator ? {} : { ipv6Subnet: IPV6_SUBNET }),
     ...rest, //! Looked up a lot for this, super useful for the  future check again if you comeback can be used in context of another factory
     handler: (_req, _res, next) => {
       next(
