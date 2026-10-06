@@ -46,7 +46,7 @@ export const login = async (req: Request, res: Response) => {
     expires: sessionExpiresAt,
   });
 
-  res.status(200).json("Login Successful");
+  res.status(200).json({ message: "Login Successful" });
 };
 
 export const logout = async (req: Request, res: Response) => {

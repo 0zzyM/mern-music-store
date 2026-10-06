@@ -60,7 +60,7 @@ export const validateBody =
       // !value is wrong here cause body is JSON and value can be falsy(0 or false) etc.
       if (value === undefined || value === null) {
         if ("required" in rule && rule.required) {
-          throw new BadRequestError(`(${key}) is required`);
+          throw new BadRequestError(`${key} is required`);
         }
         continue;
       }
