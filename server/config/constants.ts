@@ -63,3 +63,12 @@ export const SORT_OPTIONS = {
 } as const;
 
 export const saltRounds = 10;
+
+export const USER_ROLES = ["user", "admin", "owner"] as const;
+export type UserRole = (typeof USER_ROLES)[number];
+
+export const SESSION_EXPIRIES_AFTER_DAYS = 30;
+export const ACCESS_TOKEN_EXPIRES_MS = 15 * 60 * 1000;
+export const ACCESS_TOKEN_EXPIRES_MINS = 15;
+
+export const isEnvProd = process.env.NODE_ENV === "production";
