@@ -33,6 +33,8 @@ export const listSuggestedSearchResults = async (q: string) => {
   const safeQuery = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").trim();
   const regex = new RegExp(safeQuery, "i");
 
+  // promise returns null or value if null during building the obj
+  // if any of them doesn't have a result it will be an empty array
   const [productResults, categoryResults, subcategoryResults, brandResults] =
     await Promise.all([
       Product.find(
@@ -75,17 +77,6 @@ export const listSuggestedSearchResults = async (q: string) => {
         .limit(3)
         .lean(),
     ]);
-
-  const hasResults =
-    productResults.length > 0 ||
-    categoryResults.length > 0 ||
-    subcategoryResults.length > 0 ||
-    brandResults.length > 0;
-
-  // Check any search  results exist  for any schema, FE can handle [] and show no result
-  if (!hasResults) {
-    throw new NotFoundError("No results found");
-  }
 
   return { productResults, categoryResults, subcategoryResults, brandResults };
 };
