@@ -2,7 +2,6 @@ import Product from "../models/productModel.js";
 import Brand from "../models/brandModel.js";
 import Category from "../models/categoryModel.js";
 import Subcategory from "../models/subcategoryModel.js";
-import { NotFoundError } from "../errors/AppError.js";
 
 const PRODUCT_SEARCH_FIELDS = "name images price stock isOnSale discountAmount";
 
