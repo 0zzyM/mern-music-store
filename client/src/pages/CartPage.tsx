@@ -1,9 +1,9 @@
-import CartSidebar from "../components/Cart/CartSidebar";
+import Cart from "../components/Cart/Cart";
 
 export default function CartPage() {
   return (
     <>
-      <CartSidebar />
+      <Cart />
     </>
   );
 }
