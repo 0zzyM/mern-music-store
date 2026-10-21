@@ -1,13 +1,10 @@
 import { useDispatch } from "react-redux";
 import { removeItem, updateQty } from "../../features/cartSlice";
 import { LuTrash, LuPlus, LuMinus } from "react-icons/lu";
+import { IoClose } from "react-icons/io5";
 
 export default function CartActions({ item }) {
   const dispatch = useDispatch();
-
-  const handleRemoveItem = (id) => {
-    dispatch(removeItem(id));
-  };
 
   const incItemQty = (item) => {
     if (item.quantity < item.stock) {
@@ -48,15 +45,6 @@ export default function CartActions({ item }) {
           <LuPlus />
         </button>
       </div>
-
-      <button
-        className="cart-delete-btn"
-        onClick={() => {
-          handleRemoveItem(item._id);
-        }}
-      >
-        Remove
-      </button>
     </div>
   );
 }
