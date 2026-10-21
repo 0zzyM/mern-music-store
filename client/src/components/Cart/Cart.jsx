@@ -1,22 +1,21 @@
 import "./Cart.css";
 import { useSelector } from "react-redux";
 import CartHeader from "./CartHeader";
-import CartItem from "./CartItem";
+import CartItem from "./CartItem.jsx";
 import CartCheckout from "./CartCheckout";
 
 export default function Cart() {
   const cartItems = useSelector((state) => state.cart.items);
 
-  const totalPrice = cartItems
-    .reduce((total, item) => total + item.price * item.quantity, 0)
-    .toLocaleString("de-DE", {
-      minimumFractionDigits: 2,
-    });
+  const subtotalPrice = cartItems.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0,
+  );
 
   return (
     <div className="cart-wrapper">
       <div className="cart-products">
-        <CartHeader cartItems={cartItems} />
+        <CartHeader />
 
         {cartItems.length > 0 &&
           cartItems.map((item) => {
@@ -24,7 +23,7 @@ export default function Cart() {
           })}
       </div>
 
-      <CartCheckout totalPrice={totalPrice} />
+      <CartCheckout subtotalPrice={subtotalPrice} />
     </div>
   );
 }
