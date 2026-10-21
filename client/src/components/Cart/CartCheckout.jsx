@@ -1,19 +1,53 @@
 import { Link } from "react-router-dom";
+import "./Cart.css";
+import { FIXED_SHIPMENT_COST } from "../../config";
+import { FaArrowRight } from "react-icons/fa6";
+const CartCheckout = ({ subtotalPrice }) => {
+  const total = (subtotalPrice + 5).toLocaleString("de-DE", {
+    minimumFractionDigits: 2,
+  });
 
-const CartCheckout = ({ totalPrice }) => {
   return (
-    <div className="cart-sidebar-checkout">
-      <div className="cart-sidebar-total-section">
-        <div className="cart-sidebar-summary">
-          <h3>Total</h3>
-          <p className="cart-sidebar-text-info">
-            Taxes and <Link>shipping</Link> calculated at checkout
+    <div className="cart-checkout">
+      <div className="cart-order-summary">
+        <h4 className="order-summary-title">Order Summary</h4>
+        <div className="cart-subtotal">
+          <p>Subtotal</p>
+          <p>
+            €
+            {subtotalPrice.toLocaleString("de-DE", {
+              minimumFractionDigits: 2,
+            })}
           </p>
         </div>
-        <h3>€{totalPrice}</h3>
+        <div className="cart-discount">
+          <p>Discount</p>
+          <p>€0</p> {/*FIXME: Hardcoded!!! */}
+        </div>
+        <div className="cart-delivery">
+          <p>Delivery Fee</p>
+          <p>€{FIXED_SHIPMENT_COST}</p>{" "}
+          {/*TECHNICALLY HARDCODED THIS NEEDS A SERVICE ON SERVER AND API TO CONSUME */}
+        </div>
       </div>
 
-      <button className="cart-sidebar-checkout-btn">Checkout</button>
+      <div className="cart-total-section">
+        <div className="cart-summary">
+          <h3>Total</h3>
+        </div>
+        <h3>€{total}</h3>
+      </div>
+
+      {/*TODO: Add promo code section here! */}
+
+      <button className="cart-checkout-btn">
+        <span>Go to checkout</span>
+        <span style={{ display: "flex" }}>
+          <FaArrowRight />
+        </span>
+      </button>
+
+      {/*TODO: Add list of methods here! */}
     </div>
   );
 };
