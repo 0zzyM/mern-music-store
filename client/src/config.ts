@@ -2,6 +2,7 @@ import type { NavCategory } from "./types/CategoryType";
 
 export const SERVER_URL: string = import.meta.env.VITE_API_URL;
 export const DEFAULT_CURRENCY = "€";
+export const FIXED_SHIPMENT_COST = 5;
 
 // Used in homepage carousels
 export const ITEMS_PER_PAGE = 12;
