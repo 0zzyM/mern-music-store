@@ -13,6 +13,12 @@
   justify-content: space-between;
 }
 
+.cart-wrapper.empty {
+  height: 800px;
+  align-items: center;
+  justify-content: center;
+}
+
 .cart-products {
   display: grid;
   flex-direction: column;
