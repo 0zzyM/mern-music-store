@@ -1,5 +1,6 @@
 const THUMBNAIL_RESIZE_OPTIONS = "h_240,c_scale,q_auto,f_auto";
 const CARD_RESIZE_OPTIONS = "h_480,c_scale,q_auto,f_auto";
+const GALLERY_RESIZE_OPTIONS = "h_720,c_scale,q_auto,f_auto";
 
 export const resizeUrlForThumbnail = (url: string) => {
   const firstIndex = url.indexOf("upload/");
@@ -22,5 +23,17 @@ export const resizeUrlForCard = (url: string) => {
     return url;
   const finalUrl =
     url.slice(0, firstIndex + 7) + CARD_RESIZE_OPTIONS + url.slice(lastIndex);
+  return finalUrl;
+};
+
+export const resizeUrlForGallery = (url: string) => {
+  const firstIndex = url.indexOf("upload/");
+  const lastIndex = url.indexOf("/v");
+  if (firstIndex + 7 === lastIndex || firstIndex < 0 || lastIndex < 0)
+    return url;
+  const finalUrl =
+    url.slice(0, firstIndex + 7) +
+    GALLERY_RESIZE_OPTIONS +
+    url.slice(lastIndex);
   return finalUrl;
 };
