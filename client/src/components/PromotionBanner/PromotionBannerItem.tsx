@@ -1,4 +1,5 @@
 import type { Promotion } from "../../types/PromotionType";
+import { resizeUrlForPromotion } from "../../utils/imageUtils";
 import "./PromotionBanner.css";
 import { Link } from "react-router-dom";
 
@@ -10,7 +11,10 @@ export default function PromotionBannerItem({
   return (
     <Link to={promotion.ctaLink} className="promotion-item-container">
       <div className="promotion-image-container">
-        <img src={promotion.image} alt={promotion.title} />
+        <img
+          src={resizeUrlForPromotion(promotion.image)}
+          alt={promotion.title}
+        />
       </div>
 
       <div className="promotion-overlay">
