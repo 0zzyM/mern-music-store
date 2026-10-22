@@ -4,15 +4,12 @@ import { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useBrands } from "../../hooks/useBrands";
-
-const BRANDS_PER_PAGE = 12;
-const SLIDE_COUNT = 2;
-const FETCH_LIMIT = BRANDS_PER_PAGE * SLIDE_COUNT;
+import { BRANDS_FETCH_LIMIT, BRANDS_PER_PAGE } from "../../config";
 
 export default function BrandsCarousel() {
   const [index, setIndex] = useState(0);
 
-  const { data: brands, isPending, isError } = useBrands(FETCH_LIMIT);
+  const { data: brands, isPending, isError } = useBrands(BRANDS_FETCH_LIMIT);
 
   if (isPending) return <p>Loading...</p>;
   if (isError) return <p>Error Fetching Brands...</p>;

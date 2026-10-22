@@ -10,6 +10,11 @@ export const ITEMS_PER_PAGE = 12;
 // Used in Products Page
 export const PRODUCTS_PER_PAGE = 15; //TODO: Move this to server  side
 
+//Used in brand carousel and brands filter
+export const BRANDS_PER_PAGE = 12;
+export const BRANDS_SLIDE_COUNT = 2;
+export const BRANDS_FETCH_LIMIT = BRANDS_PER_PAGE * BRANDS_SLIDE_COUNT;
+
 // Hardcoded used in Navbars
 export const CATEGORIES: NavCategory[] = [
   {
