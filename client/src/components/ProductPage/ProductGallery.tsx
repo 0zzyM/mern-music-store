@@ -8,12 +8,16 @@ import {
   FaChevronUp,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { resizeUrlForThumbnail } from "../../utils/imageUtils";
+import {
+  resizeUrlForGallery,
+  resizeUrlForThumbnail,
+} from "../../utils/imageUtils";
 import type { Product } from "../../types/ProductType";
+import { preload } from "react-dom";
 
 const VISIBLE_IMG = 6;
 
-// TODO: Add Img Zoom
+// TODO: Add Img Lighthouse
 
 export default function ProductGallery({ product }: { product: Product }) {
   const [imgIndex, setImgIndex] = useState(0);
@@ -28,6 +32,16 @@ export default function ProductGallery({ product }: { product: Product }) {
 
   const handlePrev = () => {
     setImgIndex((prev) => (prev - 1 + totalImages) % totalImages);
+  };
+
+  const preloadNeighbors = () => {
+    if (totalImages <= 2) return;
+
+    const prevIndex = (imgIndex - 1 + totalImages) % totalImages;
+    const nextIndex = (imgIndex + 1) % totalImages;
+
+    preload(resizeUrlForGallery(product.images[prevIndex]), { as: "image" });
+    preload(resizeUrlForGallery(product.images[nextIndex]), { as: "image" });
   };
 
   return (
@@ -112,8 +126,9 @@ export default function ProductGallery({ product }: { product: Product }) {
         <div className="main-image-container">
           <img
             className="product-page-main-image"
-            src={product.images[imgIndex]}
+            src={resizeUrlForGallery(product.images[imgIndex])}
             alt={product.name}
+            onLoad={preloadNeighbors}
           />
           <button
             className="product-hero-image-prev-btn"
