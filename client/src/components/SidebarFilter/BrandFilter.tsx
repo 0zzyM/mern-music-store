@@ -3,6 +3,7 @@ import { useFilters } from "../../hooks/useFilters.js";
 import { useState } from "react";
 import type { ChangeEvent } from "react";
 import { useBrands } from "../../hooks/useBrands.js";
+import { BRANDS_FETCH_LIMIT } from "../../config.js";
 
 export default function BrandFilter() {
   const { brandParams, toggleBrandFilter } = useFilters();
@@ -12,8 +13,7 @@ export default function BrandFilter() {
     setQuery(e.target.value);
   };
 
-  //TODO: Used 999 as a workaround limit should be on FE not on fetch figure out later here.
-  const { data: brands, isPending, isError } = useBrands(999);
+  const { data: brands, isPending, isError } = useBrands(BRANDS_FETCH_LIMIT);
 
   if (isPending) return <p>Loading....</p>;
   if (isError) return <p>Error fetching brands</p>;
