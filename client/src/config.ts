@@ -15,6 +15,9 @@ export const BRANDS_PER_PAGE = 12;
 export const BRANDS_SLIDE_COUNT = 2;
 export const BRANDS_FETCH_LIMIT = BRANDS_PER_PAGE * BRANDS_SLIDE_COUNT;
 
+//Used in price filter
+export const MAX_ITEM_PRICE = 10000;
+
 // Hardcoded used in Navbars
 export const CATEGORIES: NavCategory[] = [
   {
