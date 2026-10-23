@@ -1,12 +1,13 @@
 import "./SidebarFilter.css";
 import { useFilters } from "../../hooks/useFilters";
 import { useState } from "react";
+import { MAX_ITEM_PRICE } from "../../config";
 
 export default function PriceFilter() {
   const { minPrice, maxPrice, handleMinPrice, handleMaxPrice } = useFilters();
   const [err, setErr] = useState("");
-  const [localMin, setLocalMin] = useState(minPrice ?? "");
-  const [localMax, setLocalMax] = useState(maxPrice ?? "");
+  const [localMin, setLocalMin] = useState(minPrice ?? String(0));
+  const [localMax, setLocalMax] = useState(maxPrice ?? String(MAX_ITEM_PRICE));
 
   return (
     <div className="price-filter">
@@ -53,7 +54,47 @@ export default function PriceFilter() {
 
         {err && <p className="price-error">{err}</p>}
       </div>
-      {/*TODO: Add Price filtering slider bar later */}
+
+      <div className="price-range-wrapper">
+        <input
+          type="range"
+          value={Number(localMin) / 100}
+          onChange={(e) => {
+            setLocalMin(
+              String((Number(e.target.value) * MAX_ITEM_PRICE) / 100),
+            );
+            setErr("");
+            handleMinPrice(
+              String((Number(e.target.value) * MAX_ITEM_PRICE) / 100),
+              () => {
+                setLocalMin(minPrice ?? "");
+                setErr("Minimum price can't be higher than maximum price");
+              },
+            );
+          }}
+          className="price-range-slider-min"
+        />
+        <input
+          type="range"
+          value={
+            Number(localMax) >= 0 ? Number(localMax) / 100 : MAX_ITEM_PRICE
+          }
+          className="price-range-slider-max"
+          onChange={(e) => {
+            setLocalMax(
+              String((Number(e.target.value) * MAX_ITEM_PRICE) / 100),
+            );
+            setErr("");
+            handleMaxPrice(
+              String((Number(e.target.value) * MAX_ITEM_PRICE) / 100),
+              () => {
+                setLocalMin(minPrice ?? "");
+                setErr("Minimum price can't be higher than maximum price");
+              },
+            );
+          }}
+        />
+      </div>
     </div>
   );
 }
