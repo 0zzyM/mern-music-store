@@ -56,20 +56,26 @@ export default function PriceFilter() {
       </div>
 
       <div className="price-range-wrapper">
+
+        <div className="price-range-shared-track">
+          <div
+            className="track-range"
+            style={{
+              left: `${(Number(localMin) / MAX_ITEM_PRICE) * 100}%`,
+              width: `${((Number(localMax) - Number(localMin)) / MAX_ITEM_PRICE) * 100}%`,
+            }}
+          />
+        </div>
+
         <input
           type="range"
           value={Number(localMin) / 100}
           onChange={(e) => {
             setLocalMin(
-              String((Number(e.target.value) * MAX_ITEM_PRICE) / 100),
+              String(Math.min((Number(e.target.value) * MAX_ITEM_PRICE / 100),Number(localMax)))
             );
-            setErr("");
             handleMinPrice(
               String((Number(e.target.value) * MAX_ITEM_PRICE) / 100),
-              () => {
-                setLocalMin(minPrice ?? "");
-                setErr("Minimum price can't be higher than maximum price");
-              },
             );
           }}
           className="price-range-slider-min"
@@ -82,15 +88,10 @@ export default function PriceFilter() {
           className="price-range-slider-max"
           onChange={(e) => {
             setLocalMax(
-              String((Number(e.target.value) * MAX_ITEM_PRICE) / 100),
+              String(Math.max((Number(e.target.value) * MAX_ITEM_PRICE / 100),Number(localMin)))
             );
-            setErr("");
             handleMaxPrice(
-              String((Number(e.target.value) * MAX_ITEM_PRICE) / 100),
-              () => {
-                setLocalMin(minPrice ?? "");
-                setErr("Minimum price can't be higher than maximum price");
-              },
+              String((Number(e.target.value) * MAX_ITEM_PRICE) / 100)
             );
           }}
         />
