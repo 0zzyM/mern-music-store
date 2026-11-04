@@ -70,6 +70,14 @@
   transition: all 0.2s ease-in-out;
 }
 
+/* Chrome, Brave, Edge, Safari */
+.dual-range input::-webkit-slider-runnable-track {
+  height: 4px;
+  background: transparent;
+}
+
+
+
 .filter-search-icon {
   height: 16px;
   font-size: 16px;
@@ -122,22 +130,44 @@
   transition: all 0.2s ease-in-out;
 }
 
+/* PRICE RANGE WRAPPER */
+/* =================== */
+
 .price-range-wrapper {
-  display: flex;
-  justify-content: space-between;
   position: relative;
+  width: 200px;
+  height: 32px;
+  margin: 24px;
+}
+
+.track-range {
+  position: absolute;
+  height: 100%;
+  background: #000000;
+  border-radius: inherit;
+}
+
+.price-range-shared-track {
+  position: absolute;
+  top: 100%;
+  transform: translateY(-50%);
+  left: 12px;
+  right: 12px;
+  height: 4px;
+  background: rgb(104, 104, 104);
 }
 
 .price-range-slider-min,
 .price-range-slider-max {
-  margin: 16px;
-  appearance: none;
-  height: 4px;
-  background: #d3d3d3;
-  opacity: 0.9; /* Set transparency (for mouse-over effects on hover) */
-  width: 110px;
   position: absolute;
-  cursor: pointer;
+  inset: 0;
+  appearance: none;
+  width: 100%;
+  margin: 0;
+  background: transparent;
+  pointer-events: none;
+  transform: translateY(50%);
+  height: 24px;
 }
 
 .price-range-slider-min:hover,
@@ -145,30 +175,27 @@
   opacity: 1;
 }
 
-.price-range-slider-min {
-  top: 0px;
-  left: 0px;
-}
-
-.price-range-slider-max {
-  top: 0px;
-  left: 110px;
+.price-range-slider-min::-webkit-slider-runnable-track,
+.price-range-slider-max::-webkit-slider-runnable-track{
+  height: 4px;
+  background: transparent;
 }
 
 .price-range-slider-min::-webkit-slider-thumb,
 .price-range-slider-max::-webkit-slider-thumb {
-  -webkit-appearance: none;
+  margin-top: -34px;
   appearance: none;
+  cursor: grab;
+  -webkit-appearance: none;
   width: 24px;
   height: 24px;
+  pointer-events: auto;
   background-color: #000;
+  background-size: 16px 16px;
+  border-radius: 50%;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23fff' fill-rule='evenodd' d='M5 17.5a.625.625 0 0 1-.625-.625V3.125a.625.625 0 1 1 1.25 0v13.75c0 .345-.28.625-.625.625Zm5 0a.625.625 0 0 1-.625-.625V3.125a.625.625 0 1 1 1.25 0v13.75c0 .345-.28.625-.625.625Zm5 0a.625.625 0 0 1-.625-.625V3.125a.625.625 0 1 1 1.25 0v13.75c0 .345-.28.625-.625.625Z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 16px 16px;
-  border-radius: 50%;
-
-  cursor: pointer;
 }
 
 /* ================================================*/
