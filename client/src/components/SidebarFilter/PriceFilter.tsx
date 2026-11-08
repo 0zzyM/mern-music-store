@@ -9,6 +9,7 @@ export default function PriceFilter() {
   const [localMin, setLocalMin] = useState(minPrice ?? String(0));
   const [localMax, setLocalMax] = useState(maxPrice ?? String(MAX_ITEM_PRICE));
 
+  console.log(localMin);
   return (
     <div className="price-filter">
       <h3>Price</h3>
@@ -56,7 +57,6 @@ export default function PriceFilter() {
       </div>
 
       <div className="price-range-wrapper">
-
         <div className="price-range-shared-track">
           <div
             className="track-range"
@@ -71,12 +71,14 @@ export default function PriceFilter() {
           type="range"
           value={Number(localMin) / 100}
           onChange={(e) => {
-            setLocalMin(
-              String(Math.min((Number(e.target.value) * MAX_ITEM_PRICE / 100),Number(localMax)))
+            const nextMin = String(
+              Math.min(
+                (Number(e.target.value) * MAX_ITEM_PRICE) / 100,
+                Number(localMax),
+              ),
             );
-            handleMinPrice(
-              String((Number(e.target.value) * MAX_ITEM_PRICE) / 100),
-            );
+            setLocalMin(nextMin);
+            handleMinPrice(nextMin);
           }}
           className="price-range-slider-min"
         />
@@ -87,12 +89,15 @@ export default function PriceFilter() {
           }
           className="price-range-slider-max"
           onChange={(e) => {
-            setLocalMax(
-              String(Math.max((Number(e.target.value) * MAX_ITEM_PRICE / 100),Number(localMin)))
+            const nextMax = String(
+              Math.max(
+                (Number(e.target.value) * MAX_ITEM_PRICE) / 100,
+                Number(localMin),
+              ),
             );
-            handleMaxPrice(
-              String((Number(e.target.value) * MAX_ITEM_PRICE) / 100)
-            );
+
+            setLocalMax(nextMax);
+            handleMaxPrice(nextMax);
           }}
         />
       </div>
