@@ -1,13 +1,15 @@
 import "./SidebarFilter.css";
 import { useFilters } from "../../hooks/useFilters";
 import { useState } from "react";
+import { MAX_ITEM_PRICE } from "../../config";
 
 export default function PriceFilter() {
   const { minPrice, maxPrice, handleMinPrice, handleMaxPrice } = useFilters();
   const [err, setErr] = useState("");
-  const [localMin, setLocalMin] = useState(minPrice ?? "");
-  const [localMax, setLocalMax] = useState(maxPrice ?? "");
+  const [localMin, setLocalMin] = useState(minPrice ?? String(0));
+  const [localMax, setLocalMax] = useState(maxPrice ?? String(MAX_ITEM_PRICE));
 
+  console.log(localMin);
   return (
     <div className="price-filter">
       <h3>Price</h3>
@@ -53,7 +55,52 @@ export default function PriceFilter() {
 
         {err && <p className="price-error">{err}</p>}
       </div>
-      {/*TODO: Add Price filtering slider bar later */}
+
+      <div className="price-range-wrapper">
+        <div className="price-range-shared-track">
+          <div
+            className="track-range"
+            style={{
+              left: `${(Number(localMin) / MAX_ITEM_PRICE) * 100}%`,
+              width: `${((Number(localMax) - Number(localMin)) / MAX_ITEM_PRICE) * 100}%`,
+            }}
+          />
+        </div>
+
+        <input
+          type="range"
+          value={Number(localMin) / 100}
+          onChange={(e) => {
+            const nextMin = String(
+              Math.min(
+                (Number(e.target.value) * MAX_ITEM_PRICE) / 100,
+                Number(localMax),
+              ),
+            );
+            setLocalMin(nextMin);
+            handleMinPrice(nextMin);
+          }}
+          className="price-range-slider-min"
+        />
+        <input
+          type="range"
+          value={
+            Number(localMax) >= 0 ? Number(localMax) / 100 : MAX_ITEM_PRICE
+          }
+          className="price-range-slider-max"
+          onChange={(e) => {
+            const nextMax = String(
+              Math.max(
+                (Number(e.target.value) * MAX_ITEM_PRICE) / 100,
+                Number(localMin),
+              ),
+            );
+
+            setLocalMax(nextMax);
+            handleMaxPrice(nextMax);
+          }}
+        />
+      </div>
     </div>
   );
 }
