@@ -22,7 +22,7 @@ export const validateToken = (
 };
 
 export const validateRole =
-  (expectedRole: UserRole) =>
+  (allowedRoles: UserRole[]) =>
   (req: Request, _res: Response, next: NextFunction) => {
     const { id: userID, role } = req.user ?? {};
 
@@ -36,7 +36,7 @@ export const validateRole =
       );
     }
 
-    if (role !== expectedRole) {
+    if (!allowedRoles.includes(role as UserRole)) {
       throw new ForbiddenError(
         "User role does not have sufficient permissions.",
       );
