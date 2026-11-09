@@ -9,7 +9,6 @@ export default function PriceFilter() {
   const [localMin, setLocalMin] = useState(minPrice ?? String(0));
   const [localMax, setLocalMax] = useState(maxPrice ?? String(MAX_ITEM_PRICE));
 
-  console.log(localMin);
   return (
     <div className="price-filter">
       <h3>Price</h3>
