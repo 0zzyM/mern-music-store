@@ -40,9 +40,14 @@ export class InvalidCredentialsError extends AppError {
   }
 }
 
-
 export class UnauthorizedError extends AppError {
   constructor(message = "Authentication Failed") {
     super(message, 401);
+  }
+}
+
+export class ForbiddenError extends AppError {
+  constructor(message = "Insufficient permissions") {
+    super(message, 403);
   }
 }
