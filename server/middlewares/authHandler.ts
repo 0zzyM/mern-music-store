@@ -16,7 +16,7 @@ export const validateToken = (
   // validation will throw if access token is not valid
   const validated = validateAccessToken(accessToken);
 
-  req.user = { id: validated.sid, role: validated.role };
+  req.user = { id: validated.sub, role: validated.role };
 
   next();
 };
