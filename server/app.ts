@@ -13,6 +13,7 @@ import helmet from "helmet";
 import userRouter from "./routers/userRouter.js";
 import authRouter from "./routers/authRouter.js";
 import cookieParser from "cookie-parser";
+import profileRouter from "./routers/profileRouter.js";
 
 const app = express();
 
@@ -44,6 +45,7 @@ app.use("/api/v1/brands", brandRouter);
 app.use("/api/v1/promotions", promotionRouter);
 app.use("/api/v1/search", searchLimiter, searchRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/profile", profileRouter);
 app.use("/api/v1/auth", authRouter);
 
 // It is basically for all the paths  since no path specified as the first arg
