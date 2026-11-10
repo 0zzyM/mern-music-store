@@ -5,6 +5,11 @@ const userRouter = express.Router();
 
 userRouter.get("/", validateToken, validateRole(["admin", "owner"]), getUsers);
 
-userRouter.get("/:_id", validateRole(["admin", "owner"]), getUser);
+userRouter.get(
+  "/:_id",
+  validateToken,
+  validateRole(["admin", "owner"]),
+  getUser,
+);
 
 export default userRouter;
