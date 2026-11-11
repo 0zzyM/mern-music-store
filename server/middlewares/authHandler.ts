@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { UnauthorizedError } from "../errors/AppError.js";
+import { ForbiddenError, UnauthorizedError } from "../errors/AppError.js";
 import { validateAccessToken } from "../services/tokenService.js";
-
-//TODO: Attach req.user later when ready
+import { USER_ROLES, UserRole } from "../config/constants.js";
 
 export const validateToken = (
   req: Request,
@@ -15,7 +14,33 @@ export const validateToken = (
 
   //TODO: fe needs to call refresh token endpoint if this fails.
   // validation will throw if access token is not valid
-  validateAccessToken(accessToken);
+  const validated = validateAccessToken(accessToken);
+
+  req.user = { id: validated.sub, role: validated.role };
 
   next();
 };
+
+export const validateRole =
+  (allowedRoles: UserRole[]) =>
+  (req: Request, _res: Response, next: NextFunction) => {
+    const { id: userID, role } = req.user ?? {};
+
+    if (
+      typeof userID !== "string" ||
+      typeof role !== "string" ||
+      !USER_ROLES.includes(role as UserRole)
+    ) {
+      throw new UnauthorizedError(
+        "Invalid user, unable to validate user or role!",
+      );
+    }
+
+    if (!allowedRoles.includes(role as UserRole)) {
+      throw new ForbiddenError(
+        "User role does not have sufficient permissions.",
+      );
+    }
+
+    next();
+  };

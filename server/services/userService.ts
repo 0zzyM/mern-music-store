@@ -3,36 +3,27 @@ import { BadRequestError, NotFoundError } from "../errors/AppError.js";
 import User from "../models/userModel.js";
 import { USER_ROLES } from "../config/constants.js";
 
-/*
 const DEFAULT_FIELDS = "name surname email phoneNumber createdAt";
-*/
+const USER_FIELDS = "name surname email phoneNumber address createdAt role";
 const PROFILE_FIELDS = "name surname email phoneNumber address createdAt";
 
 export const getAllUsers = async () => {
-  /*
   const users = await User.find({}, DEFAULT_FIELDS);
 
   return users;
-  */
-
-  return null;
 };
 
 export const getUserById = async (id: string) => {
   if (!isValidObjectId(id)) {
     throw new BadRequestError("User ID is not valid.");
   }
-  const user = await User.findOne({ _id: id }, PROFILE_FIELDS).lean();
+  const user = await User.findOne({ _id: id }, USER_FIELDS).lean();
 
   if (!user) {
     throw new NotFoundError("User was not found");
   }
 
-  return null;
-
-  /*
   return user;
-  */
 };
 
 export const getUserRolebyId = async (id: string) => {
@@ -47,4 +38,17 @@ export const getUserRolebyId = async (id: string) => {
   }
 
   return user.role;
+};
+
+export const getProfileById = async (id: string) => {
+  if (!isValidObjectId(id)) {
+    throw new BadRequestError("User ID is not valid.");
+  }
+  const user = await User.findOne({ _id: id }, PROFILE_FIELDS).lean();
+
+  if (!user) {
+    throw new NotFoundError("User was not found");
+  }
+
+  return user;
 };

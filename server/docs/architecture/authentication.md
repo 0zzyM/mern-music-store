@@ -7,6 +7,8 @@ Refresh tokens are linked to a session, and stored as SHA-256 hashes, also as a 
 
 Which currently allows regular authenticated requests to avoid db lookups while keeping control over session expiration, refresh-token revocation, and logout.
 
+RBAC authorization is documented separately in `authorization.md` file.
+
 ## Implementation structure
 
 | File                              | Responsibility                                  |
@@ -58,8 +60,6 @@ Another critical point is; user's role is only included in access tokens as duri
 TODO: Add the flow from draw.io when polishing is done!!
 
 ### Registration
-
-TODO: Update this section after authorization PR is closed!
 
 Current registration flow includes following steps:
 
@@ -183,8 +183,6 @@ Authentication failures are kept separate from server configuration errors.
 
 ## Testing
 
-TODO: Update after Authorization PR.
-
 Token creation and validation are covered by unit tests.
 
 Integration tests use **Vitest**, **Supertest**, and **mongodb-memory-server** to exercise registration, login, refresh, and logout against an isolated MongoDB instance. Integration tests were the only way to tests
@@ -211,7 +209,4 @@ Unlike passwords, they do not require an intentionally slow hashing algorithm li
 
 ## Currently pending
 
-- Haven't implemented the protected routes yet to auth middleware.
-- Authenticated identity is not yet attached to `req`.
-- Role-based authorization will be implemented on the next server PR.
 - Rate-limiter behavior is bypassed during normal integration tests so rate limiting tests need to be written.

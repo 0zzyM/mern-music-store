@@ -13,7 +13,7 @@ export const getUsers = async (
 export const getUser = async (req: Request<{ _id: string }>, res: Response) => {
   const { _id } = req.params;
 
-  const product = await getUserById(_id);
+  const user = await getUserById(_id);
 
-  res.status(200).json(product);
+  res.status(200).json(user);
 };
