@@ -80,7 +80,7 @@
 /* ===================================================*/
 
 @media (hover: hover) {
-  .category-image:hover {
+  .category-image-container:hover .category-image {
     transform: scale(1.05);
   }
 }
